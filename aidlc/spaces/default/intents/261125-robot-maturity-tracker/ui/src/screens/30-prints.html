@@ -1,0 +1,95 @@
+<section data-route="#/prints" aria-labelledby="h-prints">
+  <div class="k-page-header">
+    <div>
+      <h1 id="h-prints">Impressions 3D</h1>
+      <p id="prints-context">File d'impression de l'atelier</p>
+    </div>
+    <div class="k-actions">
+      <button class="k-btn" type="button" id="prints3d-open">Contrôler une pièce en 3D</button>
+      <button class="k-btn k-btn-primary" type="button" data-k-open="#dlg-prints-status">Changer le statut d'une impression</button>
+    </div>
+  </div>
+
+  <div class="k-grid">
+    <div class="k-span-4" id="a-prints-summary" data-k-block="kpi" data-k-cfg="prints-summary"></div>
+    <div class="k-span-8" id="a-prints-status-bars" data-k-block="bars" data-k-cfg="prints-status-bars"></div>
+
+    <div class="k-span-12 k-stack">
+      <div class="k-card">
+        <div id="a-prints-filters" data-k-block="filterbar" data-k-cfg="prints-filters"></div>
+      </div>
+      <div id="a-prints-table" data-k-block="table" data-k-cfg="prints-table"></div>
+    </div>
+  </div>
+
+  <dialog class="k-dialog" id="dlg-prints-status" aria-labelledby="dlg-prints-status-title">
+    <form method="dialog" id="prints-status-form">
+      <div class="k-dialog-head"><h2 id="dlg-prints-status-title">Changer le statut d'une impression</h2></div>
+      <div class="k-dialog-body k-form">
+        <div class="k-field">
+          <label for="prints-dlg-print">Impression</label>
+          <select class="k-select" id="prints-dlg-print"></select>
+        </div>
+        <div class="k-field">
+          <label for="prints-dlg-status">Nouveau statut</label>
+          <select class="k-select" id="prints-dlg-status">
+            <option value="À préparer">À préparer</option>
+            <option value="En impression">En impression</option>
+            <option value="Validée">Validée</option>
+            <option value="À réimprimer">À réimprimer</option>
+          </select>
+        </div>
+        <p class="k-muted" id="prints-dlg-current" role="status"></p>
+      </div>
+      <div class="k-dialog-foot">
+        <button class="k-btn" type="submit" value="cancel">Annuler</button>
+        <button class="k-btn k-btn-primary" type="submit" value="ok">Enregistrer le statut</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="k-dialog" id="dlg-prints-3d" aria-labelledby="dlg-prints-3d-title">
+    <div class="k-dialog-head"><h2 id="dlg-prints-3d-title">Contrôle de conformité en 3D</h2></div>
+    <div class="k-dialog-body p3d-grid">
+      <div class="k-stack">
+        <div class="k-field">
+          <label for="prints3d-print">Pièce à contrôler</label>
+          <select class="k-select" id="prints3d-print"></select>
+        </div>
+        <canvas id="prints3d-view" class="p3d-canvas" width="640" height="420" role="img" aria-label="Modèle 3D de la pièce. Glissez pour la tourner, cliquez sur une zone pour la surligner comme cassée. Les cases « Zone cassée » font la même chose au clavier."></canvas>
+        <div class="p3d-sliders">
+          <div class="k-field">
+            <label for="prints3d-yaw">Rotation horizontale</label>
+            <input type="range" id="prints3d-yaw" min="-180" max="180" step="1" value="35">
+          </div>
+          <div class="k-field">
+            <label for="prints3d-pitch">Inclinaison</label>
+            <input type="range" id="prints3d-pitch" min="-80" max="80" step="1" value="22">
+          </div>
+        </div>
+        <div><button class="k-btn k-btn-sm" type="button" id="prints3d-reset">Réinitialiser la vue</button></div>
+      </div>
+
+      <div class="k-stack">
+        <fieldset class="p3d-zones">
+          <legend>Zone cassée</legend>
+          <label class="p3d-check"><input type="checkbox" id="prints3d-zone-embase" value="embase"> Embase</label>
+          <label class="p3d-check"><input type="checkbox" id="prints3d-zone-bras" value="bras"> Bras</label>
+          <label class="p3d-check"><input type="checkbox" id="prints3d-zone-nervure" value="nervure"> Nervure</label>
+          <label class="p3d-check"><input type="checkbox" id="prints3d-zone-ergot" value="ergot"> Ergot</label>
+        </fieldset>
+        <div class="k-field">
+          <label for="prints3d-photo">Prendre une photo de la casse</label>
+          <input class="k-input" type="file" id="prints3d-photo" accept="image/*" capture="environment">
+        </div>
+        <canvas id="prints3d-shot" class="p3d-canvas p3d-shot" width="480" height="360" role="img" aria-label="Photo de la pièce. Passez le doigt ou la souris sur la photo pour surligner la zone cassée."></canvas>
+        <div><button class="k-btn k-btn-sm" type="button" id="prints3d-clear">Effacer le surlignage de la photo</button></div>
+        <p class="k-muted" id="prints3d-summary" role="status"></p>
+      </div>
+    </div>
+    <div class="k-dialog-foot">
+      <button class="k-btn" type="button" id="prints3d-close">Fermer</button>
+      <button class="k-btn k-btn-primary" type="button" id="prints3d-save">Enregistrer le signalement</button>
+    </div>
+  </dialog>
+</section>

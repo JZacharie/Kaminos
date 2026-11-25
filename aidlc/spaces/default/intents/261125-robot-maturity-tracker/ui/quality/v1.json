@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "pass": true,
+  "checks": {
+    "console": {
+      "pass": true,
+      "issues": 0,
+      "rerun": true
+    },
+    "overflow": {
+      "pass": true,
+      "issues": 0,
+      "rerun": true
+    },
+    "axe": {
+      "pass": true,
+      "issues": 0,
+      "rerun": true
+    },
+    "lighthouse": {
+      "pass": true,
+      "issues": 0,
+      "scores": {
+        "#/robots": 100,
+        "#/robot/R-03": 100,
+        "#/prints": 100,
+        "#/orders": 100,
+        "#/stock": 100,
+        "#/repairs": 100
+      },
+      "rerun": true
+    },
+    "network": {
+      "pass": true,
+      "issues": 0,
+      "rerun": true
+    },
+    "data": {
+      "pass": true,
+      "issues": 0,
+      "tables": [
+        {
+          "route": "#/robot/R-03",
+          "selector": "div.k-tbl.k-tbl-bleed > div.k-tbl-frame > div.k-tbl-scroll > table.k-tbl-t",
+          "rows": 2
+        },
+        {
+          "route": "#/robot/R-03",
+          "selector": "div.k-tbl.k-tbl-bleed > div.k-tbl-frame > div.k-tbl-scroll > table.k-tbl-t",
+          "rows": 10
+        },
+        {
+          "route": "#/prints",
+          "selector": "div.k-tbl.k-tbl-bleed > div.k-tbl-frame > div.k-tbl-scroll > table.k-tbl-t",
+          "rows": 20
+        },
+        {
+          "route": "#/orders",
+          "selector": "div.k-tbl.k-tbl-bleed > div.k-tbl-frame > div.k-tbl-scroll > table.k-tbl-t",
+          "rows": 12
+        },
+        {
+          "route": "#/stock",
+          "selector": "div.k-tbl.k-tbl-bleed > div.k-tbl-frame > div.k-tbl-scroll > table.k-tbl-t",
+          "rows": 17
+        },
+        {
+          "route": "#/repairs",
+          "selector": "div.k-tbl.k-tbl-bleed > div.k-tbl-frame > div.k-tbl-scroll > table.k-tbl-t",
+          "rows": 12
+        }
+      ],
+      "lists": [
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 10
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 1
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 10
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 1
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 10
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 2
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 10
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 4
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 10
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 2
+        },
+        {
+          "route": "#/robots",
+          "selector": "#robots-cards-list > article.k-card.k-span-4 > ul.k-list",
+          "items": 10
+        }
+      ],
+      "rerun": true
+    },
+    "critic": {
+      "pass": true,
+      "issues": 0,
+      "rerun": true
+    }
+  },
+  "issues": [],
+  "warnings": [
+    {
+      "id": "critic-hint-readability",
+      "check": "critic",
+      "severity": "warn",
+      "route": null,
+      "width": null,
+      "message": "Vision review hint (not blocking, the critic passed with mean 4.00): readability scored 3/5. Tables are crisp, but on the fleet cards the score rings show 0 for R-03/R-02/R-01 and the progress bars are empty for the top three robots (bars appear to show a gap-to-next-tier), so the numbers seem to contradict each other; the thin small gray text is also faint. Fix: On the Robots screen, make the ring value match the score (R-03 should show 50, R-02 should show 62 and R-01 should show 75, not 0), and make the bars show the score so they are not empty for robots that are already high; raise the contrast of the small gray sub-labels."
+    },
+    {
+      "id": "critic-hint-layout",
+      "check": "critic",
+      "severity": "warn",
+      "route": null,
+      "width": null,
+      "message": "Vision review hint (not blocking, the critic passed with mean 4.00): layout scored 3/5. The fleet screen has very tall cards with large empty areas at the bottom of the shorter ones, and R-03's card is far taller than its neighbours; the 1440 px width leaves wide side margins and the Prints screen leaves a blank area under the status chart. Fix: On the Robots screen, shorten the cards by showing the five subsystems in a compact two-column or mini-table style and capping the prerequisites, so all six cards have equal height; on Prints, fill the space under the 'Pièces par statut' card (for example by moving a KPI tile there or stretching the chart card to match the three KPI cards)."
+    }
+  ],
+  "critic": {
+    "round": 1,
+    "scores": {
+      "hierarchy": 4,
+      "realism": 5,
+      "consistency": 4,
+      "readability": 3,
+      "layout": 3,
+      "fit": 5
+    },
+    "mean": 4,
+    "pass": true,
+    "parity": {
+      "verdict": "close",
+      "reason": "Domain-specific data (IM/CMD/RP IDs, grams and hours, €, material types) and detail are on par with the reference, but the fleet cards are tall and repetitive and the progress rings and bars look partly broken."
+    },
+    "reasons": {
+      "hierarchy": "Titles, the single primary button, KPI tiles and the red-bordered alert banner are clear on each screen, but the robot cards on the fleet screen give equal weight to every row.",
+      "realism": "IDs, units (g, h, €, kg), materials such as PETG/PA-CF/TPU, suppliers and the Hexa/RP-04 storyline are plausible, varied and cross-linked.",
+      "consistency": "Cards, tables, badges, buttons and filters look the same across all screens and the dark theme looks deliberate, though the fleet cards differ slightly in structure (R-03 has a different header).",
+      "readability": "Tables are crisp, but on the fleet cards the score rings show 0 for R-03/R-02/R-01 and the progress bars are empty for the top three robots (bars appear to show a gap-to-next-tier), so the numbers seem to contradict each other; the thin small gray text is also faint.",
+      "layout": "The fleet screen has very tall cards with large empty areas at the bottom of the shorter ones, and R-03's card is far taller than its neighbours; the 1440 px width leaves wide side margins and the Prints screen leaves a blank area under the status chart.",
+      "fit": "The screens cover tiers, a robot sheet with prerequisites, prints, orders, stock and repairs/versions, which fits the idea of a robot-building workshop exactly."
+    },
+    "fixes": {
+      "hierarchy": "",
+      "realism": "",
+      "consistency": "",
+      "readability": "On the Robots screen, make the ring value match the score (R-03 should show 50, R-02 should show 62 and R-01 should show 75, not 0), and make the bars show the score so they are not empty for robots that are already high; raise the contrast of the small gray sub-labels.",
+      "layout": "On the Robots screen, shorten the cards by showing the five subsystems in a compact two-column or mini-table style and capping the prerequisites, so all six cards have equal height; on Prints, fill the space under the 'Pièces par statut' card (for example by moving a KPI tile there or stretching the chart card to match the three KPI cards).",
+      "fit": ""
+    },
+    "costUsd": 0.14504,
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "usage": {
+      "inputTokens": 44152,
+      "outputTokens": 839,
+      "calls": 1,
+      "images": 15,
+      "referenceImages": 2
+    },
+    "prototypeSha": "6e44349e73e4e250ce8a9899717dde56228a464ed77b24b977de711f78b81e4a"
+  },
+  "durationMs": 48040,
+  "timings": {
+    "layoutPassMs": 4240,
+    "desktopPassMs": 14591,
+    "lighthouseMs": 6034,
+    "softWidthsMs": 8536,
+    "checksMs": 29470,
+    "criticMs": 18538
+  },
+  "routes": [
+    "#/robots",
+    "#/robot/R-03",
+    "#/prints",
+    "#/orders",
+    "#/stock",
+    "#/repairs"
+  ],
+  "widths": {
+    "blocking": [
+      1280,
+      1440
+    ],
+    "layout": [
+      1324,
+      1920
+    ],
+    "warning": [
+      768,
+      375
+    ]
+  },
+  "tools": {
+    "playwrightCore": "1.64.1",
+    "axeCore": "4.10.3",
+    "chromium": "156.0.8078.4",
+    "lighthouse": "13.6.0"
+  },
+  "partial": false,
+  "generatedAt": "2026-11-25T10:08:27.662Z",
+  "handover": []
+}

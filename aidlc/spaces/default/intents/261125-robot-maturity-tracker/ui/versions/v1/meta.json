@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "parent": null,
+  "createdAt": "2026-11-25T10:08:27Z",
+  "cause": {
+    "kind": "agent-stage",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Initial prototype",
+  "n": 1,
+  "kind": "initial"
+}

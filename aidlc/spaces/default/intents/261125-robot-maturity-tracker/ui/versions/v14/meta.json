@@ -1,0 +1,23 @@
+{
+  "version": 14,
+  "parent": 13,
+  "createdAt": "2026-11-25T10:26:05Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q17"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q17 (Fiches robots): C",
+  "ref": "intent-capture-questions#Q17",
+  "prevAnswer": "",
+  "newAnswer": "C",
+  "prevRaw": "",
+  "newRaw": " C",
+  "n": 14,
+  "kind": "answer",
+  "changedIds": [
+    "a-robot-cards"
+  ]
+}

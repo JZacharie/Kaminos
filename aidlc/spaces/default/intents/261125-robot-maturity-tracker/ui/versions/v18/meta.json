@@ -1,0 +1,26 @@
+{
+  "version": 18,
+  "parent": 17,
+  "createdAt": "2026-11-25T10:36:50Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Agent change: Une section « Plan des robots » est ajoutée en bas de la page Robots. Un plan de dessus pour Titan, Nano et Pince permet d'identifier chaque pièce par un clic, avec sa fiche. La pièce choisie s'affiche en 3D schématique, qu'on tourne en glissant ou avec des curseurs.",
+  "request": "créer un plan pour le robo Titan, Nano et Pince. on doit pouvoir identifier le pièce depuis ce plan et apres voir chaque pièce ne 3D",
+  "selection": [],
+  "selectionSource": "agent",
+  "via": "agent-mode",
+  "agent": "ui-refiner",
+  "jobId": "ag-mwvzjqay-c0n8",
+  "files": [
+    "ui/src/data.js",
+    "ui/src/extra.css",
+    "ui/src/screens/10-robots.html"
+  ],
+  "n": 18,
+  "kind": "refine",
+  "changedIds": [],
+  "classification": "aesthetic"
+}

@@ -1,0 +1,23 @@
+{
+  "version": 10,
+  "parent": 9,
+  "createdAt": "2026-11-25T10:25:15Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q11"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q11 (Prélever dans le tampon): A",
+  "ref": "intent-capture-questions#Q11",
+  "prevAnswer": "",
+  "newAnswer": "A",
+  "prevRaw": "",
+  "newRaw": " A",
+  "n": 10,
+  "kind": "answer",
+  "changedIds": [
+    "a-buffer-withdraw"
+  ]
+}

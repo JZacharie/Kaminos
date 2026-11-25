@@ -1,0 +1,54 @@
+{
+  "version": 25,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.5,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 3,
+      "readability": 3,
+      "layout": 3,
+      "fit": 4
+    },
+    "issues": [
+      {
+        "criterion": "consistency",
+        "text": "Stock page includes a generic English 'Items' table (Invoice 1042, Purchase order, In progress, Add item, Edit/Delete) that clashes with the French robot workshop UI and uses a different style."
+      },
+      {
+        "criterion": "realism",
+        "text": "The placeholder-like 'Items / 57 items' block with 'Invoice 1042' and 'Quality check' data has nothing to do with robot stock, so it breaks domain realism."
+      },
+      {
+        "criterion": "layout",
+        "text": "On #/robots the robot cards are very tall, with five long bars per card, so the page needs much scrolling. Content is narrow and centered, leaving wide empty margins at 1440."
+      },
+      {
+        "criterion": "readability",
+        "text": "Much of the text is very small and light grey (card sublabels, filter chips, stat captions, 'Minimum' lines), so it is hard to read."
+      },
+      {
+        "criterion": "consistency",
+        "text": "On #/robots the R-03 Hexa card breaks the layout of the others: the status pill, ring and badge are stacked, and the card is taller. Progress bar colors are inconsistent (R-04 Chassis is blue, others are orange or red). Energie and Capteurs bars look empty at 1280."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "Score ring values differ between viewports (R-06 shows 5 at 1280 and 4 at 1440; R-05 shows 14 and 10), so the key numbers look unreliable. The average score of 45 does not match the cards' rings."
+      }
+    ],
+    "summary": "The French robot workshop UI is coherent and mostly realistic, but the Stock page has a foreign English 'Items' table and the robot cards are tall and use small, low-contrast text. Score values are inconsistent between the two viewports, so it fails.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0,
+    "htmlSha": "297a2a1fbea8a19d142abfb616678b7f66cdbee083381179e74d18ee32c9b5a3",
+    "rubric": "addon",
+    "samples": 2,
+    "sampleMeans": [
+      3.5,
+      3.5
+    ],
+    "seconds": 0,
+    "at": "2026-11-25T10:46:01Z",
+    "copiedFrom": 21
+  }
+}

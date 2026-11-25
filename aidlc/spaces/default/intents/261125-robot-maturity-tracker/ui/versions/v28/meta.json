@@ -1,0 +1,23 @@
+{
+  "version": 28,
+  "parent": 27,
+  "createdAt": "2026-11-25T10:46:25Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "login-questions#Q3"
+    ]
+  },
+  "summary": "Answered login-questions#Q3 (Login signup): A",
+  "ref": "login-questions#Q3",
+  "prevAnswer": "",
+  "newAnswer": "A",
+  "prevRaw": "",
+  "newRaw": " A",
+  "n": 28,
+  "kind": "answer",
+  "changedIds": [
+    "a-login-signup"
+  ]
+}

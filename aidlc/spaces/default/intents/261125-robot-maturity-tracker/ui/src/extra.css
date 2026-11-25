@@ -1,0 +1,29 @@
+#dlg-prints-3d{width:min(62rem,calc(100% - 2rem))}
+.p3d-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:var(--s5);align-items:start}
+.p3d-canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r2);background:var(--surface-2);touch-action:none;cursor:grab}
+.p3d-shot{cursor:crosshair}
+.p3d-sliders{display:flex;flex-wrap:wrap;gap:var(--s4)}
+.p3d-sliders .k-field{flex:1 1 12rem}
+.p3d-sliders input[type=range]{width:100%;accent-color:var(--accent)}
+.p3d-zones{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);margin:0;padding:var(--s3);border:1px solid var(--line);border-radius:var(--r2)}
+.p3d-zones legend{padding:0 var(--s1);font-weight:600}
+.p3d-check{display:inline-flex;align-items:center;gap:var(--s2);min-height:2rem}
+.p3d-check input{width:1.125rem;height:1.125rem;accent-color:var(--accent)}
+@media(max-width:760px){.p3d-grid{grid-template-columns:minmax(0,1fr)}}
+.rp-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:var(--s5);align-items:start}
+.rp-plan{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r2);background:var(--surface-2)}
+.rp-3d{height:auto;aspect-ratio:480/330}
+.rp-3d polygon{stroke:var(--text);stroke-opacity:.3;stroke-width:.7;stroke-linejoin:round}
+.rp-plan text{fill:var(--text);font-size:13px;font-family:inherit}
+.rp-plan .rp-id{font-weight:700}
+.rp-plan .rp-status,.rp-plan .rp-front{fill:var(--text-muted);font-size:12px}
+.rp-part{cursor:pointer;outline:none}
+.rp-part rect{fill:var(--surface);stroke:var(--border);stroke-width:2}
+.rp-part:hover rect{stroke:var(--accent);stroke-width:3}
+.rp-part[aria-pressed=true] rect{fill:var(--accent);stroke:var(--accent)}
+.rp-part[aria-pressed=true] text{fill:var(--on-accent)}
+.rp-part:focus-visible rect{stroke:var(--text);stroke-width:4;stroke-dasharray:none}
+.rp-ghost rect{fill:none;stroke:var(--border);stroke-width:1.5;stroke-dasharray:5 4}
+.rp-ghost text{fill:var(--text-muted);font-size:11px}
+.rp-picked{margin:0;font-weight:600}
+@media(max-width:900px){.rp-grid{grid-template-columns:minmax(0,1fr)}}

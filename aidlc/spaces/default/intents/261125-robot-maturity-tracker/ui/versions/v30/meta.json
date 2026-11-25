@@ -1,0 +1,23 @@
+{
+  "version": 30,
+  "parent": 29,
+  "createdAt": "2026-11-25T10:46:41Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "table-questions#Q1"
+    ]
+  },
+  "summary": "Answered table-questions#Q1 (Table filters): C",
+  "ref": "table-questions#Q1",
+  "prevAnswer": "",
+  "newAnswer": "C",
+  "prevRaw": "",
+  "newRaw": " C",
+  "n": 30,
+  "kind": "answer",
+  "changedIds": [
+    "a-table-filters"
+  ]
+}

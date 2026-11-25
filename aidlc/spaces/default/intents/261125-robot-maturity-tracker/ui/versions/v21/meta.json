@@ -1,0 +1,32 @@
+{
+  "version": 21,
+  "parent": 20,
+  "createdAt": "2026-11-25T10:44:46Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Added module Login to Stock",
+  "moduleId": "login",
+  "screen": "stock",
+  "moduleVersion": "1.0.0",
+  "entryExisted": false,
+  "n": 21,
+  "kind": "module",
+  "changedIds": [
+    "a-login-form",
+    "a-login-email",
+    "a-login-password",
+    "a-login-mfa",
+    "a-login-mfa-code",
+    "a-login-submit",
+    "a-login-federated",
+    "a-login-forgot",
+    "a-login-signup",
+    "a-login-error",
+    "a-login-signedin",
+    "a-login-role-badge",
+    "a-login-signout"
+  ]
+}

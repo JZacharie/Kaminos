@@ -1,0 +1,26 @@
+{
+  "version": 17,
+  "parent": 16,
+  "createdAt": "2026-11-25T10:30:57Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Agent change: Ajout d'une fenêtre « Contrôler une pièce en 3D » : pièce 3D rotative dont on surligne la zone cassée, photo à prendre ou importer avec surlignage, et enregistrement du signalement qui passe la pièce à réimprimer.",
+  "request": "L'UI doit pouvoir permettre d'afficher un pièce en 3D pour valider qu'elle ets bien conforme , l'utilistaeyur doit pouvoir prendre une photo ou surligner la zone de la pièce qui vient de casser",
+  "selection": [],
+  "selectionSource": "agent",
+  "via": "agent-mode",
+  "agent": "ui-refiner",
+  "jobId": "ag-mwvzdkra-tn0r",
+  "files": [
+    "ui/src/extra.css",
+    "ui/src/screens/30-prints.blocks.js",
+    "ui/src/screens/30-prints.html"
+  ],
+  "n": 17,
+  "kind": "refine",
+  "changedIds": [],
+  "classification": "aesthetic"
+}

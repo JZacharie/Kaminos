@@ -1,0 +1,23 @@
+{
+  "version": 7,
+  "parent": 6,
+  "createdAt": "2026-11-25T10:24:34Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q8"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q8 (Commandes de composants): C",
+  "ref": "intent-capture-questions#Q8",
+  "prevAnswer": "",
+  "newAnswer": "C",
+  "prevRaw": "",
+  "newRaw": " C",
+  "n": 7,
+  "kind": "answer",
+  "changedIds": [
+    "a-orders-table"
+  ]
+}

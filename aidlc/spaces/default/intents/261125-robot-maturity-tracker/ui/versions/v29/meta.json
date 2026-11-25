@@ -1,0 +1,23 @@
+{
+  "version": 29,
+  "parent": 28,
+  "createdAt": "2026-11-25T10:46:30Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "login-questions#Q4"
+    ]
+  },
+  "summary": "Answered login-questions#Q4 (Login forgot): A",
+  "ref": "login-questions#Q4",
+  "prevAnswer": "",
+  "newAnswer": "A",
+  "prevRaw": "",
+  "newRaw": " A",
+  "n": 29,
+  "kind": "answer",
+  "changedIds": [
+    "a-login-forgot"
+  ]
+}

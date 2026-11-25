@@ -1,0 +1,23 @@
+{
+  "version": 24,
+  "parent": 23,
+  "createdAt": "2026-11-25T10:45:55Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "chatbot-questions#Q3"
+    ]
+  },
+  "summary": "Answered chatbot-questions#Q3 (Chatbot input): X — FRench an English",
+  "ref": "chatbot-questions#Q3",
+  "prevAnswer": "",
+  "newAnswer": "X — FRench an English",
+  "prevRaw": "",
+  "newRaw": " X — FRench an English",
+  "n": 24,
+  "kind": "answer",
+  "changedIds": [
+    "a-chatbot-input"
+  ]
+}

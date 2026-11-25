@@ -1,0 +1,23 @@
+{
+  "version": 13,
+  "parent": 12,
+  "createdAt": "2026-11-25T10:25:54Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q16"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q16 (Paliers P1 à P4): B",
+  "ref": "intent-capture-questions#Q16",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 13,
+  "kind": "answer",
+  "changedIds": [
+    "a-palier-steps"
+  ]
+}

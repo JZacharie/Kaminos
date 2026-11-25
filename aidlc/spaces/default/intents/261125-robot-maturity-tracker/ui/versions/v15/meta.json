@@ -1,0 +1,23 @@
+{
+  "version": 15,
+  "parent": 14,
+  "createdAt": "2026-11-25T10:26:13Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q18"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q18 (Stock tampon générateur): B",
+  "ref": "intent-capture-questions#Q18",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 15,
+  "kind": "answer",
+  "changedIds": [
+    "a-buffer-panel"
+  ]
+}

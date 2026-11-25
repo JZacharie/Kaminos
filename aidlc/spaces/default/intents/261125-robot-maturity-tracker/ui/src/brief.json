@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "app": {
+    "name": "RoboForge",
+    "language": "fr",
+    "domain": "robotique maker: maturité, impression 3D, achats, stock et réparations",
+    "summary": "RoboForge montre à l'équipe d'Atelier Cyclope (fictif) où en est chaque robot sur son échelle de maturité, quelles impressions et quels achats le bloquent, ce qui manque en stock et quelles réparations sont ouvertes."
+  },
+  "style": { "accent": "indigo", "density": "comfortable", "theme": "auto" },
+  "screens": [
+    {
+      "id": "robots", "title": "Flotte de robots", "route": "#/robots",
+      "purpose": "Voir en 10 secondes le palier de chaque robot, ce qui le bloque et les réparations critiques ouvertes. Blocks: kpi, filterbar, board.",
+      "primaryAction": "Ouvrir la fiche d'un robot",
+      "anchors": [
+        { "id": "a-kpi-robots", "label": "Nombre de robots", "kind": "kpi", "screen": "robots" },
+        { "id": "a-kpi-mean-score", "label": "Score moyen de la flotte", "kind": "kpi", "screen": "robots" },
+        { "id": "a-kpi-critical", "label": "Réparations critiques ouvertes", "kind": "kpi", "screen": "robots" },
+        { "id": "a-kpi-toprint", "label": "Pièces à imprimer", "kind": "kpi", "screen": "robots" },
+        { "id": "a-robots-filters", "label": "Filtre par palier", "kind": "form", "screen": "robots" },
+        { "id": "a-robot-cards", "label": "Fiches robots", "kind": "list", "screen": "robots" }
+      ]
+    },
+    {
+      "id": "robot-detail", "title": "Fiche robot R-03 Hexa", "route": "#/robot/R-03",
+      "purpose": "Comprendre pourquoi Hexa est plafonné à P2 et ce qui débloque le palier suivant. Blocks: bars, steps, detail, table.",
+      "primaryAction": "Ouvrir la réparation critique",
+      "anchors": [
+        { "id": "a-subsystem-scores", "label": "Scores par sous-système", "kind": "chart", "screen": "robot-detail" },
+        { "id": "a-palier-steps", "label": "Paliers P1 à P4", "kind": "card", "screen": "robot-detail" },
+        { "id": "a-prerequisites", "label": "Prérequis du palier suivant", "kind": "list", "screen": "robot-detail" },
+        { "id": "a-subassemblies", "label": "Sous-ensembles et état Prêt à assembler", "kind": "table", "screen": "robot-detail" },
+        { "id": "a-linked-items", "label": "Impressions, commandes et réparations liées", "kind": "table", "screen": "robot-detail" }
+      ]
+    },
+    {
+      "id": "prints", "title": "Impressions 3D", "route": "#/prints",
+      "purpose": "Suivre la file d'impression par robot, matière et statut, et ce qu'il reste à imprimer. Blocks: kpi, filterbar, table, bars.",
+      "primaryAction": "Changer le statut d'une impression",
+      "anchors": [
+        { "id": "a-prints-summary", "label": "Reste à imprimer", "kind": "kpi", "screen": "prints" },
+        { "id": "a-prints-status-bars", "label": "Pièces par statut", "kind": "chart", "screen": "prints" },
+        { "id": "a-prints-filters", "label": "Filtres de la file", "kind": "form", "screen": "prints" },
+        { "id": "a-prints-table", "label": "File d'impression", "kind": "table", "screen": "prints" }
+      ]
+    },
+    {
+      "id": "orders", "title": "Commandes", "route": "#/orders",
+      "purpose": "Savoir ce qu'il faut commander et quelle pièce ou réparation chaque commande débloque. Blocks: kpi, filterbar, table.",
+      "primaryAction": "Passer une commande",
+      "anchors": [
+        { "id": "a-kpi-orders-total", "label": "Montant à commander", "kind": "kpi", "screen": "orders" },
+        { "id": "a-orders-filters", "label": "Filtres des commandes", "kind": "form", "screen": "orders" },
+        { "id": "a-orders-table", "label": "Commandes de composants", "kind": "table", "screen": "orders" }
+      ]
+    },
+    {
+      "id": "stock", "title": "Stock", "route": "#/stock",
+      "purpose": "Voir ce qui passe sous le minimum et l'état du stock tampon générateur. The withdraw button sits above the buffer panel, not inside it. Blocks: kpi, filterbar, table, feed, detail.",
+      "primaryAction": "Prélever dans le tampon générateur",
+      "anchors": [
+        { "id": "a-kpi-stock-low", "label": "Articles sous le minimum", "kind": "kpi", "screen": "stock" },
+        { "id": "a-buffer-withdraw", "label": "Prélever dans le tampon", "kind": "button", "screen": "stock" },
+        { "id": "a-stock-filters", "label": "Filtres du stock", "kind": "form", "screen": "stock" },
+        { "id": "a-stock-table", "label": "Inventaire", "kind": "table", "screen": "stock" },
+        { "id": "a-stock-alerts", "label": "Alertes sous le minimum", "kind": "list", "screen": "stock" },
+        { "id": "a-buffer-panel", "label": "Stock tampon générateur", "kind": "card", "screen": "stock" }
+      ]
+    },
+    {
+      "id": "repairs", "title": "Réparations et versions", "route": "#/repairs",
+      "purpose": "Relire les casses et les pièces remplacées pour ne pas reproduire un défaut, version par version. The recurring-defect badge sits above the timeline, not inside it. Blocks: filterbar, table, steps.",
+      "primaryAction": "Déclarer une réparation",
+      "anchors": [
+        { "id": "a-recurring-flag", "label": "Défauts récurrents", "kind": "badge", "screen": "repairs" },
+        { "id": "a-repairs-filters", "label": "Filtres du journal", "kind": "form", "screen": "repairs" },
+        { "id": "a-repairs-table", "label": "Journal de réparation", "kind": "table", "screen": "repairs" },
+        { "id": "a-version-timeline", "label": "Versions des pièces", "kind": "card", "screen": "repairs" }
+      ]
+    }
+  ],
+  "shell": { "anchors": [{ "id": "a-main-nav", "label": "Navigation principale", "kind": "nav", "screen": "shell" }] },
+  "dataEntities": [
+    {
+      "name": "robots", "rows": 6, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "R-03" },
+        { "name": "name", "type": "string", "example": "Hexa" },
+        { "name": "type", "type": "string", "example": "hexapode" },
+        { "name": "scoreChassis", "type": "integer", "unit": "pts", "example": 64 },
+        { "name": "scoreMobility", "type": "integer", "unit": "pts", "example": 48 },
+        { "name": "scoreEnergy", "type": "integer", "unit": "pts", "example": 52 },
+        { "name": "scoreSensors", "type": "integer", "unit": "pts", "example": 40 },
+        { "name": "scoreControl", "type": "integer", "unit": "pts", "example": 44 },
+        { "name": "score", "type": "integer", "unit": "pts", "example": 50 },
+        { "name": "palier", "type": "enum", "enum": ["P1 Prototype", "P2 Fonctionnel", "P3 Fiable", "P4 Autonome"], "example": "P3 Fiable" },
+        { "name": "palierShown", "type": "enum", "enum": ["P1 Prototype", "P2 Fonctionnel", "P3 Fiable", "P4 Autonome"], "example": "P2 Fonctionnel" },
+        { "name": "frozen", "type": "string", "example": "Mobilité, Énergie" },
+        { "name": "criticalOpen", "type": "integer", "example": 2 }
+      ],
+      "thresholds": [
+        { "name": "score", "rule": "mean of the 5 subsystem scores, rounded" },
+        { "name": "palier", "rule": "0-24 P1, 25-49 P2, 50-74 P3, 75-100 P4" },
+        { "name": "palierShown", "rule": "palier minus one level while criticalOpen > 0; frozen lists the subsystems of open critical repairs" }
+      ]
+    },
+    {
+      "name": "prints", "rows": 20, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "IM-107" },
+        { "name": "part", "type": "string", "example": "Patte A v3" },
+        { "name": "robotId", "type": "string", "example": "R-03" },
+        { "name": "material", "type": "enum", "enum": ["PLA+", "PETG", "ASA", "PA-CF", "TPU", "Résine tough"], "example": "PETG" },
+        { "name": "priority", "type": "enum", "enum": ["Haute", "Moyenne", "Basse"], "example": "Haute" },
+        { "name": "grams", "type": "integer", "unit": "g", "example": 76 },
+        { "name": "hours", "type": "number", "unit": "h", "example": 3.5 },
+        { "name": "status", "type": "enum", "enum": ["À préparer", "En impression", "Validée", "À réimprimer"], "example": "À réimprimer" }
+      ],
+      "relations": [{ "field": "robotId", "entity": "robots" }],
+      "thresholds": [{ "name": "toPrint", "rule": "status other than Validée counts as left to print" }]
+    },
+    {
+      "name": "orders", "rows": 12, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "CMD-31" },
+        { "name": "component", "type": "string", "example": "Servos 20 kg x12" },
+        { "name": "linkedTo", "type": "string", "example": "IM-110" },
+        { "name": "supplier", "type": "string", "example": "ElecDirect" },
+        { "name": "totalEur", "type": "number", "unit": "EUR", "example": 118.8 },
+        { "name": "eta", "type": "date", "example": "2026-11-28" },
+        { "name": "status", "type": "enum", "enum": ["À commander", "Commandée", "Expédiée", "Reçue"], "example": "À commander" }
+      ],
+      "thresholds": [{ "name": "eta", "rule": "empty for À commander; arrival date for Reçue" }]
+    },
+    {
+      "name": "stock", "rows": 17, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "ST-04" },
+        { "name": "name", "type": "string", "example": "Servos 20 kg" },
+        { "name": "category", "type": "enum", "enum": ["Visserie", "Moteurs", "Drivers", "Capteurs", "Filaments", "Résine", "Tampon générateur"], "example": "Moteurs" },
+        { "name": "quantity", "type": "number", "example": 4 },
+        { "name": "minimum", "type": "number", "example": 6 },
+        { "name": "unit", "type": "string", "example": "pièces" },
+        { "name": "belowMin", "type": "boolean", "example": true }
+      ],
+      "thresholds": [{ "name": "belowMin", "rule": "quantity < minimum; buffer rows below minimum show the seuil bas flag" }]
+    },
+    {
+      "name": "repairs", "rows": 12, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "RP-04" },
+        { "name": "date", "type": "date", "example": "2026-11-12" },
+        { "name": "robotId", "type": "string", "example": "R-03" },
+        { "name": "subsystem", "type": "enum", "enum": ["Châssis", "Mobilité", "Énergie", "Capteurs", "Contrôle"], "example": "Mobilité" },
+        { "name": "part", "type": "string", "example": "Patte A v2" },
+        { "name": "anomaly", "type": "string", "example": "Rupture à la charnière" },
+        { "name": "fix", "type": "string", "example": "Patte A v3" },
+        { "name": "severity", "type": "enum", "enum": ["Critique", "Majeure", "Mineure"], "example": "Critique" },
+        { "name": "status", "type": "enum", "enum": ["Ouverte", "Correctif en cours", "À valider", "Clôturée"], "example": "Correctif en cours" }
+      ],
+      "relations": [{ "field": "robotId", "entity": "robots" }]
+    },
+    {
+      "name": "partVersions", "rows": 14, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "PV-01" },
+        { "name": "part", "type": "string", "example": "Patte A" },
+        { "name": "robotId", "type": "string", "example": "R-03" },
+        { "name": "version", "type": "string", "example": "v2" },
+        { "name": "outcome", "type": "enum", "enum": ["Défaut constaté", "Validée", "En test", "En impression", "À réimprimer"], "example": "Défaut constaté" },
+        { "name": "note", "type": "string", "example": "Rupture à la charnière (RP-04)" }
+      ],
+      "thresholds": [{ "name": "recurring", "rule": "a part with 2 or more versions marked Défaut constaté is a défaut récurrent" }]
+    },
+    {
+      "name": "subassemblies", "rows": 8, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "SA-05" },
+        { "name": "robotId", "type": "string", "example": "R-03" },
+        { "name": "name", "type": "string", "example": "Pattes" },
+        { "name": "requires", "type": "string", "example": "IM-107, IM-108, IM-109" },
+        { "name": "readiness", "type": "enum", "enum": ["Prêt à assembler", "Attente impressions", "Attente composants", "Bloqué par réparation"], "example": "Bloqué par réparation" }
+      ],
+      "thresholds": [{ "name": "readiness", "rule": "Prêt à assembler only when every required print is Validée and every linked order is Reçue" }]
+    },
+    {
+      "name": "prerequisites", "rows": 12, "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "PR-01" },
+        { "name": "robotId", "type": "string", "example": "R-03" },
+        { "name": "label", "type": "string", "example": "Clôturer la réparation RP-04" },
+        { "name": "kind", "type": "enum", "enum": ["Impression", "Commande", "Réparation", "Score"], "example": "Réparation" },
+        { "name": "linkedId", "type": "string", "example": "RP-04" },
+        { "name": "done", "type": "boolean", "example": false }
+      ],
+      "relations": [{ "field": "robotId", "entity": "robots" }]
+    }
+  ],
+  "dataDerived": {
+    "today": "2026-11-25",
+    "kpis": [
+      { "name": "robotsCount", "definition": "number of robots", "value": 6 },
+      { "name": "meanScore", "definition": "mean of robots.score, rounded", "value": 45, "variants": ["weakest subsystem per robot -> 37", "median -> 46"] },
+      { "name": "criticalOpen", "definition": "repairs with severity Critique and status other than Clôturée", "value": 2 },
+      { "name": "partsToPrint", "definition": "prints with status other than Validée", "value": 13, "variants": ["À préparer + À réimprimer -> 10", "À préparer -> 7"] },
+      { "name": "gramsToPrint", "definition": "sum of grams of prints other than Validée", "value": 1833 },
+      { "name": "hoursToPrint", "definition": "sum of hours of prints other than Validée", "value": 89 },
+      { "name": "toOrderEur", "definition": "sum of totalEur of orders À commander", "value": 195.7, "variants": ["+ Commandée -> 356.10", "all but Reçue -> 365.50"] },
+      { "name": "belowMin", "definition": "stock rows with quantity < minimum", "value": 5, "variants": ["with 20 % margin -> 9", "no alert -> 0"] },
+      { "name": "repairsNotClosed", "definition": "repairs with status other than Clôturée", "value": 7 },
+      { "name": "recurringParts", "definition": "parts with 2 or more Défaut constaté versions", "value": 2, "variants": ["after 3 failures -> 0"] }
+    ],
+    "series": [
+      { "name": "printsByStatus", "shape": "4 items {status, count}", "definition": "prints per status: Validée 7, En impression 3, À préparer 7, À réimprimer 3" },
+      { "name": "ordersByStatus", "shape": "4 items {status, count}", "definition": "orders per status" },
+      { "name": "repairsBySeverity", "shape": "3 items {severity, count}", "definition": "repairs not closed per severity" }
+    ],
+    "agree": [
+      { "kpi": "meanScore", "shownOn": ["a-kpi-mean-score"], "rule": "mean robot score, points out of 100" },
+      { "kpi": "criticalOpen", "shownOn": ["a-kpi-critical", "a-prerequisites"], "rule": "open critical repairs, count" },
+      { "kpi": "partsToPrint", "shownOn": ["a-kpi-toprint", "a-prints-summary"], "rule": "prints not validated, count" },
+      { "kpi": "toOrderEur", "shownOn": ["a-kpi-orders-total"], "rule": "sum of À commander orders, EUR" },
+      { "kpi": "belowMin", "shownOn": ["a-kpi-stock-low", "a-stock-alerts"], "rule": "stock rows under minimum, count" }
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "as-landing-robots", "text": "S'ouvre sur la flotte de robots", "anchor": null,
+      "question": "Quel écran s'ouvre en premier ?", "role": "Responsable atelier",
+      "options": ["Flotte de robots", "File d'impression", "Alertes de stock", "Écran selon le rôle"], "assumed": "A"
+    },
+    {
+      "id": "as-ready-rule", "text": "Prêt à assembler: impressions validées et composants reçus", "anchor": "a-subassemblies",
+      "question": "Quand un sous-ensemble passe-t-il en Prêt à assembler ?", "role": "Ingénieure en chef",
+      "whyWeAsk": "La version 1 applique la règle de liaison: toutes les impressions requises validées et tous les composants commandés reçus.",
+      "options": ["Impressions validées et composants reçus", "Impressions validées seulement", "Composants reçus seulement", "Marquage manuel"], "assumed": "A"
+    },
+    {
+      "id": "as-palier-fixed", "text": "Paliers fixes à 25, 50 et 75 points", "anchor": "a-palier-steps",
+      "question": "Les seuils des paliers sont-ils les mêmes pour tous les robots ?", "role": "Ingénieure en chef",
+      "options": ["Fixes: 25, 50, 75", "Modifiables par robot", "Cinq paliers", "Un seuil par sous-système"], "assumed": "A"
+    },
+    {
+      "id": "as-sort-score", "text": "Robots triés du score le plus bas au plus haut", "anchor": "a-robot-cards",
+      "question": "Dans quel ordre les robots s'affichent-ils ?", "role": "Responsable atelier",
+      "options": ["Score croissant, les plus en retard d'abord", "Score décroissant", "Numéro de robot", "Palier puis nom"], "assumed": "A"
+    },
+    {
+      "id": "as-buffer-global", "text": "Une seule réserve tampon générateur", "anchor": "a-buffer-panel",
+      "question": "Le stock tampon est-il une réserve globale ou une par catégorie ?", "role": "Technicien impression et achats",
+      "options": ["Une réserve globale avec un minimum par ligne", "Une réserve par catégorie", "Une réserve par robot", "Un seul minimum global"], "assumed": "A"
+    },
+    {
+      "id": "as-table-prints", "text": "File d'impression en tableau", "anchor": "a-prints-table",
+      "question": "Comment la file d'impression s'affiche-t-elle ?", "role": "Technicien impression et achats",
+      "options": ["Tableau triable", "Kanban par statut", "Tableau et kanban", "Liste simple"], "assumed": "A"
+    },
+    {
+      "id": "as-dates-fr", "text": "Dates en jj/mm, heures sur 24 h", "anchor": null,
+      "question": "Quel format de date et d'heure utilise-t-on ?", "role": "Responsable atelier",
+      "options": ["jj/mm et 24 h", "jj/mm/aaaa et 24 h", "Date relative (il y a 3 j)", "Format ISO"], "assumed": "A"
+    }
+  ],
+  "questions": [
+    {
+      "anchor": "a-kpi-critical", "text": "Que fait une réparation critique ouverte sur la maturité d'un robot ?", "role": "Ingénieure en chef",
+      "whyWeAsk": "Le compteur de réparations critiques et le palier affiché sur chaque fiche robot suivent cette règle.",
+      "options": ["Elle fige le sous-système concerné", "Elle baisse le score de 5 points par réparation", "Elle fige le sous-système et plafonne le palier", "Aucun effet automatique, alerte seulement"],
+      "effects": [
+        [{ "op": "text", "target": "a-kpi-critical", "selector": ".k-kpi-hint", "value": "Mobilité et Énergie de R-03 figées" }, { "op": "badge", "target": "a-kpi-critical", "text": "Sous-système figé" }],
+        [{ "op": "text", "target": "a-kpi-critical", "selector": ".k-kpi-hint", "value": "Score de R-03 abaissé de 50 à 40" }, { "op": "badge", "target": "a-kpi-critical", "text": "Score abaissé" }],
+        [{ "op": "text", "target": "a-kpi-critical", "selector": ".k-kpi-hint", "value": "R-03 plafonné à P2, 2 sous-systèmes figés" }, { "op": "badge", "target": "a-kpi-critical", "text": "Figé et plafonné" }],
+        [{ "op": "text", "target": "a-kpi-critical", "selector": ".k-kpi-hint", "value": "Alerte seulement, scores inchangés" }, { "op": "badge", "target": "a-kpi-critical", "text": "Alerte seule" }]
+      ]
+    },
+    {
+      "anchor": "a-kpi-mean-score", "text": "Comment calcule-t-on le score affiché pour toute la flotte ?", "role": "Responsable atelier",
+      "whyWeAsk": "Le grand chiffre en tête de l'écran dépend de cette règle.",
+      "options": ["Moyenne des scores des robots", "Sous-système le plus faible de chaque robot", "Médiane des scores des robots"],
+      "effects": [
+        [{ "op": "text", "target": "a-kpi-mean-score", "selector": ".k-kpi-value", "value": "45" }, { "op": "text", "target": "a-kpi-mean-score", "selector": ".k-kpi-hint", "value": "moyenne des 6 robots" }],
+        [{ "op": "text", "target": "a-kpi-mean-score", "selector": ".k-kpi-value", "value": "37" }, { "op": "text", "target": "a-kpi-mean-score", "selector": ".k-kpi-hint", "value": "maillon le plus faible de chaque robot" }],
+        [{ "op": "text", "target": "a-kpi-mean-score", "selector": ".k-kpi-value", "value": "46" }, { "op": "text", "target": "a-kpi-mean-score", "selector": ".k-kpi-hint", "value": "médiane des 6 robots" }]
+      ]
+    },
+    {
+      "anchor": "a-kpi-toprint", "text": "Quelles impressions comptent comme « à imprimer » ?", "role": "Technicien impression et achats",
+      "whyWeAsk": "Le compteur de pièces à imprimer et le reste à imprimer en dépendent.",
+      "options": ["Tout ce qui n'est pas Validée", "À préparer et À réimprimer seulement", "À préparer seulement"],
+      "effects": [
+        [{ "op": "text", "target": "a-kpi-toprint", "selector": ".k-kpi-value", "value": "13" }, { "op": "text", "target": "a-kpi-toprint", "selector": ".k-kpi-hint", "value": "dont 3 à réimprimer" }],
+        [{ "op": "text", "target": "a-kpi-toprint", "selector": ".k-kpi-value", "value": "10" }, { "op": "text", "target": "a-kpi-toprint", "selector": ".k-kpi-hint", "value": "hors pièces en impression" }],
+        [{ "op": "text", "target": "a-kpi-toprint", "selector": ".k-kpi-value", "value": "7" }, { "op": "text", "target": "a-kpi-toprint", "selector": ".k-kpi-hint", "value": "pas encore lancées" }]
+      ]
+    },
+    {
+      "anchor": "a-prints-table", "text": "Que montre l'estimation de chaque impression ?", "role": "Technicien impression et achats",
+      "whyWeAsk": "La colonne d'estimation de la file change de contenu selon la réponse.",
+      "options": ["La matière seule", "La matière et le temps", "La matière, le temps et le coût"],
+      "effects": [
+        [{ "op": "text", "target": "a-prints-table", "selector": "thead th:nth-child(6) .k-tbl-hl", "value": "Matière (g)" }, { "op": "badge", "target": "a-prints-table", "text": "Matière" }],
+        [{ "op": "text", "target": "a-prints-table", "selector": "thead th:nth-child(6) .k-tbl-hl", "value": "Matière et temps (g · h)" }, { "op": "badge", "target": "a-prints-table", "text": "Matière et temps" }],
+        [{ "op": "text", "target": "a-prints-table", "selector": "thead th:nth-child(6) .k-tbl-hl", "value": "Matière, temps et coût (g · h · €)" }, { "op": "badge", "target": "a-prints-table", "text": "Avec coût" }]
+      ]
+    },
+    {
+      "anchor": "a-orders-table", "text": "À quoi une commande est-elle rattachée ?", "role": "Technicien impression et achats",
+      "whyWeAsk": "La colonne « Lié à » dit ce que chaque commande débloque.",
+      "options": ["À une pièce imprimée", "À une pièce ou à une réparation", "À un robot ou à un projet"],
+      "effects": [
+        [{ "op": "text", "target": "a-orders-table", "selector": "thead th:nth-child(3) .k-tbl-hl", "value": "Pièce" }, { "op": "badge", "target": "a-orders-table", "text": "Pièce" }],
+        [{ "op": "text", "target": "a-orders-table", "selector": "thead th:nth-child(3) .k-tbl-hl", "value": "Pièce ou réparation" }, { "op": "badge", "target": "a-orders-table", "text": "Pièce ou réparation" }],
+        [{ "op": "text", "target": "a-orders-table", "selector": "thead th:nth-child(3) .k-tbl-hl", "value": "Robot ou projet" }, { "op": "badge", "target": "a-orders-table", "text": "Robot ou projet" }]
+      ]
+    },
+    {
+      "anchor": "a-kpi-orders-total", "text": "Quelles commandes entrent dans le montant à commander ?", "role": "Responsable atelier",
+      "whyWeAsk": "Le montant en tête de l'écran des commandes dépend de ce périmètre.",
+      "options": ["Les lignes À commander seulement", "À commander et Commandée", "Tout ce qui n'est pas Reçue"],
+      "effects": [
+        [{ "op": "text", "target": "a-kpi-orders-total", "selector": ".k-kpi-value", "value": "195,70 €" }, { "op": "text", "target": "a-kpi-orders-total", "selector": ".k-kpi-hint", "value": "3 lignes à commander" }],
+        [{ "op": "text", "target": "a-kpi-orders-total", "selector": ".k-kpi-value", "value": "356,10 €" }, { "op": "text", "target": "a-kpi-orders-total", "selector": ".k-kpi-hint", "value": "à commander et commandées" }],
+        [{ "op": "text", "target": "a-kpi-orders-total", "selector": ".k-kpi-value", "value": "365,50 €" }, { "op": "text", "target": "a-kpi-orders-total", "selector": ".k-kpi-hint", "value": "tout sauf les commandes reçues" }]
+      ]
+    },
+    {
+      "anchor": "a-kpi-stock-low", "text": "Quand le stock déclenche-t-il une alerte ?", "role": "Technicien impression et achats",
+      "whyWeAsk": "Le compteur d'articles en alerte et la liste d'alertes suivent cette règle.",
+      "options": ["Sous le minimum", "Sous le minimum plus 20 % de marge", "Jamais, un écart dans le tableau suffit"],
+      "effects": [
+        [{ "op": "text", "target": "a-kpi-stock-low", "selector": ".k-kpi-value", "value": "5" }, { "op": "text", "target": "a-kpi-stock-low", "selector": ".k-kpi-hint", "value": "sous le minimum" }],
+        [{ "op": "text", "target": "a-kpi-stock-low", "selector": ".k-kpi-value", "value": "9" }, { "op": "text", "target": "a-kpi-stock-low", "selector": ".k-kpi-hint", "value": "sous minimum + 20 % de marge" }],
+        [{ "op": "text", "target": "a-kpi-stock-low", "selector": ".k-kpi-value", "value": "0" }, { "op": "text", "target": "a-kpi-stock-low", "selector": ".k-kpi-hint", "value": "aucune alerte, écart dans le tableau" }]
+      ]
+    },
+    {
+      "anchor": "a-buffer-withdraw", "text": "Comment prélève-t-on dans le stock tampon générateur ?", "role": "Responsable atelier",
+      "whyWeAsk": "Le libellé et les étapes du bouton de prélèvement changent selon la règle.",
+      "options": ["Prélèvement libre", "Motif obligatoire", "Approbation du responsable"],
+      "effects": [
+        [{ "op": "text", "target": "a-buffer-withdraw", "value": "Prélever dans le tampon" }, { "op": "badge", "target": "a-buffer-withdraw", "text": "Libre" }],
+        [{ "op": "text", "target": "a-buffer-withdraw", "value": "Prélever (motif obligatoire)" }, { "op": "badge", "target": "a-buffer-withdraw", "text": "Motif requis" }],
+        [{ "op": "text", "target": "a-buffer-withdraw", "value": "Demander l'approbation du prélèvement" }, { "op": "badge", "target": "a-buffer-withdraw", "text": "Approbation" }]
+      ]
+    },
+    {
+      "anchor": "a-repairs-table", "text": "Que garde-t-on de chaque réparation ?", "role": "Ingénieure en chef",
+      "whyWeAsk": "La colonne d'anomalie du journal s'enrichit selon la réponse.",
+      "options": ["L'anomalie et le correctif", "L'anomalie avec une photo", "L'anomalie avec son coût"],
+      "effects": [
+        [{ "op": "text", "target": "a-repairs-table", "selector": "thead th:nth-child(5) .k-tbl-hl", "value": "Anomalie et correctif" }, { "op": "badge", "target": "a-repairs-table", "text": "Texte" }],
+        [{ "op": "text", "target": "a-repairs-table", "selector": "thead th:nth-child(5) .k-tbl-hl", "value": "Anomalie et photo" }, { "op": "badge", "target": "a-repairs-table", "text": "Avec photo" }],
+        [{ "op": "text", "target": "a-repairs-table", "selector": "thead th:nth-child(5) .k-tbl-hl", "value": "Anomalie et coût (€)" }, { "op": "badge", "target": "a-repairs-table", "text": "Avec coût" }]
+      ]
+    },
+    {
+      "anchor": "a-recurring-flag", "text": "À partir de combien d'échecs une pièce est-elle en défaut récurrent ?", "role": "Ingénieure en chef",
+      "whyWeAsk": "Le badge de défauts récurrents au-dessus des versions apparaît ou non selon le seuil.",
+      "options": ["Après 2 échecs", "Après 3 échecs", "Jamais de badge"],
+      "effects": [
+        [{ "op": "show", "target": "a-recurring-flag" }, { "op": "text", "target": "a-recurring-flag", "value": "2 pièces en défaut récurrent" }],
+        [{ "op": "show", "target": "a-recurring-flag" }, { "op": "text", "target": "a-recurring-flag", "value": "Aucune pièce en défaut récurrent (seuil 3)" }],
+        [{ "op": "hide", "target": "a-recurring-flag" }]
+      ]
+    }
+  ]
+}

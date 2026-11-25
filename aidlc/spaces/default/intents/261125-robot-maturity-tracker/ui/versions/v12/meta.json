@@ -1,0 +1,23 @@
+{
+  "version": 12,
+  "parent": 11,
+  "createdAt": "2026-11-25T10:25:30Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q13"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q13 (Défauts récurrents): A",
+  "ref": "intent-capture-questions#Q13",
+  "prevAnswer": "",
+  "newAnswer": "A",
+  "prevRaw": "",
+  "newRaw": " A",
+  "n": 12,
+  "kind": "answer",
+  "changedIds": [
+    "a-recurring-flag"
+  ]
+}

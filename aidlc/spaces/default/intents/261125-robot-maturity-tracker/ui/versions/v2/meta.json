@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "parent": 1,
+  "createdAt": "2026-11-25T10:19:55Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Agent change: Renamed the app from RoboForge to Kaminos in the top bar and the page title.",
+  "request": "ok",
+  "selection": [],
+  "selectionSource": "agent",
+  "via": "agent-mode",
+  "agent": "ui-refiner",
+  "jobId": "ag-mwvz1ljr-w2iv",
+  "files": [
+    "ui/src/head.json",
+    "ui/src/shell.html"
+  ],
+  "n": 2,
+  "kind": "refine",
+  "changedIds": [],
+  "classification": "aesthetic"
+}

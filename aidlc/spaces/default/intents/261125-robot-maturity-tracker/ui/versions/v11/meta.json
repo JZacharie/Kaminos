@@ -1,0 +1,23 @@
+{
+  "version": 11,
+  "parent": 10,
+  "createdAt": "2026-11-25T10:25:22Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q12"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q12 (Journal de réparation): B",
+  "ref": "intent-capture-questions#Q12",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 11,
+  "kind": "answer",
+  "changedIds": [
+    "a-repairs-table"
+  ]
+}

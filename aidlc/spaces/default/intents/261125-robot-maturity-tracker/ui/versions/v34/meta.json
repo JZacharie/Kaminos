@@ -1,0 +1,28 @@
+{
+  "version": 34,
+  "parent": 33,
+  "createdAt": "2026-11-25T10:52:54Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Agent change: Un bouton « Commander une pièce CNC ou laser » est ajouté sur les pages Stock et Commandes. Il ouvre un formulaire de commande (procédé, pièce, robot lié, prestataire, montant, délai). Le tableau des commandes a maintenant une colonne et un filtre « Type », et deux commandes d'exemple (CNC et laser…",
+  "request": "ajoute le possibilité de comender des CNC et des laser",
+  "selection": [],
+  "selectionSource": "agent",
+  "via": "agent-mode",
+  "agent": "ui-refiner",
+  "jobId": "ag-mww068iq-2dom",
+  "files": [
+    "ui/src/overlays.html",
+    "ui/src/data.js",
+    "ui/src/screens/40-orders.blocks.js",
+    "ui/src/screens/40-orders.html",
+    "ui/src/screens/50-stock.html"
+  ],
+  "n": 34,
+  "kind": "refine",
+  "changedIds": [],
+  "classification": "aesthetic"
+}

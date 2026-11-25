@@ -1,0 +1,53 @@
+{
+  "version": 34,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.5,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 3,
+      "readability": 3,
+      "layout": 3,
+      "fit": 4
+    },
+    "issues": [
+      {
+        "criterion": "consistency",
+        "text": "Stock screen ends with an English-language 'Items' table (Invoice 1042, Purchase order, 'Add item', 'In progress', Edit/Delete) that is a generic template unrelated to the French robot workshop and clashes with the rest."
+      },
+      {
+        "criterion": "realism",
+        "text": "Placeholder-looking 'Items' data (Invoice, Quality check, owners Luis/Marta) on Stock breaks the domain realism of the robot workshop."
+      },
+      {
+        "criterion": "readability",
+        "text": "Very small text for secondary labels, pills, hints and table cells (about 9-11px), with light grey on white sub-labels such as 'Minimum 3 kg' and card captions."
+      },
+      {
+        "criterion": "layout",
+        "text": "Robots grid cards are very tall with long, repetitive stat bars and large empty areas. R-03 Hexa and R-02 Scout cards are cut off at the bottom, and the card heights are uneven."
+      },
+      {
+        "criterion": "layout",
+        "text": "At 1280 the Stock page leaves a large empty area under the alerts panel next to the inventory table, and the content is narrow within the viewport; the top KPI card floats awkwardly beside the table."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "R-03 Hexa card layout differs from the others (status banner, ring and badge stacked), the 'En pause' state is easy to miss, and progress bars are empty/grey so they carry little information."
+      }
+    ],
+    "summary": "A coherent, realistic French robot-workshop UI with clear titles and primary buttons, but a leftover English generic 'Items' table on Stock, tiny text, and tall, uneven robot cards with wasted space pull it down.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0.0347,
+    "htmlSha": "fadde4bb5f11c60a9911003cfbce5bfc2b3bfd52f3f9b37041bbbec2941553ea",
+    "rubric": "addon",
+    "samples": 2,
+    "sampleMeans": [
+      3.5,
+      3.5
+    ],
+    "seconds": 18.4,
+    "at": "2026-11-25T10:53:12Z"
+  }
+}

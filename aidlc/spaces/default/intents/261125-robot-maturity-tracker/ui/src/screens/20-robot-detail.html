@@ -1,0 +1,52 @@
+<section data-route="#/robot/R-03" data-k-nav="#/robots" data-parent="#/robots" aria-labelledby="h-robot-detail">
+  <nav class="k-crumbs" aria-label="Fil d'Ariane"><a href="#/robots">Robots</a> / <span class="rd-crumb">Hexa</span></nav>
+  <div class="k-page-header">
+    <div>
+      <h1 id="h-robot-detail">Fiche robot R-03 Hexa</h1>
+      <p class="rd-context">Hexapode · mis à jour le 25/11 à 10:00</p>
+    </div>
+    <div class="k-actions">
+      <a class="k-btn k-btn-primary" href="#/repairs">Ouvrir la réparation critique</a>
+    </div>
+  </div>
+  <div class="k-grid k-row-fill">
+    <div class="k-span-12">
+      <ul class="k-alerts rd-cap">
+        <li class="k-alert k-alert-bad">
+          <span class="k-alert-title rd-cap-title">Robot en pause</span>
+          <span class="k-badge k-badge-bad rd-cap-badge">Plafonné</span>
+          <span class="k-alert-meta rd-cap-meta"></span>
+        </li>
+      </ul>
+    </div>
+    <div class="k-span-12" id="a-palier-steps" data-k-block="steps" data-k-cfg="robot-detail-steps" data-k-canon></div>
+    <div class="k-span-7" id="a-subsystem-scores" data-k-block="bars" data-k-cfg="robot-detail-scores" data-k-canon></div>
+    <div class="k-span-5" id="a-prerequisites" data-k-block="detail" data-k-cfg="robot-detail-prereqs" data-k-canon></div>
+    <div class="k-span-12" id="a-subassemblies" data-k-block="table" data-k-cfg="robot-detail-subassemblies" data-k-canon></div>
+    <div class="k-span-12" id="a-linked-items" data-k-block="table" data-k-cfg="robot-detail-linked" data-k-canon></div>
+  </div>
+  <script>
+  (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
+    var sec = document.getElementById('h-robot-detail').closest('section');
+    function paint() {
+      var m = /#\/robot\/([^/?]+)/.exec(location.hash), id = m ? decodeURIComponent(m[1]) : 'R-03';
+      var r = (D.robots || []).filter(function (x) { return x.id === id; })[0];
+      if (!r) return;
+      document.getElementById('h-robot-detail').textContent = 'Fiche robot ' + r.id + ' ' + r.name;
+      sec.querySelector('.rd-crumb').textContent = r.name;
+      sec.querySelector('.rd-context').textContent = r.type.charAt(0).toUpperCase() + r.type.slice(1) + ' · score ' + r.score + ' sur 100 · mis à jour le 25/11 à 10:00';
+      var crit = (D.repairs || []).filter(function (x) { return x.robotId === id && x.severity === 'Critique' && x.status !== 'Clôturée'; });
+      var capped = r.palierShown !== r.palier && crit.length > 0;
+      var box = sec.querySelector('.rd-cap');
+      box.hidden = !capped;
+      if (capped) {
+        sec.querySelector('.rd-cap-title').textContent = r.name + ' est en pause : palier plafonné à ' + r.palierShown + ' (score ' + r.score + ', ' + r.palier + ' sans réparation)';
+        sec.querySelector('.rd-cap-meta').textContent = crit.length + ' réparation' + (crit.length > 1 ? 's' : '') + ' critique' + (crit.length > 1 ? 's' : '') + ' ouverte' + (crit.length > 1 ? 's' : '') + ' : ' +
+          crit.map(function (x) { return x.id + ' (' + x.subsystem + ', ' + x.status.toLowerCase() + ')'; }).join(' ; ') + '. Sous-systèmes figés : ' + r.frozen + '.';
+      }
+    }
+    paint();
+    addEventListener('kit:route', paint);
+  });
+  </script>
+</section>

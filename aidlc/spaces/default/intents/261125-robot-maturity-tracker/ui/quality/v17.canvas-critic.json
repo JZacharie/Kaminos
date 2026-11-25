@@ -1,0 +1,54 @@
+{
+  "version": 17,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.67,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 4,
+      "readability": 3,
+      "layout": 3,
+      "fit": 4
+    },
+    "issues": [
+      {
+        "criterion": "layout",
+        "text": "Robots page at 1280 and 1440: the 3-column card grid leaves cards with large empty areas (R-06 Titan, R-05 Nano), while cards are uneven in height. Second-row cards are cut off with the Contrôle row missing at 1280, so the page is very long."
+      },
+      {
+        "criterion": "readability",
+        "text": "Small, low-contrast secondary text (KPI sublabels, 'Pour atteindre…' captions, table cells, tier filter pills) is hard to read, especially in the downscaled 1440 view."
+      },
+      {
+        "criterion": "consistency",
+        "text": "Progress bar colors vary across cards without a legend (R-04 Chassis is blue, others are red or orange). The R-03 and R-02 cards have different header structures (status pill above the ring vs. beside it), so the card tops do not align."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "The Hexa robot page has several equally weighted cards below the alert. The key blocker (the 2 critical repairs) and the next step are not emphasized beyond the banner, and the primary button stays generic."
+      },
+      {
+        "criterion": "realism",
+        "text": "Robot ring scores show 6/15/21 while the cards' sub-scores read 18-52, and R-03/R-02/R-01 rings show 0, which looks inconsistent with the 'Score moyen 45'. The sort claim 'du plus bas au plus haut' does not match the ring values."
+      },
+      {
+        "criterion": "layout",
+        "text": "The Hexa page tables use width well, but the 'Ce qui bloque' column is truncated with an ellipsis ('IM-109 en imp…'), cutting off content."
+      }
+    ],
+    "summary": "A coherent, realistic workshop dashboard with a clear robot-fleet and detail structure, but dense small text, uneven card layouts with empty space, a truncated table cell and inconsistent score data pull it below the pass bar.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0.0415,
+    "htmlSha": "79e33dd31bc91ea5973d2d9cb7baa295f1660658cb3eac5e106f85070a423a48",
+    "rubric": "addon",
+    "samples": 3,
+    "sampleMeans": [
+      3.83,
+      3.83,
+      3.67
+    ],
+    "seconds": 25.5,
+    "at": "2026-11-25T10:31:22Z"
+  }
+}

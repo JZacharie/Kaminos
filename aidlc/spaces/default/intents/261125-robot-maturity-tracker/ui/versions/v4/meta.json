@@ -1,0 +1,23 @@
+{
+  "version": 4,
+  "parent": 3,
+  "createdAt": "2026-11-25T10:23:37Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q5"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q5 (Score moyen de la flotte): A",
+  "ref": "intent-capture-questions#Q5",
+  "prevAnswer": "",
+  "newAnswer": "A",
+  "prevRaw": "",
+  "newRaw": " A",
+  "n": 4,
+  "kind": "answer",
+  "changedIds": [
+    "a-kpi-mean-score"
+  ]
+}

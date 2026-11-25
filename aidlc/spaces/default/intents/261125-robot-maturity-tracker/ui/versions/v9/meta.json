@@ -1,0 +1,23 @@
+{
+  "version": 9,
+  "parent": 8,
+  "createdAt": "2026-11-25T10:25:00Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q10"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q10 (Articles sous le minimum): A",
+  "ref": "intent-capture-questions#Q10",
+  "prevAnswer": "",
+  "newAnswer": "A",
+  "prevRaw": "",
+  "newRaw": " A",
+  "n": 9,
+  "kind": "answer",
+  "changedIds": [
+    "a-kpi-stock-low"
+  ]
+}

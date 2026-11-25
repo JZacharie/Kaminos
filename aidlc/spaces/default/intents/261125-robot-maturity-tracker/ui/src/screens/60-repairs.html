@@ -1,0 +1,118 @@
+<section data-route="#/repairs" aria-labelledby="h-repairs">
+  <div class="k-page-header">
+    <div>
+      <h1 id="h-repairs">Réparations et versions</h1>
+      <p id="repairs-context">Relire les casses et les pièces remplacées, version par version.</p>
+    </div>
+    <div class="k-actions">
+      <button class="k-btn k-btn-primary" type="button" data-k-open="#repairs-dialog">Déclarer une réparation</button>
+    </div>
+  </div>
+
+  <div class="k-grid">
+    <div class="k-span-12" id="a-repairs-filters" data-k-block="filterbar" data-k-cfg="repairs-filters"></div>
+    <div class="k-span-12" id="a-repairs-table" data-k-block="table" data-k-cfg="repairs-table"></div>
+
+    <div class="k-span-12">
+      <span class="k-badge k-badge-bad" id="a-recurring-flag">Défauts récurrents</span>
+    </div>
+
+    <article class="k-card k-span-12" id="a-version-timeline" aria-labelledby="repairs-tl-title">
+      <div class="k-card-head"><h2 class="k-card-title" id="repairs-tl-title">Versions des pièces</h2></div>
+      <div class="k-stack" id="repairs-tl-body"></div>
+      <p class="k-empty-sm" id="repairs-tl-empty" hidden>Aucune version de pièce enregistrée pour l'instant.</p>
+    </article>
+  </div>
+
+  <dialog class="k-dialog" id="repairs-dialog" aria-labelledby="repairs-dialog-title">
+    <form id="repairs-new-form" class="k-form" novalidate>
+      <div class="k-dialog-head"><h2 id="repairs-dialog-title">Déclarer une réparation</h2></div>
+      <div class="k-dialog-body k-form">
+        <div class="k-field">
+          <label for="repairs-f-robot">Robot</label>
+          <select class="k-select" id="repairs-f-robot" required></select>
+        </div>
+        <div class="k-field">
+          <label for="repairs-f-subsystem">Sous-système</label>
+          <select class="k-select" id="repairs-f-subsystem" required>
+            <option>Châssis</option><option>Mobilité</option><option>Énergie</option><option>Capteurs</option><option>Contrôle</option>
+          </select>
+        </div>
+        <div class="k-field">
+          <label for="repairs-f-part">Pièce</label>
+          <input class="k-input" id="repairs-f-part" type="text" required aria-describedby="repairs-f-part-err" autocomplete="off">
+          <span class="k-error" id="repairs-f-part-err" role="alert"></span>
+        </div>
+        <div class="k-field">
+          <label for="repairs-f-anomaly">Anomalie constatée</label>
+          <textarea class="k-textarea" id="repairs-f-anomaly" rows="3" required aria-describedby="repairs-f-anomaly-err"></textarea>
+          <span class="k-error" id="repairs-f-anomaly-err" role="alert"></span>
+        </div>
+        <div class="k-field">
+          <label for="repairs-f-severity">Gravité</label>
+          <select class="k-select" id="repairs-f-severity" required>
+            <option>Mineure</option><option>Majeure</option><option>Critique</option>
+          </select>
+        </div>
+      </div>
+      <div class="k-dialog-foot">
+        <button class="k-btn" type="button" data-k-close>Annuler</button>
+        <button class="k-btn k-btn-primary" type="submit">Enregistrer la réparation</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+  (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
+    var section = document.getElementById('h-repairs').closest('section');
+    var q = function (id) { return section.querySelector('#' + id); };
+    var pl = function (n, one, many) { return n + ' ' + (n > 1 ? many : one); };
+    var repairs = D.repairs || [];
+    var versions = D.partVersions || [];
+    var robots = D.robots || [];
+
+    // context line, computed from the rows of the log
+    var open = repairs.filter(function (r) { return r.status !== 'Clôturée'; });
+    var crit = open.filter(function (r) { return r.severity === 'Critique'; });
+    q('repairs-context').textContent = pl(open.length, 'réparation non clôturée', 'réparations non clôturées') +
+      ' dont ' + pl(crit.length, 'critique', 'critiques');
+
+    // recurring-defect badge (plain badge above the timeline)
+    var n = D.kpis.recurringParts;
+    q('a-recurring-flag').textContent = n > 0 ? pl(n, 'pièce', 'pièces') + ' en défaut récurrent' : 'Aucune pièce en défaut récurrent';
+
+    // part-version timeline: one steps block per part
+    var robotName = function (id) {
+      var r = robots.filter(function (x) { return x.id === id; })[0];
+      return r ? id + ' ' + r.name : id;
+    };
+    var groups = {}, order = [];
+    versions.forEach(function (v) {
+      var k = v.robotId + '|' + v.part;
+      if (!groups[k]) { groups[k] = { part: v.part, robotId: v.robotId, list: [] }; order.push(k); }
+      groups[k].list.push(v);
+    });
+    var failures = function (g) { return g.list.filter(function (v) { return v.outcome === 'Défaut constaté'; }).length; };
+    order.sort(function (a, b) { return failures(groups[b]) - failures(groups[a]); });
+    var kind = { 'Validée': 'done', 'Défaut constaté': 'blocked', 'En test': 'in progress', 'En impression': 'in progress', 'À réimprimer': 'at risk' };
+    var body = q('repairs-tl-body');
+    q('repairs-tl-empty').hidden = order.length > 0;
+    order.forEach(function (k, i) {
+      var g = groups[k];
+      g.list.sort(function (a, b) { return parseInt(String(a.version).slice(1), 10) - parseInt(String(b.version).slice(1), 10); });
+      var wrap = document.createElement('div');
+      var flag = failures(g) >= 2 ? ' <span class="k-badge k-badge-bad">Défaut récurrent</span>' : '';
+      wrap.innerHTML = '<h3 class="k-card-title">' + esc(g.part) + ' <span class="k-badge">' + esc(robotName(g.robotId)) + '</span>' + flag + '</h3>' +
+        '<div id="repairs-tl-steps-' + i + '"></div>';
+      body.appendChild(wrap);
+      K.block.steps('#repairs-tl-steps-' + i, {
+        frame: false,
+        minStepWidth: 180,
+        steps: g.list.map(function (v) {
+          return { label: v.version, sub: v.note, status: kind[v.outcome] || 'waiting', statusText: v.outcome };
+        })
+      });
+    });
+  });
+  </script>
+</section>

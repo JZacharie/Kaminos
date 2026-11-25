@@ -1,0 +1,23 @@
+{
+  "version": 22,
+  "parent": 21,
+  "createdAt": "2026-11-25T10:45:32Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "chatbot-questions#Q1"
+    ]
+  },
+  "summary": "Answered chatbot-questions#Q1 (Chatbot panel): B",
+  "ref": "chatbot-questions#Q1",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 22,
+  "kind": "answer",
+  "changedIds": [
+    "a-chatbot-panel"
+  ]
+}

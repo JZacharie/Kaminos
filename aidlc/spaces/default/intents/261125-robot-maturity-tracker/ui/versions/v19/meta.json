@@ -1,0 +1,27 @@
+{
+  "version": 19,
+  "parent": 18,
+  "createdAt": "2026-11-25T10:44:40Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Added module Data table to Stock",
+  "moduleId": "table",
+  "screen": "stock",
+  "moduleVersion": "1.0.0",
+  "entryExisted": false,
+  "n": 19,
+  "kind": "module",
+  "changedIds": [
+    "a-table",
+    "a-table-grid",
+    "a-table-filters",
+    "a-table-status-filter",
+    "a-table-search",
+    "a-table-sort",
+    "a-table-pager",
+    "a-table-add"
+  ]
+}

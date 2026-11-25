@@ -1,0 +1,314 @@
+<section data-route="#/robots" aria-labelledby="h-robots">
+  <div class="k-page-header">
+    <div>
+      <h1 id="h-robots">Flotte de robots</h1>
+      <p id="robots-context">Atelier Cyclope, Lyon</p>
+    </div>
+    <div class="k-actions">
+      <a class="k-btn k-btn-primary" id="robots-open-first" href="#/robots">Ouvrir la fiche d'un robot</a>
+    </div>
+  </div>
+  <div class="k-grid">
+    <div class="k-span-3" id="a-kpi-robots" data-k-block="kpi" data-k-cfg="robots-kpi-robots"></div>
+    <div class="k-span-3" id="a-kpi-mean-score" data-k-block="kpi" data-k-cfg="robots-kpi-mean"></div>
+    <div class="k-span-3" id="a-kpi-critical" data-k-block="kpi" data-k-cfg="robots-kpi-critical"></div>
+    <div class="k-span-3" id="a-kpi-toprint" data-k-block="kpi" data-k-cfg="robots-kpi-toprint"></div>
+    <div class="k-span-12" id="a-robots-filters" data-k-block="filterbar" data-k-cfg="robots-filters"></div>
+    <div class="k-span-12 k-stack" id="a-robot-cards" data-k-canon>
+      <p class="k-muted" id="robots-count" role="status"></p>
+      <div class="k-grid k-grid-stretch" id="robots-cards-list"></div>
+      <div class="k-empty-sm" id="robots-empty" hidden>Aucun robot à ce palier. Choisissez un autre palier ou réinitialisez le filtre.</div>
+    </div>
+    <div class="k-span-12 k-card k-stack" id="rp-card">
+      <div class="k-card-head"><h2 class="k-card-title">Plan des robots</h2></div>
+      <p class="k-muted">Choisissez un robot, cliquez sur une pièce du plan pour l'identifier, puis tournez-la en 3D à droite.</p>
+      <div class="k-chips" role="group" aria-label="Robot du plan" id="rp-robots"></div>
+      <div class="rp-grid">
+        <div class="k-stack">
+          <h3 id="rp-plan-title">Plan</h3>
+          <svg id="rp-plan" class="rp-plan" viewBox="0 0 560 290" role="group" aria-labelledby="rp-plan-title"></svg>
+          <p class="k-muted">Les pièces pleines sont imprimées en 3D dans l'atelier ; les pointillés sont des éléments achetés.</p>
+          <p class="rp-picked" id="rp-picked" role="status"></p>
+          <dl class="k-dl" id="rp-detail"></dl>
+        </div>
+        <div class="k-stack">
+          <h3 id="rp-3d-title">Pièce en 3D</h3>
+          <svg id="rp-3d" class="p3d-canvas rp-3d" viewBox="0 0 480 330" role="img" aria-label="Modèle 3D de la pièce"></svg>
+          <div class="p3d-sliders">
+            <div class="k-field">
+              <label for="rp-yaw">Rotation horizontale</label>
+              <input type="range" id="rp-yaw" min="-180" max="180" step="1" value="35">
+            </div>
+            <div class="k-field">
+              <label for="rp-pitch">Inclinaison</label>
+              <input type="range" id="rp-pitch" min="-80" max="80" step="1" value="22">
+            </div>
+          </div>
+          <div class="k-row">
+            <button class="k-btn k-btn-sm" type="button" id="rp-reset">Réinitialiser la vue</button>
+            <a class="k-btn k-btn-sm" href="#/prints">Voir la file d'impression</a>
+          </div>
+          <p class="k-muted">Glissez sur la pièce pour la tourner, ou utilisez les curseurs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
+    var PAL = ['P1 Prototype', 'P2 Fonctionnel', 'P3 Fiable', 'P4 Autonome'];
+    var PAL_TONE = ['bad', 'warn', 'info', 'ok'];
+    var SUBS = [['Châssis', 'scoreChassis'], ['Mobilité', 'scoreMobility'], ['Énergie', 'scoreEnergy'], ['Capteurs', 'scoreSensors'], ['Contrôle', 'scoreControl']];
+    function toneOf(s) { return s < 25 ? 'bad' : s < 50 ? 'warn' : s < 75 ? 'info' : 'ok'; }
+    function plural(n, w) { return n + ' ' + w + (n > 1 ? 's' : ''); }
+    var sorted = D.robots.slice().sort(function (a, b) { return a.score - b.score; });
+
+    function card(r) {
+      var frozen = r.frozen ? String(r.frozen).split(/,\s*/) : [];
+      var shownIdx = PAL.indexOf(r.palierShown), realIdx = PAL.indexOf(r.palier);
+      var next = PAL[shownIdx + 1];
+      var todo = D.prerequisites.filter(function (p) { return p.robotId === r.id && !p.done; });
+      var h = '<article class="k-card k-span-4" data-robot="' + esc(r.id) + '">';
+      h += '<div class="k-card-head"><h2 class="k-card-title"><a href="#/robot/' + esc(r.id) + '">' + esc(r.id) + ' ' + esc(r.name) + '</a></h2>';
+      if (r.criticalOpen > 0) h += '<span class="k-badge k-badge-bad">En pause · ' + plural(r.criticalOpen, 'réparation critique') + '</span>';
+      h += '</div>';
+      h += '<div class="k-row"><div data-k-ring="' + r.score + '" data-k-ring-text="' + r.score + '" data-k-tone="' + toneOf(r.score) + '" aria-label="Score de ' + esc(r.name) + ' : ' + r.score + ' sur 100"></div>';
+      h += '<div class="k-stack"><span class="k-badge k-badge-' + PAL_TONE[shownIdx] + '">' + esc(r.palierShown) + '</span>';
+      h += '<span class="k-muted">' + esc(r.type) + (shownIdx !== realIdx ? ', plafonné (score : ' + esc(r.palier) + ')' : '') + '</span></div></div>';
+      h += '<ul class="k-list">';
+      SUBS.forEach(function (s) {
+        var v = r[s[1]], isFrozen = frozen.indexOf(s[0]) >= 0;
+        h += '<li><span>' + esc(s[0]) + (isFrozen ? ' (figé)' : '') + '</span><span class="k-muted">' + v + ' / 100</span></li>';
+        h += '<li><div class="k-grow" data-k-progress="' + v + '" data-k-tone="' + (isFrozen ? 'bad' : toneOf(v)) + '" aria-label="' + esc(s[0]) + ' : ' + v + ' sur 100' + (isFrozen ? ', figé' : '') + '"></div></li>';
+      });
+      h += '</ul>';
+      if (!next) {
+        h += '<p class="k-muted">Palier maximal atteint.</p>';
+      } else {
+        h += '<h3 class="k-kpi-label">Pour atteindre ' + esc(next) + '</h3>';
+        if (!todo.length) h += '<p class="k-muted">Aucun prérequis en attente.</p>';
+        else {
+          h += '<ul class="k-list">';
+          todo.slice(0, 3).forEach(function (p) { h += '<li><span>' + esc(p.label) + '</span><span class="k-muted k-break">' + esc(p.linkedId) + '</span></li>'; });
+          if (todo.length > 3) h += '<li><span class="k-muted">+ ' + (todo.length - 3) + ' autres prérequis</span></li>';
+          h += '</ul>';
+        }
+      }
+      return h + '</article>';
+    }
+
+    window.RobotCards = {
+      render: function (palier) {
+        var rows = sorted.filter(function (r) { return !palier || r.palierShown === palier; });
+        document.getElementById('robots-cards-list').innerHTML = rows.map(card).join('');
+        document.getElementById('robots-empty').hidden = rows.length > 0;
+        document.getElementById('robots-count').textContent = plural(rows.length, 'robot') + ' affiché' + (rows.length > 1 ? 's' : '') + ', du score le plus bas au plus haut';
+      }
+    };
+    window.RobotCards.render('');
+    var focus = sorted.filter(function (r) { return r.criticalOpen > 0; })[0] || sorted[0];
+    var open = document.getElementById('robots-open-first');
+    open.setAttribute('href', '#/robot/' + focus.id);
+    open.setAttribute('aria-label', 'Ouvrir la fiche d\'un robot, par exemple ' + focus.id + ' ' + focus.name);
+    document.getElementById('robots-context').textContent = 'Atelier Cyclope, Lyon · mis à jour mer. 25/11 à 10:00 · ' + D.kpis.robotsCount + ' robots';
+  });
+  </script>
+  <script>
+  (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
+    var TONE = { 'Validée': 'ok', 'En impression': 'info', 'À préparer': 'warn', 'À réimprimer': 'bad' };
+    var AX = { x: 0, y: 1, z: 2 };
+    var nf = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
+    var plans = D.robotPlans || [];
+    var st = { robot: plans.length ? plans[0].robotId : '', part: '', yaw: 35, pitch: 22 };
+    var meshes = {};
+    var drag = null;
+    function byId(id) { return document.getElementById(id); }
+    function planOf(rid) { return plans.filter(function (p) { return p.robotId === rid; })[0]; }
+    function robotOf(rid) { return D.robots.filter(function (r) { return r.id === rid; })[0] || { id: rid, name: rid, type: '' }; }
+    function printOf(id) { return D.prints.filter(function (p) { return p.id === id; })[0]; }
+    function partOf(id) { var pl = planOf(st.robot); return pl ? pl.parts.filter(function (p) { return p.printId === id; })[0] : null; }
+    function wrap(a) { return ((a + 180) % 360 + 360) % 360 - 180; }
+
+    // ---- 3D: faces of boxes and cylinders, flat shading, painter's order
+    function buildMesh(prims) {
+      var faces = [];
+      prims.forEach(function (p) {
+        var c = [p[1], p[2], p[3]], a, s, i;
+        if (p[0] === 'box') {
+          var half = [p[4] / 2, p[5] / 2, p[6] / 2];
+          for (a = 0; a < 3; a++) for (s = -1; s <= 1; s += 2) {
+            var u = (a + 1) % 3, v = (a + 2) % 3, n = [0, 0, 0], pts = [];
+            n[a] = s;
+            [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(function (q) {
+              var pt = [0, 0, 0];
+              pt[a] = c[a] + s * half[a]; pt[u] = c[u] + q[0] * half[u]; pt[v] = c[v] + q[1] * half[v];
+              pts.push(pt);
+            });
+            faces.push({ pts: pts, n: n });
+          }
+        } else {
+          var A = AX[p[6]], U = (A + 1) % 3, V = (A + 2) % 3, N = 20, r = p[4], hl = p[5] / 2;
+          function ring(k, side) {
+            var ang = 2 * Math.PI * k / N, pt = [0, 0, 0];
+            pt[U] = c[U] + r * Math.cos(ang); pt[V] = c[V] + r * Math.sin(ang); pt[A] = c[A] + side * hl;
+            return pt;
+          }
+          for (i = 0; i < N; i++) {
+            var mid = 2 * Math.PI * (i + 0.5) / N, nn = [0, 0, 0];
+            nn[U] = Math.cos(mid); nn[V] = Math.sin(mid);
+            faces.push({ pts: [ring(i, -1), ring(i + 1, -1), ring(i + 1, 1), ring(i, 1)], n: nn });
+          }
+          [-1, 1].forEach(function (side) {
+            var cap = [], nc = [0, 0, 0];
+            nc[A] = side;
+            for (i = 0; i < N; i++) cap.push(ring(i, side));
+            faces.push({ pts: cap, n: nc });
+          });
+        }
+      });
+      var lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
+      faces.forEach(function (f) { f.pts.forEach(function (pt) { for (var k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], pt[k]); hi[k] = Math.max(hi[k], pt[k]); } }); });
+      var ctr = [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2], rad = 0;
+      faces.forEach(function (f) { f.pts.forEach(function (pt) { rad = Math.max(rad, Math.hypot(pt[0] - ctr[0], pt[1] - ctr[1], pt[2] - ctr[2])); }); });
+      return { faces: faces, center: ctr, radius: rad || 1 };
+    }
+    function render3d() {
+      var svg = byId('rp-3d'), part = partOf(st.part), pr = printOf(st.part);
+      if (!part || !pr) { svg.innerHTML = ''; return; }
+      var m = meshes[part.printId] || (meshes[part.printId] = buildMesh(part.model));
+      var ya = st.yaw * Math.PI / 180, pa = st.pitch * Math.PI / 180;
+      var cy = Math.cos(ya), sy = Math.sin(ya), cp = Math.cos(pa), sp = Math.sin(pa);
+      function rot(v) {
+        var x = v[0] * cy + v[2] * sy, z = -v[0] * sy + v[2] * cy;
+        return [x, v[1] * cp - z * sp, v[1] * sp + z * cp];
+      }
+      var k = 135 / m.radius, L = [-0.35, 0.75, 0.55], list = [];
+      m.faces.forEach(function (f) {
+        var n = rot(f.n);
+        if (n[2] <= 0.001) return;
+        var z = 0, pts = f.pts.map(function (pt) {
+          var q = rot([pt[0] - m.center[0], pt[1] - m.center[1], pt[2] - m.center[2]]);
+          z += q[2];
+          return (240 + k * q[0]).toFixed(1) + ',' + (165 - k * q[1]).toFixed(1);
+        });
+        var light = Math.max(0, n[0] * L[0] + n[1] * L[1] + n[2] * L[2]);
+        list.push({ z: z / f.pts.length, pts: pts.join(' '), pct: Math.round(100 * (0.4 + 0.6 * Math.min(1, light))) });
+      });
+      list.sort(function (a, b) { return a.z - b.z; });
+      var label = 'Modèle 3D de ' + pr.part + ' (' + pr.id + '), robot ' + robotOf(pr.robotId).name;
+      svg.setAttribute('aria-label', label);
+      svg.innerHTML = '<title>' + esc(label) + '</title>' + list.map(function (f) {
+        return '<polygon points="' + f.pts + '" style="fill:color-mix(in srgb,var(--accent) ' + f.pct + '%,black)"/>';
+      }).join('');
+    }
+
+    // ---- plan, chips, detail
+    function renderChips() {
+      byId('rp-robots').innerHTML = plans.map(function (p) {
+        var r = robotOf(p.robotId);
+        return '<button type="button" class="k-chip" data-rp-robot="' + esc(p.robotId) + '" aria-pressed="' + (p.robotId === st.robot) + '">' + esc(r.name) + ' (' + esc(r.type) + ')</button>';
+      }).join('');
+    }
+    function renderPlan() {
+      var pl = planOf(st.robot), r = robotOf(st.robot);
+      if (!pl) return;
+      var ttl = 'Plan de ' + r.name + ' (' + r.id + '), ' + pl.view.toLowerCase();
+      byId('rp-plan-title').textContent = ttl;
+      var h = '<text class="rp-front" x="548" y="22" text-anchor="end">Avant →</text>';
+      (pl.ghosts || []).forEach(function (g) {
+        h += '<g class="rp-ghost"><rect x="' + g[0] + '" y="' + g[1] + '" width="' + g[2] + '" height="' + g[3] + '" rx="6"/><text x="' + (g[0] + g[2] / 2) + '" y="' + (g[1] + g[3] / 2 + 4) + '" text-anchor="middle">' + esc(g[4]) + '</text></g>';
+      });
+      pl.parts.forEach(function (p) {
+        var pr = printOf(p.printId), b = p.plan, cx = b[0] + b[2] / 2, cy = b[1] + b[3] / 2;
+        h += '<g class="rp-part" role="button" tabindex="0" data-part="' + esc(p.printId) + '" aria-pressed="' + (p.printId === st.part) + '" aria-label="' + esc(p.printId + ' ' + pr.part + ', ' + pr.status + '. Afficher en 3D') + '">';
+        h += '<rect x="' + b[0] + '" y="' + b[1] + '" width="' + b[2] + '" height="' + b[3] + '" rx="8"/>';
+        h += '<text class="rp-id" x="' + cx + '" y="' + (cy - 12) + '" text-anchor="middle">' + esc(p.printId) + '</text>';
+        h += '<text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle">' + esc(pr.part) + '</text>';
+        h += '<text class="rp-status" x="' + cx + '" y="' + (cy + 22) + '" text-anchor="middle">' + esc(pr.status) + '</text></g>';
+      });
+      byId('rp-plan').innerHTML = '<title>' + esc(ttl) + '</title><desc>' + esc(pl.parts.length + ' pièces imprimées : ' + pl.parts.map(function (p) { return p.printId + ' ' + printOf(p.printId).part; }).join(', ')) + '</desc>' + h;
+    }
+    function renderDetail() {
+      var pr = printOf(st.part), r;
+      if (!pr) return;
+      r = robotOf(pr.robotId);
+      byId('rp-picked').textContent = 'Pièce sélectionnée : ' + pr.id + ' ' + pr.part + ' (' + r.name + ')';
+      byId('rp-3d-title').textContent = 'Pièce en 3D : ' + pr.part;
+      byId('rp-detail').innerHTML =
+        '<dt>Pièce</dt><dd>' + esc(pr.part) + '</dd>' +
+        '<dt>Identifiant</dt><dd>' + esc(pr.id) + '</dd>' +
+        '<dt>Robot</dt><dd>' + esc(r.id + ' ' + r.name) + '</dd>' +
+        '<dt>Matière</dt><dd>' + esc(pr.material) + '</dd>' +
+        '<dt>Priorité</dt><dd>' + esc(pr.priority) + '</dd>' +
+        '<dt>Statut</dt><dd><span class="k-badge k-badge-' + (TONE[pr.status] || 'info') + '">' + esc(pr.status) + '</span></dd>' +
+        '<dt>Estimation</dt><dd>' + esc(nf.format(pr.grams) + ' g, ' + nf.format(pr.hours) + ' h') + '</dd>';
+    }
+    function markSelected() {
+      Array.prototype.forEach.call(byId('rp-plan').querySelectorAll('.rp-part'), function (g) {
+        g.setAttribute('aria-pressed', String(g.getAttribute('data-part') === st.part));
+      });
+    }
+    function selectPart(id) {
+      st.part = id;
+      markSelected();
+      renderDetail();
+      render3d();
+    }
+    function selectRobot(rid) {
+      var pl = planOf(rid);
+      if (!pl) return;
+      st.robot = rid;
+      st.part = pl.parts[0].printId;
+      renderChips();
+      renderPlan();
+      renderDetail();
+      render3d();
+    }
+    function syncSliders() { byId('rp-yaw').value = Math.round(st.yaw); byId('rp-pitch').value = Math.round(st.pitch); }
+
+    if (window.__rpOff) window.__rpOff();
+    (function () {
+      var subs = [];
+      function on(target, type, fn) { target.addEventListener(type, fn); subs.push([target, type, fn]); }
+      window.__rpOff = function () { subs.forEach(function (s) { s[0].removeEventListener(s[1], s[2]); }); subs = []; };
+      on(document, 'click', function (e) {
+        var t = e.target && e.target.closest ? e.target : null;
+        if (!t) return;
+        var chip = t.closest('[data-rp-robot]'), g = t.closest('.rp-part');
+        if (chip) {
+          selectRobot(chip.getAttribute('data-rp-robot'));
+          var again = document.querySelector('[data-rp-robot="' + chip.getAttribute('data-rp-robot') + '"]');
+          if (again) again.focus();
+        } else if (g) selectPart(g.getAttribute('data-part'));
+        else if (t.closest('#rp-reset')) { st.yaw = 35; st.pitch = 22; syncSliders(); render3d(); }
+      });
+      on(document, 'keydown', function (e) {
+        var g = e.target && e.target.closest ? e.target.closest('.rp-part') : null;
+        if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectPart(g.getAttribute('data-part')); }
+      });
+      on(document, 'input', function (e) {
+        var t = e.target;
+        if (!t) return;
+        if (t.id === 'rp-yaw') { st.yaw = Number(t.value); render3d(); }
+        else if (t.id === 'rp-pitch') { st.pitch = Number(t.value); render3d(); }
+      });
+      on(document, 'pointerdown', function (e) {
+        var svg = e.target && e.target.closest ? e.target.closest('#rp-3d') : null;
+        if (!svg) return;
+        drag = { x: e.clientX, y: e.clientY };
+        if (svg.setPointerCapture) svg.setPointerCapture(e.pointerId);
+      });
+      on(document, 'pointermove', function (e) {
+        if (!drag) return;
+        st.yaw = wrap(st.yaw + (e.clientX - drag.x) * 0.6);
+        st.pitch = Math.max(-80, Math.min(80, st.pitch - (e.clientY - drag.y) * 0.6));
+        drag.x = e.clientX; drag.y = e.clientY;
+        syncSliders();
+        render3d();
+      });
+      on(document, 'pointerup', function () { drag = null; });
+      on(window, 'kit:route', function () { if (byId('rp-plan')) { renderPlan(); renderDetail(); render3d(); } });
+    })();
+    if (plans.length) selectRobot(st.robot);
+  });
+  </script>
+</section>

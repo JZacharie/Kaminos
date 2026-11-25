@@ -1,0 +1,53 @@
+{
+  "version": 18,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.67,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 4,
+      "readability": 3,
+      "layout": 3,
+      "fit": 4
+    },
+    "issues": [
+      {
+        "criterion": "readability",
+        "text": "Robots list: the small captions (stat sub-labels, 'Pour atteindre…', tier filter chips) are tiny and light grey, hard to read at 1280/1440."
+      },
+      {
+        "criterion": "layout",
+        "text": "Robots list: R-03 Hexa card is taller than the others because of the stacked ring, chips and long text, so the row is uneven and the grid looks ragged; cards are cut off at the bottom."
+      },
+      {
+        "criterion": "layout",
+        "text": "Robot sheet: the content column stays narrow on 1440 with large empty margins; the sub-assemblies table truncates 'Ce qui bloque' with an ellipsis."
+      },
+      {
+        "criterion": "consistency",
+        "text": "Robots list: the progress bars for 'Énergie', 'Capteurs' and 'Contrôle' are empty for scores of 12 to 46 while Châssis shows fill, so the bars are inconsistent with their values. The ring shows 6, 15 or 21 while the detail text says P2 Fonctionnel for Hexa, which makes the data contradictory."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "Robots list: the ring score inside each card competes with the card title, and the status chips and the 'Pour atteindre' action are small, so the next step is easy to miss."
+      },
+      {
+        "criterion": "realism",
+        "text": "Score mismatches: the R-03 card shows 0 in the ring while the sheet states score 50, and the ring values differ between 1280 and 1440 (6 vs 4, 15 vs 11, 21 vs 15), which undermines credibility."
+      }
+    ],
+    "summary": "A realistic, coherent French robot-fleet UI with a clear structure, but data inconsistencies (ring scores that differ between viewports and from the sheet, empty bars), tiny captions and uneven cards pull it below the pass bar.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0.0349,
+    "htmlSha": "75cf958dbf4b5917c0f4d3fa003bc3d36b8b0287deb411250fd6ca050e298b1d",
+    "rubric": "addon",
+    "samples": 2,
+    "sampleMeans": [
+      3.67,
+      3.67
+    ],
+    "seconds": 19.2,
+    "at": "2026-11-25T10:37:09Z"
+  }
+}

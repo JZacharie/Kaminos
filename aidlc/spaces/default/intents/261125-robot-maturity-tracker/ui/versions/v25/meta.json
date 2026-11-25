@@ -1,0 +1,23 @@
+{
+  "version": 25,
+  "parent": 24,
+  "createdAt": "2026-11-25T10:46:01Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "chatbot-questions#Q4"
+    ]
+  },
+  "summary": "Answered chatbot-questions#Q4 (Chatbot disclaimer): B",
+  "ref": "chatbot-questions#Q4",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 25,
+  "kind": "answer",
+  "changedIds": [
+    "a-chatbot-disclaimer"
+  ]
+}

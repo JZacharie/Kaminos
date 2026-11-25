@@ -1,0 +1,54 @@
+{
+  "version": 8,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.67,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 4,
+      "readability": 3,
+      "layout": 3,
+      "fit": 4
+    },
+    "issues": [
+      {
+        "criterion": "layout",
+        "text": "Robots list: the 3-column grid of cards is very tall, so the robots R-03, R-02 and R-01 are cut off at the bottom of the viewport. Many near-empty progress bars waste space."
+      },
+      {
+        "criterion": "readability",
+        "text": "Small, light-gray secondary text (KPI captions, 'Pour atteindre…', filter chips, table cells) is hard to read at 1280/1440."
+      },
+      {
+        "criterion": "layout",
+        "text": "Cards in the same row have different heights and internal alignment: R-03 has a stacked badge, a ring and a long description, so its sub-system rows don't line up with R-02 and R-01."
+      },
+      {
+        "criterion": "consistency",
+        "text": "The score ring shows 0 for R-03, R-02 and R-01 yet the scores are 50+. In the first screenshot R-06 shows 4 while the second shows 6, and the average is 45 in both, so the numbers are inconsistent."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "Fiche robot: the main score (50/100) appears only in the subtitle, with no large number. The critical banner and the many tables compete with each other."
+      },
+      {
+        "criterion": "layout",
+        "text": "Fiche robot at 1280: the page content is narrow with large side margins. The sub-assemblies table truncates 'Ce qui bloque' with an ellipsis."
+      }
+    ],
+    "summary": "A realistic, coherent workshop dashboard with clear states and good domain detail. It is let down by the ring scores showing 0 or inconsistent values, tall cards that get cut off, small low-contrast text and truncated table cells.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0,
+    "htmlSha": "b720519e84d137cb16a356988a34a43206ffa8df93c978ed30bc8eb56fa3e737",
+    "rubric": "addon",
+    "samples": 2,
+    "sampleMeans": [
+      3.67,
+      3.67
+    ],
+    "seconds": 0,
+    "at": "2026-11-25T10:24:47Z",
+    "copiedFrom": 2
+  }
+}

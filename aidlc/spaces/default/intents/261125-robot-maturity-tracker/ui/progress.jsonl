@@ -1,0 +1,45 @@
+{"schemaVersion":1,"ts":"2026-11-25T09:56:58.036Z","version":1,"phase":"brief","status":"start","screen":null,"check":null,"n":null,"of":null,"message":"Reading the brief"}
+{"schemaVersion":1,"ts":"2026-11-25T09:57:07.522Z","version":1,"phase":"brief","status":"info","screen":null,"check":null,"n":null,"of":null,"message":"Using the brief custom"}
+{"schemaVersion":1,"ts":"2026-11-25T09:59:40.630Z","version":1,"phase":"brief","status":"done","screen":null,"check":null,"n":null,"of":null,"message":"Product brief ready"}
+{"schemaVersion":1,"ts":"2026-11-25T10:02:26.403Z","version":1,"phase":"screen","status":"start","screen":"robots","check":null,"n":1,"of":6,"message":"Building: Flotte de robots"}
+{"schemaVersion":1,"ts":"2026-11-25T10:02:26.405Z","version":1,"phase":"screen","status":"start","screen":"robot-detail","check":null,"n":2,"of":6,"message":"Building: Fiche robot R-03 Hexa"}
+{"schemaVersion":1,"ts":"2026-11-25T10:02:26.405Z","version":1,"phase":"screen","status":"start","screen":"prints","check":null,"n":3,"of":6,"message":"Building: Impressions 3D"}
+{"schemaVersion":1,"ts":"2026-11-25T10:02:26.405Z","version":1,"phase":"screen","status":"start","screen":"orders","check":null,"n":4,"of":6,"message":"Building: Commandes"}
+{"schemaVersion":1,"ts":"2026-11-25T10:02:26.405Z","version":1,"phase":"screen","status":"start","screen":"stock","check":null,"n":5,"of":6,"message":"Building: Stock"}
+{"schemaVersion":1,"ts":"2026-11-25T10:02:26.405Z","version":1,"phase":"screen","status":"start","screen":"repairs","check":null,"n":6,"of":6,"message":"Building: Réparations et versions"}
+{"schemaVersion":1,"ts":"2026-11-25T10:02:26.405Z","version":1,"phase":"screen","status":"start","screen":"data","check":null,"n":null,"of":null,"message":"Building: shared dataset"}
+{"schemaVersion":1,"ts":"2026-11-25T10:03:08.952Z","version":1,"phase":"screen","status":"start","screen":"data","check":null,"n":null,"of":null,"message":"Building: shared dataset"}
+{"schemaVersion":1,"ts":"2026-11-25T10:04:27.941Z","version":1,"phase":"screen","status":"start","screen":"robot-detail","check":null,"n":2,"of":6,"message":"Building: Fiche robot R-03 Hexa"}
+{"schemaVersion":1,"ts":"2026-11-25T10:04:29.604Z","version":1,"phase":"screen","status":"done","screen":"robot-detail","check":null,"n":2,"of":6,"message":"Built: Fiche robot R-03 Hexa"}
+{"schemaVersion":1,"ts":"2026-11-25T10:04:32.943Z","version":1,"phase":"screen","status":"done","screen":"data","check":null,"n":null,"of":null,"message":"Building: shared dataset"}
+{"schemaVersion":1,"ts":"2026-11-25T10:04:38.618Z","version":1,"phase":"screen","status":"done","screen":"robots","check":null,"n":1,"of":6,"message":"Built: Flotte de robots"}
+{"schemaVersion":1,"ts":"2026-11-25T10:04:40.093Z","version":1,"phase":"screen","status":"done","screen":"robots","check":null,"n":1,"of":6,"message":"Building: Flotte de robots"}
+{"schemaVersion":1,"ts":"2026-11-25T10:04:55.310Z","version":1,"phase":"screen","status":"done","screen":"robot-detail","check":null,"n":2,"of":6,"message":"Built: Fiche robot R-03 Hexa"}
+{"schemaVersion":1,"ts":"2026-11-25T10:05:16.287Z","version":1,"phase":"screen","status":"start","screen":"orders","check":null,"n":4,"of":6,"message":"Building: Commandes"}
+{"schemaVersion":1,"ts":"2026-11-25T10:05:17.660Z","version":1,"phase":"screen","status":"done","screen":"orders","check":null,"n":4,"of":6,"message":"Built: Commandes"}
+{"schemaVersion":1,"ts":"2026-11-25T10:05:17.660Z","version":1,"phase":"screen","status":"done","screen":"repairs","check":null,"n":6,"of":6,"message":"Built: Réparations et versions"}
+{"schemaVersion":1,"ts":"2026-11-25T10:05:29.344Z","version":1,"phase":"screen","status":"start","screen":"prints","check":null,"n":3,"of":6,"message":"Building: Impressions 3D"}
+{"schemaVersion":1,"ts":"2026-11-25T10:05:29.444Z","version":1,"phase":"screen","status":"done","screen":"repairs","check":null,"n":6,"of":6,"message":"Building: Réparations et versions"}
+{"schemaVersion":1,"ts":"2026-11-25T10:05:29.677Z","version":1,"phase":"screen","status":"done","screen":"prints","check":null,"n":3,"of":6,"message":"Built: Impressions 3D"}
+{"schemaVersion":1,"ts":"2026-11-25T10:05:33.683Z","version":1,"phase":"screen","status":"done","screen":"prints","check":null,"n":3,"of":6,"message":"Built: Impressions 3D"}
+{"schemaVersion":1,"ts":"2026-11-25T10:06:02.711Z","version":1,"phase":"screen","status":"done","screen":"stock","check":null,"n":5,"of":6,"message":"Built: Stock"}
+{"schemaVersion":1,"ts":"2026-11-25T10:06:04.762Z","version":1,"phase":"screen","status":"start","screen":"stock","check":null,"n":5,"of":6,"message":"Building: Stock"}
+{"schemaVersion":1,"ts":"2026-11-25T10:06:21.994Z","version":1,"phase":"screen","status":"done","screen":"orders","check":null,"n":4,"of":6,"message":"Done: Commandes"}
+{"schemaVersion":1,"ts":"2026-11-25T10:06:51.535Z","version":1,"phase":"screen","status":"done","screen":"stock","check":null,"n":5,"of":6,"message":"Building: Stock"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:26.821Z","version":1,"phase":"assemble","status":"start","screen":null,"check":null,"n":0,"of":6,"message":"Assembling the prototype from 6 screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:26.842Z","version":1,"phase":"assemble","status":"done","screen":null,"check":null,"n":6,"of":6,"message":"Assembled prototype.html: 6 screens, 29 anchors, 388 KB"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:39.623Z","version":1,"phase":"gate","status":"start","screen":null,"check":"console","n":null,"of":null,"message":"Checking console on 6 screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:39.624Z","version":1,"phase":"gate","status":"start","screen":null,"check":"overflow","n":null,"of":null,"message":"Checking overflow on 6 screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:39.624Z","version":1,"phase":"gate","status":"start","screen":null,"check":"axe","n":null,"of":null,"message":"Checking axe on 6 screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:39.624Z","version":1,"phase":"gate","status":"start","screen":null,"check":"lighthouse","n":null,"of":null,"message":"Checking lighthouse on 6 screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:39.624Z","version":1,"phase":"gate","status":"start","screen":null,"check":"network","n":null,"of":null,"message":"Checking network on 6 screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:39.625Z","version":1,"phase":"gate","status":"start","screen":null,"check":"data","n":null,"of":null,"message":"Checking data on 6 screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:54.521Z","version":1,"phase":"gate","status":"pass","screen":null,"check":"console","n":null,"of":null,"message":"console: no issues at 1280 and 1440 px"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:54.522Z","version":1,"phase":"gate","status":"pass","screen":null,"check":"network","n":null,"of":null,"message":"network: no issues at 1280 and 1440 px"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:54.522Z","version":1,"phase":"gate","status":"pass","screen":null,"check":"data","n":null,"of":null,"message":"data: no issues at 1280 and 1440 px"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:54.522Z","version":1,"phase":"gate","status":"pass","screen":null,"check":"overflow","n":null,"of":null,"message":"overflow: no issues at 1280 and 1440 px"}
+{"schemaVersion":1,"ts":"2026-11-25T10:07:54.522Z","version":1,"phase":"gate","status":"pass","screen":null,"check":"axe","n":null,"of":null,"message":"axe: no issues at 1280 and 1440 px"}
+{"schemaVersion":1,"ts":"2026-11-25T10:08:00.556Z","version":1,"phase":"gate","status":"pass","screen":null,"check":"lighthouse","n":null,"of":null,"message":"lighthouse: accessibility 100+ on all routes"}
+{"schemaVersion":1,"ts":"2026-11-25T10:08:09.092Z","version":1,"phase":"critic","status":"start","screen":null,"check":"critic","n":null,"of":null,"message":"Visual review of the screens"}
+{"schemaVersion":1,"ts":"2026-11-25T10:08:27.630Z","version":1,"phase":"critic","status":"done","screen":null,"check":"critic","n":null,"of":null,"message":"Visual review: mean 4.0/5 pass"}
+{"schemaVersion":1,"ts":"2026-11-25T10:09:45.147Z","version":1,"phase":"done","status":"pass","screen":null,"check":null,"n":null,"of":null,"message":"First UI ready"}

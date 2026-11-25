@@ -1,0 +1,53 @@
+{
+  "version": 19,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.5,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 3,
+      "readability": 3,
+      "layout": 3,
+      "fit": 4
+    },
+    "issues": [
+      {
+        "criterion": "consistency",
+        "text": "Stock page ends with an off-domain generic 'Items' table (Invoice 1042, Purchase order, English labels 'In progress', 'Add item', 'Edit', 'Delete') that clashes with the French robot-workshop UI."
+      },
+      {
+        "criterion": "realism",
+        "text": "Placeholder-style English data (Invoice 1042, Quality check, owners Luis/Marta/Ana, itm-1042) is unrelated to robots/stock."
+      },
+      {
+        "criterion": "readability",
+        "text": "Very small, low-contrast text in the robots page: stat card captions, tier filter pills, the 'Pour atteindre' labels and the tiny status chips are hard to read."
+      },
+      {
+        "criterion": "layout",
+        "text": "On the robots page the 3-column cards have uneven heights and a large empty area in R-06/R-05 cards. The score-ring cards are narrow, and at 1440 the content stays in a narrow centered column with wide margins."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "The R-03 Hexa card breaks the pattern: the paused badge, ring and tier chip are stacked, which pushes its content far below its neighbours. The Stock page has no clear primary action, and the 'Prélever' form competes with the table."
+      },
+      {
+        "criterion": "consistency",
+        "text": "The score rings differ between viewports (R-06 shows 5 at 1280 but 6 at 1440, R-05 14 vs 10, R-04 20 vs 15), and several bars are empty despite non-zero values, e.g. Énergie 12/100 and Capteurs 5/100 at 1280."
+      }
+    ],
+    "summary": "The French robot workshop UI is realistic overall, with a clear title and KPI cards, but the generic English 'Items' table pasted into Stock breaks coherence. Tiny text, uneven card layouts and inconsistent score values across viewports pull it below the pass bar.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0.0347,
+    "htmlSha": "f43dcdc482ea6bb866c9a327b90c66feabffce208e848fe62a8cdd563dbc85cc",
+    "rubric": "addon",
+    "samples": 2,
+    "sampleMeans": [
+      3.5,
+      3.5
+    ],
+    "seconds": 18.6,
+    "at": "2026-11-25T10:44:58Z"
+  }
+}

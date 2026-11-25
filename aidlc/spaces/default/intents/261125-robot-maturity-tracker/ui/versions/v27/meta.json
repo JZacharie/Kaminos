@@ -1,0 +1,23 @@
+{
+  "version": 27,
+  "parent": 26,
+  "createdAt": "2026-11-25T10:46:12Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "login-questions#Q2"
+    ]
+  },
+  "summary": "Answered login-questions#Q2 (Login role badge): B",
+  "ref": "login-questions#Q2",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 27,
+  "kind": "answer",
+  "changedIds": [
+    "a-login-role-badge"
+  ]
+}

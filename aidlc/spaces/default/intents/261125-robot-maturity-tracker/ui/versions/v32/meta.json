@@ -1,0 +1,23 @@
+{
+  "version": 32,
+  "parent": 31,
+  "createdAt": "2026-11-25T10:46:50Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "table-questions#Q3"
+    ]
+  },
+  "summary": "Answered table-questions#Q3 (Table pager): B",
+  "ref": "table-questions#Q3",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 32,
+  "kind": "answer",
+  "changedIds": [
+    "a-table-pager"
+  ]
+}

@@ -1,0 +1,111 @@
+<section data-route="#/orders" aria-labelledby="h-orders">
+  <div class="k-page-header">
+    <div>
+      <h1 id="h-orders">Commandes</h1>
+      <p id="orders-context">Commandes de composants et pièces qu'elles débloquent</p>
+    </div>
+    <div class="k-actions">
+      <button class="k-btn" type="button" data-fab-open>Commander une pièce CNC ou laser</button>
+      <button class="k-btn k-btn-primary" type="button" data-k-toast="Commande préparée : choisissez les lignes à commander dans le tableau">Passer une commande</button>
+    </div>
+  </div>
+
+  <div class="k-grid">
+    <div class="k-span-4" id="a-kpi-orders-total" data-k-block="kpi" data-k-cfg="orders-kpi-total"></div>
+    <div class="k-span-4" data-k-block="kpi" data-k-cfg="orders-kpi-flow"></div>
+    <div class="k-span-4" data-k-block="kpi" data-k-cfg="orders-kpi-next"></div>
+
+    <div class="k-card k-span-12">
+      <div id="a-orders-filters" data-k-block="filterbar" data-k-cfg="orders-filters"></div>
+    </div>
+
+    <div class="k-span-12" id="a-orders-table" data-k-block="table" data-k-cfg="orders-table"></div>
+  </div>
+
+  <script>
+    (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
+      var rows = D.orders || [];
+      var open = rows.filter(function (r) { return r.status === 'À commander'; }).length;
+      var el = document.getElementById('orders-context');
+      if (el) el.textContent = rows.length + ' commandes · ' + open + ' à commander';
+    });
+
+    (function () {
+      if (window.__fabOrderBound) return;
+      window.__fabOrderBound = true;
+      var SUPPLIERS = { 'Usinage CNC': ['UsiPro', 'MécaRapide'], 'Découpe laser': ['LaserCut', 'DécoupeExpress'] };
+      var $ = function (id) { return document.getElementById(id); };
+      var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); };
+
+      function fillSuppliers() {
+        var list = SUPPLIERS[$('fab-kind').value] || [];
+        $('fab-supplier').innerHTML = list.map(function (s) { return '<option value="' + esc(s) + '">' + esc(s) + '</option>'; }).join('');
+      }
+      function fillLinks() {
+        var D = window.APP_DATA || {};
+        $('fab-link').innerHTML = (D.robots || []).map(function (r) {
+          var v = r.id + ' ' + r.name;
+          return '<option value="' + esc(v) + '">' + esc(v) + '</option>';
+        }).join('') + '<option value="Atelier">Atelier (hors robot)</option>';
+      }
+      function showErr(msg) {
+        var err = $('fab-err');
+        err.textContent = msg || '';
+        err.classList.toggle('k-hide', !msg);
+      }
+      function openFab() {
+        var dlg = $('dlg-order-fab');
+        if (!dlg) return;
+        $('fab-kind').value = 'Usinage CNC';
+        $('fab-part').value = '';
+        $('fab-total').value = '';
+        $('fab-days').value = '7';
+        fillSuppliers();
+        fillLinks();
+        showErr('');
+        if (typeof dlg.showModal === 'function' && !dlg.open) dlg.showModal();
+        $('fab-part').focus();
+      }
+      function redraw() {
+        [].forEach.call(document.querySelectorAll('[data-k-cfg^="orders-"]'), function (el) {
+          var f = window.UI_BLOCKS && window.UI_BLOCKS[el.getAttribute('data-k-cfg')];
+          if (el._kBlock && f) el._kBlock.update(f());
+        });
+        var D = window.APP_DATA, ctx = $('orders-context');
+        if (ctx) ctx.textContent = D.orders.length + ' commandes · ' + D.orders.filter(function (r) { return r.status === 'À commander'; }).length + ' à commander';
+      }
+      function submitFab() {
+        var D = window.APP_DATA;
+        var kind = $('fab-kind').value, part = $('fab-part').value.trim();
+        var total = parseFloat(String($('fab-total').value).replace(',', '.'));
+        var days = parseInt($('fab-days').value, 10);
+        if (!part) { showErr('Décrivez la pièce à fabriquer.'); $('fab-part').focus(); return; }
+        if (!isFinite(total) || total <= 0) { showErr('Saisissez un montant supérieur à 0 €.'); $('fab-total').focus(); return; }
+        if (!isFinite(days) || days < 1) { showErr('Saisissez un délai d\u2019au moins 1 jour.'); $('fab-days').focus(); return; }
+        var max = D.orders.reduce(function (m, o) { return Math.max(m, parseInt(String(o.id).replace(/\D/g, ''), 10) || 0); }, 0);
+        var base = window.TODAY instanceof Date ? window.TODAY : new Date();
+        var eta = new Date(base.getTime() + days * 86400000);
+        var id = 'CMD-' + (max + 1);
+        D.orders.push({
+          id: id, component: part + (kind === 'Usinage CNC' ? ' (usinage CNC)' : ' (découpe laser)'), linkedTo: $('fab-link').value,
+          supplier: $('fab-supplier').value, totalEur: Math.round(total * 100) / 100, eta: eta, status: 'Commandée', kind: kind
+        });
+        if (D.series && D.series.ordersByStatus) D.series.ordersByStatus.forEach(function (s) { s.count = D.orders.filter(function (o) { return o.status === s.status; }).length; });
+        $('dlg-order-fab').close();
+        redraw();
+        if (window.kitToast) window.kitToast(id + ' commandée : ' + kind.toLowerCase() + ', arrivée prévue dans ' + days + ' jour' + (days > 1 ? 's' : '') + '.', 'ok');
+      }
+
+      document.addEventListener('click', function (e) {
+        var t = e.target && e.target.closest ? e.target.closest('[data-fab-open], #fab-cancel, #fab-submit') : null;
+        if (!t) return;
+        if (t.hasAttribute('data-fab-open')) openFab();
+        else if (t.id === 'fab-cancel') $('dlg-order-fab').close();
+        else submitFab();
+      });
+      document.addEventListener('change', function (e) {
+        if (e.target && e.target.id === 'fab-kind') fillSuppliers();
+      });
+    })();
+  </script>
+</section>

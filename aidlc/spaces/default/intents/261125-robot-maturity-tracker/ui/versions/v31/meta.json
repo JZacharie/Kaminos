@@ -1,0 +1,23 @@
+{
+  "version": 31,
+  "parent": 30,
+  "createdAt": "2026-11-25T10:46:45Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "table-questions#Q2"
+    ]
+  },
+  "summary": "Answered table-questions#Q2 (Table sort): B",
+  "ref": "table-questions#Q2",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 31,
+  "kind": "answer",
+  "changedIds": [
+    "a-table-sort"
+  ]
+}

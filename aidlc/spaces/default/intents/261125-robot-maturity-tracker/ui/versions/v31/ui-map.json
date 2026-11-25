@@ -1,0 +1,684 @@
+{
+  "schemaVersion": "1.1",
+  "uiVersion": 31,
+  "app": {
+    "name": "RoboForge",
+    "intent": "261125-robot-maturity-tracker",
+    "language": "fr"
+  },
+  "screens": [
+    {
+      "id": "robots",
+      "title": "Flotte de robots",
+      "route": "#/robots"
+    },
+    {
+      "id": "robot-detail",
+      "title": "Fiche robot R-03 Hexa",
+      "route": "#/robot/R-03"
+    },
+    {
+      "id": "prints",
+      "title": "Impressions 3D",
+      "route": "#/prints"
+    },
+    {
+      "id": "orders",
+      "title": "Commandes",
+      "route": "#/orders"
+    },
+    {
+      "id": "stock",
+      "title": "Stock",
+      "route": "#/stock"
+    },
+    {
+      "id": "repairs",
+      "title": "Réparations et versions",
+      "route": "#/repairs"
+    },
+    {
+      "id": "shell",
+      "title": "Top bar and navigation (all screens)",
+      "route": "#/robots"
+    }
+  ],
+  "elements": [
+    {
+      "id": "a-main-nav",
+      "screen": "shell",
+      "label": "Navigation principale",
+      "kind": "nav",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-kpi-robots",
+      "screen": "robots",
+      "label": "Nombre de robots",
+      "kind": "kpi",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-kpi-mean-score",
+      "screen": "robots",
+      "label": "Score moyen de la flotte",
+      "kind": "kpi",
+      "questionIds": [
+        "intent-capture-questions#Q5"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-kpi-critical",
+      "screen": "robots",
+      "label": "Réparations critiques ouvertes",
+      "kind": "kpi",
+      "questionIds": [
+        "intent-capture-questions#Q4"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-kpi-toprint",
+      "screen": "robots",
+      "label": "Pièces à imprimer",
+      "kind": "kpi",
+      "questionIds": [
+        "intent-capture-questions#Q6"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-robots-filters",
+      "screen": "robots",
+      "label": "Filtre par palier",
+      "kind": "form",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-robot-cards",
+      "screen": "robots",
+      "label": "Fiches robots",
+      "kind": "list",
+      "questionIds": [
+        "intent-capture-questions#Q17"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-subsystem-scores",
+      "screen": "robot-detail",
+      "label": "Scores par sous-système",
+      "kind": "chart",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-palier-steps",
+      "screen": "robot-detail",
+      "label": "Paliers P1 à P4",
+      "kind": "card",
+      "questionIds": [
+        "intent-capture-questions#Q16"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-prerequisites",
+      "screen": "robot-detail",
+      "label": "Prérequis du palier suivant",
+      "kind": "list",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-subassemblies",
+      "screen": "robot-detail",
+      "label": "Sous-ensembles et état Prêt à assembler",
+      "kind": "table",
+      "questionIds": [
+        "intent-capture-questions#Q15"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-linked-items",
+      "screen": "robot-detail",
+      "label": "Impressions, commandes et réparations liées",
+      "kind": "table",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-prints-summary",
+      "screen": "prints",
+      "label": "Reste à imprimer",
+      "kind": "kpi",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-prints-status-bars",
+      "screen": "prints",
+      "label": "Pièces par statut",
+      "kind": "chart",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-prints-filters",
+      "screen": "prints",
+      "label": "Filtres de la file",
+      "kind": "form",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-prints-table",
+      "screen": "prints",
+      "label": "File d'impression",
+      "kind": "table",
+      "questionIds": [
+        "intent-capture-questions#Q7",
+        "intent-capture-questions#Q19"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-kpi-orders-total",
+      "screen": "orders",
+      "label": "Montant à commander",
+      "kind": "kpi",
+      "questionIds": [
+        "intent-capture-questions#Q9"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-orders-filters",
+      "screen": "orders",
+      "label": "Filtres des commandes",
+      "kind": "form",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-orders-table",
+      "screen": "orders",
+      "label": "Commandes de composants",
+      "kind": "table",
+      "questionIds": [
+        "intent-capture-questions#Q8"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-kpi-stock-low",
+      "screen": "stock",
+      "label": "Articles sous le minimum",
+      "kind": "kpi",
+      "questionIds": [
+        "intent-capture-questions#Q10"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-buffer-withdraw",
+      "screen": "stock",
+      "label": "Prélever dans le tampon",
+      "kind": "button",
+      "questionIds": [
+        "intent-capture-questions#Q11"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-stock-filters",
+      "screen": "stock",
+      "label": "Filtres du stock",
+      "kind": "form",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-stock-table",
+      "screen": "stock",
+      "label": "Inventaire",
+      "kind": "table",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-stock-alerts",
+      "screen": "stock",
+      "label": "Alertes sous le minimum",
+      "kind": "list",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-buffer-panel",
+      "screen": "stock",
+      "label": "Stock tampon générateur",
+      "kind": "card",
+      "questionIds": [
+        "intent-capture-questions#Q18"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-recurring-flag",
+      "screen": "repairs",
+      "label": "Défauts récurrents",
+      "kind": "badge",
+      "questionIds": [
+        "intent-capture-questions#Q13"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-repairs-filters",
+      "screen": "repairs",
+      "label": "Filtres du journal",
+      "kind": "form",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-repairs-table",
+      "screen": "repairs",
+      "label": "Journal de réparation",
+      "kind": "table",
+      "questionIds": [
+        "intent-capture-questions#Q12"
+      ],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-version-timeline",
+      "screen": "repairs",
+      "label": "Versions des pièces",
+      "kind": "card",
+      "questionIds": [],
+      "frIds": [],
+      "module": null
+    },
+    {
+      "id": "a-table",
+      "screen": "stock",
+      "label": "Data table",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-table-grid",
+      "screen": "stock",
+      "label": "Table grid",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-table-filters",
+      "screen": "stock",
+      "label": "Table filters",
+      "kind": "other",
+      "questionIds": [
+        "table-questions#Q1"
+      ],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-table-status-filter",
+      "screen": "stock",
+      "label": "Table status filter",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-table-search",
+      "screen": "stock",
+      "label": "Table search",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-table-sort",
+      "screen": "stock",
+      "label": "Table sort",
+      "kind": "other",
+      "questionIds": [
+        "table-questions#Q2"
+      ],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-table-pager",
+      "screen": "stock",
+      "label": "Table pager",
+      "kind": "other",
+      "questionIds": [
+        "table-questions#Q3"
+      ],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-table-add",
+      "screen": "stock",
+      "label": "Table add",
+      "kind": "other",
+      "questionIds": [
+        "table-questions#Q4"
+      ],
+      "frIds": [],
+      "module": "table"
+    },
+    {
+      "id": "a-chatbot",
+      "screen": "stock",
+      "label": "Chatbot",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "chatbot"
+    },
+    {
+      "id": "a-chatbot-panel",
+      "screen": "stock",
+      "label": "Chatbot panel",
+      "kind": "other",
+      "questionIds": [
+        "chatbot-questions#Q1"
+      ],
+      "frIds": [],
+      "module": "chatbot"
+    },
+    {
+      "id": "a-chatbot-messages",
+      "screen": "stock",
+      "label": "Chatbot messages",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "chatbot"
+    },
+    {
+      "id": "a-chatbot-sources",
+      "screen": "stock",
+      "label": "Chatbot sources",
+      "kind": "other",
+      "questionIds": [
+        "chatbot-questions#Q2"
+      ],
+      "frIds": [],
+      "module": "chatbot"
+    },
+    {
+      "id": "a-chatbot-input",
+      "screen": "stock",
+      "label": "Chatbot input",
+      "kind": "other",
+      "questionIds": [
+        "chatbot-questions#Q3"
+      ],
+      "frIds": [],
+      "module": "chatbot"
+    },
+    {
+      "id": "a-chatbot-send",
+      "screen": "stock",
+      "label": "Chatbot send",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "chatbot"
+    },
+    {
+      "id": "a-chatbot-disclaimer",
+      "screen": "stock",
+      "label": "Chatbot disclaimer",
+      "kind": "other",
+      "questionIds": [
+        "chatbot-questions#Q4"
+      ],
+      "frIds": [],
+      "module": "chatbot"
+    },
+    {
+      "id": "a-login-form",
+      "screen": "stock",
+      "label": "Login form",
+      "kind": "other",
+      "questionIds": [
+        "login-questions#Q1"
+      ],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-email",
+      "screen": "stock",
+      "label": "Login email",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-password",
+      "screen": "stock",
+      "label": "Login password",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-mfa",
+      "screen": "stock",
+      "label": "Login mfa",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-mfa-code",
+      "screen": "stock",
+      "label": "Login mfa code",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-submit",
+      "screen": "stock",
+      "label": "Login submit",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-federated",
+      "screen": "stock",
+      "label": "Login federated",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-forgot",
+      "screen": "stock",
+      "label": "Login forgot",
+      "kind": "other",
+      "questionIds": [
+        "login-questions#Q4"
+      ],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-signup",
+      "screen": "stock",
+      "label": "Login signup",
+      "kind": "other",
+      "questionIds": [
+        "login-questions#Q3"
+      ],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-error",
+      "screen": "stock",
+      "label": "Login error",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-signedin",
+      "screen": "stock",
+      "label": "Login signedin",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-role-badge",
+      "screen": "stock",
+      "label": "Login role badge",
+      "kind": "other",
+      "questionIds": [
+        "login-questions#Q2"
+      ],
+      "frIds": [],
+      "module": "login"
+    },
+    {
+      "id": "a-login-signout",
+      "screen": "stock",
+      "label": "Login signout",
+      "kind": "other",
+      "questionIds": [],
+      "frIds": [],
+      "module": "login"
+    }
+  ],
+  "modules": [
+    {
+      "id": "table",
+      "name": "Data table",
+      "scope": "mvp",
+      "source": "catalog",
+      "catalogVersion": "1.0.0",
+      "mounted": true
+    },
+    {
+      "id": "chatbot",
+      "name": "Chatbot",
+      "scope": "mvp",
+      "source": "catalog",
+      "catalogVersion": "1.0.0",
+      "mounted": true
+    },
+    {
+      "id": "login",
+      "name": "Login",
+      "scope": "mvp",
+      "source": "catalog",
+      "catalogVersion": "1.0.0",
+      "mounted": true
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "as-landing-robots",
+      "text": "S'ouvre sur la flotte de robots",
+      "question": "intent-capture-questions#Q14",
+      "assumed": "A"
+    },
+    {
+      "id": "as-ready-rule",
+      "text": "Prêt à assembler: impressions validées et composants reçus",
+      "question": "intent-capture-questions#Q15",
+      "assumed": "A"
+    },
+    {
+      "id": "as-palier-fixed",
+      "text": "Paliers fixes à 25, 50 et 75 points",
+      "question": "intent-capture-questions#Q16",
+      "assumed": "A"
+    },
+    {
+      "id": "as-sort-score",
+      "text": "Robots triés du score le plus bas au plus haut",
+      "question": "intent-capture-questions#Q17",
+      "assumed": "A"
+    },
+    {
+      "id": "as-buffer-global",
+      "text": "Une seule réserve tampon générateur",
+      "question": "intent-capture-questions#Q18",
+      "assumed": "A"
+    },
+    {
+      "id": "as-table-prints",
+      "text": "File d'impression en tableau",
+      "question": "intent-capture-questions#Q19",
+      "assumed": "A"
+    },
+    {
+      "id": "as-dates-fr",
+      "text": "Dates en jj/mm, heures sur 24 h",
+      "question": "intent-capture-questions#Q20",
+      "assumed": "A"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "version": 6,
+  "parent": 5,
+  "createdAt": "2026-11-25T10:23:59Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q7"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q7 (File d'impression): C",
+  "ref": "intent-capture-questions#Q7",
+  "prevAnswer": "",
+  "newAnswer": "C",
+  "prevRaw": "",
+  "newRaw": " C",
+  "n": 6,
+  "kind": "answer",
+  "changedIds": [
+    "a-prints-table"
+  ]
+}

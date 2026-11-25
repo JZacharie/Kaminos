@@ -1,0 +1,23 @@
+{
+  "version": 26,
+  "parent": 25,
+  "createdAt": "2026-11-25T10:46:08Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "login-questions#Q1"
+    ]
+  },
+  "summary": "Answered login-questions#Q1 (Login form): B",
+  "ref": "login-questions#Q1",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 26,
+  "kind": "answer",
+  "changedIds": [
+    "a-login-form"
+  ]
+}

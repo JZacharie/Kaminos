@@ -1,0 +1,23 @@
+{
+  "version": 8,
+  "parent": 7,
+  "createdAt": "2026-11-25T10:24:47Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q9"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q9 (Montant à commander): B",
+  "ref": "intent-capture-questions#Q9",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 8,
+  "kind": "answer",
+  "changedIds": [
+    "a-kpi-orders-total"
+  ]
+}

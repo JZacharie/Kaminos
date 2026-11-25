@@ -1,0 +1,26 @@
+{
+  "version": 20,
+  "parent": 19,
+  "createdAt": "2026-11-25T10:44:44Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Added module Chatbot to Stock",
+  "moduleId": "chatbot",
+  "screen": "stock",
+  "moduleVersion": "1.0.0",
+  "entryExisted": false,
+  "n": 20,
+  "kind": "module",
+  "changedIds": [
+    "a-chatbot",
+    "a-chatbot-panel",
+    "a-chatbot-messages",
+    "a-chatbot-sources",
+    "a-chatbot-input",
+    "a-chatbot-send",
+    "a-chatbot-disclaimer"
+  ]
+}

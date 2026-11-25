@@ -1,0 +1,53 @@
+{
+  "version": 20,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.33,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 3,
+      "readability": 3,
+      "layout": 3,
+      "fit": 3
+    },
+    "issues": [
+      {
+        "criterion": "consistency",
+        "text": "Stock page has a generic English 'Items' section (Invoice 1042, Purchase order, In progress, Edit/Delete, + Add item) that clashes with the French robotics UI and looks like leftover template content."
+      },
+      {
+        "criterion": "fit",
+        "text": "The 'Items' table with invoices and purchase orders is unrelated to the robot workshop idea and dilutes the Stock screen. Only Robots and Stock were shown, so other screens can't be judged."
+      },
+      {
+        "criterion": "readability",
+        "text": "Much of the text is very small and light grey (card sublabels, filter chips, 'Pour atteindre…' captions, table headers), and hard to read at the downscaled size."
+      },
+      {
+        "criterion": "layout",
+        "text": "The Robots page has a large empty bottom-left area in cards, since the R-06 and R-05 cards leave blank space below. The Stock alerts column leaves a big empty area under it beside the long inventory table."
+      },
+      {
+        "criterion": "realism",
+        "text": "The R-03 Hexa card is inconsistent with the others: a status pill sits above the ring and its layout is different. The score also differs between viewports (R-06 shows 5 in image 1 and 6 in image 2; R-05 shows 14 and 10), which undermines trust in the data."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "Progress bars are empty for most metrics and colored only for some (blue for Châssis on R-04, none on Énergie or Capteurs in image 1), so the data looks broken and its meaning is unclear."
+      }
+    ],
+    "summary": "The French workshop UI is coherent and realistic in the fleet and stock tables, but leftover English template 'Items' content, inconsistent scores and bars between viewports, and tiny low-contrast text pull it down. It fails the bar mainly on consistency, fit and readability.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0.0167,
+    "htmlSha": "92ac9c45a764955fb196e2ee9abffca7a5b99c567fc07cd2d76a2d8540f6dd7c",
+    "rubric": "addon",
+    "samples": 2,
+    "sampleMeans": [
+      3.33,
+      3.33
+    ],
+    "seconds": 19,
+    "at": "2026-11-25T10:45:17Z"
+  }
+}

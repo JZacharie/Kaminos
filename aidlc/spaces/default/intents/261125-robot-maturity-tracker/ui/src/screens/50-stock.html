@@ -1,0 +1,43 @@
+<section data-route="#/stock" aria-labelledby="h-stock">
+  <div class="k-page-header">
+    <div>
+      <h1 id="h-stock">Stock</h1>
+      <p data-stock-context>Inventaire de l'atelier, minimum par article</p>
+    </div>
+    <div class="k-actions">
+      <button class="k-btn k-btn-primary" type="button" data-fab-open>Commander une pièce CNC ou laser</button>
+    </div>
+  </div>
+  <div class="k-grid">
+    <div class="k-span-8 k-stack">
+      <div id="a-stock-filters" data-k-block="filterbar" data-k-cfg="stock-filters"></div>
+      <div id="a-stock-table" data-k-block="table" data-k-cfg="stock-table"></div>
+    </div>
+    <div class="k-span-4 k-stack">
+      <div id="a-kpi-stock-low" data-k-block="kpi" data-k-cfg="stock-kpi"></div>
+      <div id="a-stock-alerts" data-k-block="feed" data-k-cfg="stock-alerts"></div>
+    </div>
+    <div class="k-span-12 k-stack">
+      <div class="k-card">
+        <div class="k-card-head"><h2 class="k-card-title">Prélèvement dans le tampon</h2></div>
+        <form id="stock-withdraw-form" novalidate>
+          <div class="k-rowfit k-rowfit-md">
+            <div class="k-field">
+              <label for="stock-withdraw-item">Article du tampon</label>
+              <select class="k-select" id="stock-withdraw-item"></select>
+            </div>
+            <div class="k-field">
+              <label for="stock-withdraw-qty">Quantité à prélever</label>
+              <input class="k-input" id="stock-withdraw-qty" type="number" inputmode="decimal" min="0" step="any" value="1" aria-describedby="stock-withdraw-err">
+              <p class="k-error k-hide" id="stock-withdraw-err" role="alert"></p>
+            </div>
+            <div class="k-actions">
+              <button class="k-btn k-btn-primary" id="a-buffer-withdraw" type="button">Prélever dans le tampon</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="a-buffer-panel" data-k-block="detail" data-k-cfg="stock-buffer"></div>
+    </div>
+  </div>
+</section>

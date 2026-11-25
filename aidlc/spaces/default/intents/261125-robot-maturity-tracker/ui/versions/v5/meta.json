@@ -1,0 +1,23 @@
+{
+  "version": 5,
+  "parent": 4,
+  "createdAt": "2026-11-25T10:23:45Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q6"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q6 (Pièces à imprimer): B",
+  "ref": "intent-capture-questions#Q6",
+  "prevAnswer": "",
+  "newAnswer": "B",
+  "prevRaw": "",
+  "newRaw": " B",
+  "n": 5,
+  "kind": "answer",
+  "changedIds": [
+    "a-kpi-toprint"
+  ]
+}

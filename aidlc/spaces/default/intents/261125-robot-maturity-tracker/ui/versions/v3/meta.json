@@ -1,0 +1,23 @@
+{
+  "version": 3,
+  "parent": 2,
+  "createdAt": "2026-11-25T10:23:26Z",
+  "cause": {
+    "kind": "answer",
+    "stage": "intent-capture",
+    "refs": [
+      "intent-capture-questions#Q4"
+    ]
+  },
+  "summary": "Answered intent-capture-questions#Q4 (Réparations critiques ouvertes): D",
+  "ref": "intent-capture-questions#Q4",
+  "prevAnswer": "",
+  "newAnswer": "D",
+  "prevRaw": "",
+  "newRaw": " D",
+  "n": 3,
+  "kind": "answer",
+  "changedIds": [
+    "a-kpi-critical"
+  ]
+}
