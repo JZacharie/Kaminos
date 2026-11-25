@@ -65,7 +65,7 @@
 .rp-stl-missing[hidden]{display:none}
 .rp-stl-bar{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
 .rp-stl-input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
-.rp-stl-input:focus-visible+*,.rp-stl-bar:focus-within label{outline:2px solid var(--text);outline-offset:2px}
+.rp-stl-bar:focus-within label{outline:2px solid var(--text);outline-offset:2px}
 .bp-note{margin:0 0 var(--s3);font-weight:600}
 #bp-others{margin-bottom:var(--s3)}
 #bp-others a[aria-current=page]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}

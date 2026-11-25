@@ -296,58 +296,17 @@
   <script>
   (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
     var TONE = { 'Validée': 'ok', 'En impression': 'info', 'À préparer': 'warn', 'À réimprimer': 'bad' };
-    var AX = { x: 0, y: 1, z: 2 };
     var nf = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
     var plans = D.robotPlans || [];
     var st = { robot: plans.length ? plans[0].robotId : '', part: '', yaw: 35, pitch: 22 };
-    var meshes = {};
     var drag = null;
     function byId(id) { return document.getElementById(id); }
     function planOf(rid) { return plans.filter(function (p) { return p.robotId === rid; })[0]; }
     function robotOf(rid) { return D.robots.filter(function (r) { return r.id === rid; })[0] || { id: rid, name: rid, type: '' }; }
     function printOf(id) { return D.prints.filter(function (p) { return p.id === id; })[0]; }
-    function partOf(id) { var pl = planOf(st.robot); return pl ? pl.parts.filter(function (p) { return p.printId === id; })[0] : null; }
     function wrap(a) { return ((a + 180) % 360 + 360) % 360 - 180; }
 
-    // ---- 3D: faces of boxes and cylinders, flat shading, painter's order
-    function buildMesh(prims) {
-      var faces = [];
-      prims.forEach(function (p) {
-        var c = [p[1], p[2], p[3]], a, s, i;
-        if (p[0] === 'box') {
-          var half = [p[4] / 2, p[5] / 2, p[6] / 2];
-          for (a = 0; a < 3; a++) for (s = -1; s <= 1; s += 2) {
-            var u = (a + 1) % 3, v = (a + 2) % 3, n = [0, 0, 0], pts = [];
-            n[a] = s;
-            [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(function (q) {
-              var pt = [0, 0, 0];
-              pt[a] = c[a] + s * half[a]; pt[u] = c[u] + q[0] * half[u]; pt[v] = c[v] + q[1] * half[v];
-              pts.push(pt);
-            });
-            faces.push({ pts: pts, n: n });
-          }
-        } else {
-          var A = AX[p[6]], U = (A + 1) % 3, V = (A + 2) % 3, N = 20, r = p[4], hl = p[5] / 2;
-          function ring(k, side) {
-            var ang = 2 * Math.PI * k / N, pt = [0, 0, 0];
-            pt[U] = c[U] + r * Math.cos(ang); pt[V] = c[V] + r * Math.sin(ang); pt[A] = c[A] + side * hl;
-            return pt;
-          }
-          for (i = 0; i < N; i++) {
-            var mid = 2 * Math.PI * (i + 0.5) / N, nn = [0, 0, 0];
-            nn[U] = Math.cos(mid); nn[V] = Math.sin(mid);
-            faces.push({ pts: [ring(i, -1), ring(i + 1, -1), ring(i + 1, 1), ring(i, 1)], n: nn });
-          }
-          [-1, 1].forEach(function (side) {
-            var cap = [], nc = [0, 0, 0];
-            nc[A] = side;
-            for (i = 0; i < N; i++) cap.push(ring(i, side));
-            faces.push({ pts: cap, n: nc });
-          });
-        }
-      });
-      return finishMesh(faces);
-    }
+    // ---- 3D: flat shading, painter's order, faces from an STL mesh
     function finishMesh(faces) {
       var lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
       faces.forEach(function (f) { f.pts.forEach(function (pt) { for (var k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], pt[k]); hi[k] = Math.max(hi[k], pt[k]); } }); });
