@@ -315,6 +315,28 @@
       ] }
   ];
 
+// ---- resources board: shared calculations (defined here so they exist before the screen render functions run)
+window.BoardCalc = (function () {
+  var fr = function (n, dp) { return Number(n).toLocaleString('fr-FR', { maximumFractionDigits: dp == null ? 2 : dp }); };
+  var AV = { crit: 'Insuffisant', warn: 'Juste', ok: 'Suffisant' };
+  var BU = { crit: 'Dépassé', warn: 'À surveiller', ok: 'Dans le budget' };
+  function resource(r) {
+    var limit = r.kind === 'Machine' ? r.capacity : r.available;
+    var avail = r.need > limit ? 'crit' : (r.need > 0.8 * limit || r.need > r.capacity) ? 'warn' : 'ok';
+    var budget = r.budgetEur == null ? '' : r.engagedEur > r.budgetEur ? 'crit' : r.engagedEur >= 0.8 * r.budgetEur ? 'warn' : 'ok';
+    return { avail: avail, budget: budget, usage: r.capacity > 0 ? Math.round(100 * r.need / r.capacity) : null };
+  }
+  function robot(r) {
+    var paused = r.criticalOpen > 0 ? 1 : 0;
+    var free = Math.max(0, r.units - paused);
+    var cap = free * r.hoursPerUnit;
+    var usage = cap > 0 ? Math.round(100 * r.hoursPlanned / cap) : null;
+    return { paused: Math.min(paused, r.units), free: free, budgetTotal: r.units * r.unitBudgetEur, cap: cap, usage: usage,
+      tone: usage == null || usage > 100 ? 'bad' : usage > 80 ? 'warn' : 'ok' };
+  }
+  return { fr: fr, AV: AV, BU: BU, resource: resource, robot: robot };
+})();
+
   window.APP_DATA = {
     robotPlans: robotPlans,
     robots: robots,

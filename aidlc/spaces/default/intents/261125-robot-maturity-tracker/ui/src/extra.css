@@ -52,7 +52,8 @@
 .bp-zone.bp-warn,.bp-sw.bp-warn{fill:var(--warn-bg);background:var(--warn)}
 .bp-zone.bp-bad,.bp-sw.bp-bad{fill:var(--bad-bg);background:var(--bad)}
 .bp-zone.bp-ok{stroke:var(--ok)}.bp-zone.bp-info{stroke:var(--info)}.bp-zone.bp-warn{stroke:var(--warn)}.bp-zone.bp-bad{stroke:var(--bad)}
-.bp-zone .bp-eye{fill:var(--bad);stroke:none}
+.bp-zone .bp-eye{fill:var(--text-muted);stroke:none}
+.bp-zone.bp-ok .bp-eye{fill:var(--ok)}.bp-zone.bp-info .bp-eye{fill:var(--info)}.bp-zone.bp-warn .bp-eye{fill:var(--warn)}.bp-zone.bp-bad .bp-eye{fill:var(--bad)}
 .bp-zone .bp-rib{fill:none;stroke:inherit;stroke-width:1}
 .bp-hint{margin:0 0 var(--s3);color:var(--text-muted)}
 .bp-legend,.bp-key{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}

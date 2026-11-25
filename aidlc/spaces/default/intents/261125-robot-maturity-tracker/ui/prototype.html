@@ -1017,7 +1017,8 @@ html[data-k-m] .k-m-ind{transition:transform .4s var(--k-ease),width .4s var(--k
 .bp-zone.bp-warn,.bp-sw.bp-warn{fill:var(--warn-bg);background:var(--warn)}
 .bp-zone.bp-bad,.bp-sw.bp-bad{fill:var(--bad-bg);background:var(--bad)}
 .bp-zone.bp-ok{stroke:var(--ok)}.bp-zone.bp-info{stroke:var(--info)}.bp-zone.bp-warn{stroke:var(--warn)}.bp-zone.bp-bad{stroke:var(--bad)}
-.bp-zone .bp-eye{fill:var(--bad);stroke:none}
+.bp-zone .bp-eye{fill:var(--text-muted);stroke:none}
+.bp-zone.bp-ok .bp-eye{fill:var(--ok)}.bp-zone.bp-info .bp-eye{fill:var(--info)}.bp-zone.bp-warn .bp-eye{fill:var(--warn)}.bp-zone.bp-bad .bp-eye{fill:var(--bad)}
 .bp-zone .bp-rib{fill:none;stroke:inherit;stroke-width:1}
 .bp-hint{margin:0 0 var(--s3);color:var(--text-muted)}
 .bp-legend,.bp-key{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
@@ -1580,8 +1581,8 @@ UI_BLOCKS.shell = {
     var BP_ZONES = [
       ['skull', 'Crâne', '<ellipse cx="150" cy="52" rx="34" ry="40"/><circle cx="136" cy="48" r="7" class="bp-eye"/><circle cx="164" cy="48" r="7" class="bp-eye"/>'],
       ['jaw', 'Mâchoire', '<path d="M128 86h44l-6 18h-32z"/>'],
-      ['thorax', 'Cage thoracique', '<rect x="104" y="116" width="92" height="86" rx="14"/><path d="M110 138h80M110 158h80M110 178h80" class="bp-rib"/>'],
       ['spine', 'Colonne', '<rect x="143" y="104" width="14" height="184" rx="4"/>'],
+      ['thorax', 'Cage thoracique', '<rect x="104" y="116" width="92" height="86" rx="14"/><path d="M110 138h80M110 158h80M110 178h80" class="bp-rib"/>'],
       ['arm', 'Humérus', '<rect x="70" y="120" width="26" height="86" rx="8"/><rect x="204" y="120" width="26" height="86" rx="8"/>'],
       ['forearm', 'Poignet', '<rect x="72" y="212" width="22" height="76" rx="8"/><rect x="206" y="212" width="22" height="76" rx="8"/>'],
       ['pelvis', 'Bassin', '<rect x="112" y="290" width="76" height="40" rx="10"/>'],
@@ -4623,6 +4624,28 @@ function sparkline(target, o) {
       ] }
   ];
 
+// ---- resources board: shared calculations (defined here so they exist before the screen render functions run)
+window.BoardCalc = (function () {
+  var fr = function (n, dp) { return Number(n).toLocaleString('fr-FR', { maximumFractionDigits: dp == null ? 2 : dp }); };
+  var AV = { crit: 'Insuffisant', warn: 'Juste', ok: 'Suffisant' };
+  var BU = { crit: 'Dépassé', warn: 'À surveiller', ok: 'Dans le budget' };
+  function resource(r) {
+    var limit = r.kind === 'Machine' ? r.capacity : r.available;
+    var avail = r.need > limit ? 'crit' : (r.need > 0.8 * limit || r.need > r.capacity) ? 'warn' : 'ok';
+    var budget = r.budgetEur == null ? '' : r.engagedEur > r.budgetEur ? 'crit' : r.engagedEur >= 0.8 * r.budgetEur ? 'warn' : 'ok';
+    return { avail: avail, budget: budget, usage: r.capacity > 0 ? Math.round(100 * r.need / r.capacity) : null };
+  }
+  function robot(r) {
+    var paused = r.criticalOpen > 0 ? 1 : 0;
+    var free = Math.max(0, r.units - paused);
+    var cap = free * r.hoursPerUnit;
+    var usage = cap > 0 ? Math.round(100 * r.hoursPlanned / cap) : null;
+    return { paused: Math.min(paused, r.units), free: free, budgetTotal: r.units * r.unitBudgetEur, cap: cap, usage: usage,
+      tone: usage == null || usage > 100 ? 'bad' : usage > 80 ? 'warn' : 'ok' };
+  }
+  return { fr: fr, AV: AV, BU: BU, resource: resource, robot: robot };
+})();
+
   window.APP_DATA = {
     robotPlans: robotPlans,
     robots: robots,
@@ -4662,27 +4685,6 @@ UI_BLOCKS['robots-kpi-toprint'] = function () {
   var reprint = D.prints.filter(function (p) { return p.status === 'À réimprimer'; }).length;
   return { items: [{ label: 'Pièces à imprimer', value: D.kpis.partsToPrint, hint: 'dont ' + reprint + ' à réimprimer' }] };
 };
-// ---- resources board: shared calculations (also used by the screen script)
-window.BoardCalc = (function () {
-  var fr = function (n, dp) { return Number(n).toLocaleString('fr-FR', { maximumFractionDigits: dp == null ? 2 : dp }); };
-  var AV = { crit: 'Insuffisant', warn: 'Juste', ok: 'Suffisant' };
-  var BU = { crit: 'Dépassé', warn: 'À surveiller', ok: 'Dans le budget' };
-  function resource(r) {
-    var limit = r.kind === 'Machine' ? r.capacity : r.available;
-    var avail = r.need > limit ? 'crit' : (r.need > 0.8 * limit || r.need > r.capacity) ? 'warn' : 'ok';
-    var budget = r.budgetEur == null ? '' : r.engagedEur > r.budgetEur ? 'crit' : r.engagedEur >= 0.8 * r.budgetEur ? 'warn' : 'ok';
-    return { avail: avail, budget: budget, usage: r.capacity > 0 ? Math.round(100 * r.need / r.capacity) : null };
-  }
-  function robot(r) {
-    var paused = r.criticalOpen > 0 ? 1 : 0;
-    var free = Math.max(0, r.units - paused);
-    var cap = free * r.hoursPerUnit;
-    var usage = cap > 0 ? Math.round(100 * r.hoursPlanned / cap) : null;
-    return { paused: Math.min(paused, r.units), free: free, budgetTotal: r.units * r.unitBudgetEur, cap: cap, usage: usage,
-      tone: usage == null || usage > 100 ? 'bad' : usage > 80 ? 'warn' : 'ok' };
-  }
-  return { fr: fr, AV: AV, BU: BU, resource: resource, robot: robot };
-})();
 UI_BLOCKS['robots-board-kpi'] = function () {
   var D = window.APP_DATA, B = window.BoardCalc;
   var units = 0, free = 0, paused = 0, budget = 0;
