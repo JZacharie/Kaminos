@@ -81,7 +81,7 @@
           <h3 id="rp-3d-title">Pièce en 3D</h3>
           <svg id="rp-3d" class="p3d-canvas rp-3d" viewBox="0 0 480 330" role="img" aria-label="Modèle 3D de la pièce"></svg>
           <div class="rp-stl-missing" id="rp-stl-missing" hidden>
-            <strong>STL manquant</strong>
+            <strong>STL non disponible</strong>
             <span id="rp-stl-missing-msg">Aucun fichier STL pour cette pièce.</span>
           </div>
           <div class="rp-stl-bar">
@@ -372,10 +372,11 @@
       if (!pr) return;
       miss.hidden = !!entry;
       byId('rp-3d').style.display = entry ? '' : 'none';
-      byId('rp-stl-missing-msg').textContent = 'Aucun fichier STL pour ' + pr.id + ' ' + pr.part + '. Importez-le pour l\'afficher en 3D.';
-      byId('rp-stl-label').textContent = entry ? 'Remplacer le STL' : 'Importer le STL';
-      byId('rp-stl-remove').hidden = !entry;
-      byId('rp-stl-status').textContent = entry ? 'Fichier chargé : ' + entry.name + ' (' + nf.format(entry.triangles) + ' triangles, ' + nf.format(entry.size / 1024) + ' Ko). Conservé le temps de la session.' : '';
+      byId('rp-stl-missing-msg').textContent = 'Aucun fichier STL pour ' + pr.id + ' ' + pr.part + '. Importez le STL de la pièce pour l\'afficher en 3D.';
+      byId('rp-stl-label').textContent = !entry ? 'Importer le STL' : entry.source === 'upload' ? 'Remplacer le STL' : 'Importer mon STL';
+      byId('rp-stl-remove').hidden = !entry || entry.source !== 'upload';
+      byId('rp-stl-status').textContent = !entry ? '' : entry.source === 'upload' ? 'Fichier importé : ' + entry.name + ' (' + nf.format(entry.triangles) + ' triangles, ' + nf.format(entry.size / 1024) + ' Ko). Conservé le temps de la session.'
+        : 'Modèle fourni : ' + entry.label + ', maillage simplifié à ' + nf.format(entry.triangles) + ' triangles (original : ' + nf.format(entry.original) + '). Source : ' + entry.origin + '. Pièce de référence, pas le STL définitif.';
     }
     function render3d() {
       var svg = byId('rp-3d'), pr = printOf(st.part), entry = pr && window.PartStl.get(pr.id);
@@ -448,7 +449,7 @@
         '<dt>Priorité</dt><dd>' + esc(pr.priority) + '</dd>' +
         '<dt>Statut</dt><dd><span class="k-badge k-badge-' + (TONE[pr.status] || 'info') + '">' + esc(pr.status) + '</span></dd>' +
         '<dt>Estimation</dt><dd>' + esc(nf.format(pr.grams) + ' g, ' + nf.format(pr.hours) + ' h') + '</dd>' +
-        '<dt>Fichier STL</dt><dd><span class="k-badge k-badge-' + (window.PartStl.has(pr.id) ? 'ok' : 'warn') + '">' + (window.PartStl.has(pr.id) ? 'Chargé' : 'STL manquant') + '</span></dd>';
+        '<dt>Fichier STL</dt><dd><span class="k-badge k-badge-' + (window.PartStl.has(pr.id) ? 'ok' : 'warn') + '">' + (window.PartStl.has(pr.id) ? 'Chargé' : 'STL non disponible') + '</span></dd>';
     }
     function markSelected() {
       Array.prototype.forEach.call(byId('rp-plan').querySelectorAll('.rp-part'), function (g) {

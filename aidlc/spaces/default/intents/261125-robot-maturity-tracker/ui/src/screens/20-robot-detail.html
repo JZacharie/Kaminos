@@ -23,11 +23,13 @@
     <div class="k-span-7" id="a-subsystem-scores" data-k-block="bars" data-k-cfg="robot-detail-scores" data-k-canon></div>
     <div class="k-span-5" id="a-prerequisites" data-k-block="detail" data-k-cfg="robot-detail-prereqs" data-k-canon></div>
     <div class="k-span-12 k-card k-stack" id="a-blueprint">
-      <div class="k-card-head"><h2 class="k-card-title" id="bp-title">Plan de l'endosquelette</h2></div>
+      <div class="k-card-head"><h2 class="k-card-title" id="bp-title">Plan du robot</h2></div>
       <div class="bp-grid">
         <svg id="bp-svg" class="bp-svg" viewBox="0 0 300 560" role="img" aria-labelledby="bp-title"></svg>
         <div>
-          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante. Les fichiers STL manquants se déposent dans <a href="#/robots">Plan des robots</a>.</p>
+          <p class="bp-note" id="bp-note"></p>
+          <div class="k-chips" id="bp-others" role="group" aria-label="Fiches des autres robots"></div>
+          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante. Les STL non disponibles se déposent dans <a href="#/robots">Plan des robots</a>.</p>
           <ul class="bp-legend" id="bp-legend"></ul>
           <ul class="bp-key">
             <li><i class="bp-sw bp-ok"></i>Validée</li><li><i class="bp-sw bp-info"></i>En impression</li>
@@ -45,19 +47,57 @@
     var sec = document.getElementById('h-robot-detail').closest('section');
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-    var BP_ZONES = [
-      ['skull', 'Crâne', '<ellipse cx="150" cy="52" rx="34" ry="40"/><circle cx="136" cy="48" r="7" class="bp-eye"/><circle cx="164" cy="48" r="7" class="bp-eye"/>'],
-      ['jaw', 'Mâchoire', '<path d="M128 86h44l-6 18h-32z"/>'],
-      ['spine', 'Colonne', '<rect x="143" y="104" width="14" height="184" rx="4"/>'],
-      ['thorax', 'Cage thoracique', '<rect x="104" y="116" width="92" height="86" rx="14"/><path d="M110 138h80M110 158h80M110 178h80" class="bp-rib"/>'],
-      ['arm', 'Humérus', '<rect x="70" y="120" width="26" height="86" rx="8"/><rect x="204" y="120" width="26" height="86" rx="8"/>'],
-      ['forearm', 'Poignet', '<rect x="72" y="212" width="22" height="76" rx="8"/><rect x="206" y="212" width="22" height="76" rx="8"/>'],
-      ['pelvis', 'Bassin', '<rect x="112" y="290" width="76" height="40" rx="10"/>'],
-      ['femur', 'Fémur', '<rect x="116" y="336" width="28" height="84" rx="9"/><rect x="156" y="336" width="28" height="84" rx="9"/>'],
-      ['knee', 'Rotule', '<circle cx="130" cy="432" r="14"/><circle cx="170" cy="432" r="14"/>'],
-      ['tibia', 'Tibia', '<rect x="119" y="450" width="22" height="64" rx="7"/><rect x="159" y="450" width="22" height="64" rx="7"/>'],
-      ['foot', 'Pied', '<path d="M108 518h38v18h-50z"/><path d="M154 518h38l12 18h-50z"/>']
-    ];
+    // zones of the front view, per model: [zone id, label, SVG shapes]. The three models share the zone ids so parts map the same way.
+    var BP_BASE = {
+      skull: ['Crâne', '<ellipse cx="150" cy="52" rx="34" ry="40"/>@eyes'],
+      jaw: ['Mâchoire', '<path d="M128 86h44l-6 18h-32z"/>'],
+      spine: ['Colonne', '<rect x="143" y="104" width="14" height="184" rx="4"/>'],
+      thorax: ['Cage thoracique', '<rect x="104" y="116" width="92" height="86" rx="14"/>@ribs'],
+      arm: ['Humérus', '<rect x="70" y="120" width="26" height="86" rx="8"/><rect x="204" y="120" width="26" height="86" rx="8"/>'],
+      forearm: ['Poignet', '<rect x="72" y="212" width="22" height="76" rx="8"/><rect x="206" y="212" width="22" height="76" rx="8"/>'],
+      pelvis: ['Bassin', '<rect x="112" y="290" width="76" height="40" rx="10"/>'],
+      femur: ['Fémur', '<rect x="116" y="336" width="28" height="84" rx="9"/><rect x="156" y="336" width="28" height="84" rx="9"/>'],
+      knee: ['Rotule', '<circle cx="130" cy="432" r="14"/><circle cx="170" cy="432" r="14"/>'],
+      tibia: ['Tibia', '<rect x="119" y="450" width="22" height="64" rx="7"/><rect x="159" y="450" width="22" height="64" rx="7"/>'],
+      foot: ['Pied', '<path d="M108 518h38v18h-50z"/><path d="M154 518h38l12 18h-50z"/>']
+    };
+    var EYES = '<circle cx="136" cy="48" r="7" class="bp-eye"/><circle cx="164" cy="48" r="7" class="bp-eye"/>';
+    var RIBS = '<path d="M110 138h80M110 158h80M110 178h80" class="bp-rib"/>';
+    var BP_MODELS = {
+      'T-800': { note: 'Endosquelette à structure apparente : crâne aux yeux rouges, cage thoracique à côtes, colonne et articulations visibles.', over: {} },
+      'T-1000': { note: 'Alliage liquide : silhouette lisse sans côtes ni colonne apparente, avant-bras droit en lame.',
+        over: {
+          skull: ['Crâne', '<ellipse cx="150" cy="52" rx="32" ry="40"/>'],
+          spine: ['Colonne', '<rect x="145" y="206" width="10" height="82" rx="5"/>'],
+          thorax: ['Cage thoracique', '<rect x="106" y="116" width="88" height="88" rx="28"/>'],
+          arm: ['Humérus', '<rect x="72" y="120" width="26" height="86" rx="13"/><rect x="202" y="120" width="26" height="86" rx="13"/>'],
+          forearm: ['Poignet', '<rect x="74" y="212" width="22" height="76" rx="11"/><path d="M204 212h24l-4 110-8 42-8-42z"/>'],
+          pelvis: ['Bassin', '<rect x="114" y="290" width="72" height="40" rx="18"/>'],
+          femur: ['Fémur', '<rect x="116" y="336" width="28" height="84" rx="14"/><rect x="156" y="336" width="28" height="84" rx="14"/>'],
+          knee: ['Rotule', '<circle cx="130" cy="432" r="12"/><circle cx="170" cy="432" r="12"/>'],
+          tibia: ['Tibia', '<rect x="119" y="450" width="22" height="64" rx="11"/><rect x="159" y="450" width="22" height="64" rx="11"/>']
+        } },
+      'T-X': { note: 'Endosquelette fin : silhouette allongée, avant-bras droit en canon à plasma.',
+        over: {
+          skull: ['Crâne', '<ellipse cx="150" cy="50" rx="29" ry="37"/>@eyes'],
+          jaw: ['Mâchoire', '<path d="M131 83h38l-5 16h-28z"/>'],
+          thorax: ['Cage thoracique', '<rect x="112" y="112" width="76" height="84" rx="14"/>@ribs'],
+          arm: ['Humérus', '<rect x="82" y="116" width="22" height="84" rx="8"/><rect x="196" y="116" width="22" height="84" rx="8"/>'],
+          forearm: ['Poignet', '<rect x="84" y="206" width="18" height="76" rx="8"/><rect x="190" y="206" width="38" height="62" rx="8"/><rect x="202" y="268" width="14" height="70" rx="4"/>'],
+          pelvis: ['Bassin', '<rect x="118" y="284" width="64" height="38" rx="10"/>'],
+          femur: ['Fémur', '<rect x="121" y="328" width="24" height="94" rx="8"/><rect x="155" y="328" width="24" height="94" rx="8"/>'],
+          knee: ['Rotule', '<circle cx="133" cy="434" r="12"/><circle cx="167" cy="434" r="12"/>'],
+          tibia: ['Tibia', '<rect x="123" y="450" width="18" height="66" rx="6"/><rect x="159" y="450" width="18" height="66" rx="6"/>']
+        } }
+    };
+    var BP_ORDER = ['skull', 'jaw', 'spine', 'thorax', 'arm', 'forearm', 'pelvis', 'femur', 'knee', 'tibia', 'foot'];
+    function bpZones(model) {
+      var m = BP_MODELS[model] || BP_MODELS['T-800'];
+      return BP_ORDER.map(function (k) {
+        var z = m.over[k] || BP_BASE[k];
+        return [k, z[0], z[1].replace('@eyes', EYES).replace('@ribs', RIBS)];
+      });
+    }
     var BP_RULES = [[/Crâne/, 'skull'], [/Mâchoire/, 'jaw'], [/Cage thoracique|Plaque dorsale/, 'thorax'], [/Colonne|Épaule/, 'spine'],
       [/Humérus/, 'arm'], [/Poignet|Avant-bras/, 'forearm'], [/Bassin/, 'pelvis'], [/Fémur/, 'femur'], [/Rotule|Genou/, 'knee'],
       [/Tibia/, 'tibia'], [/Pied/, 'foot']];
@@ -80,17 +120,21 @@
         '<rect width="300" height="560" fill="url(#bp-grid)" class="bp-bg"/>' +
         '<line x1="150" y1="6" x2="150" y2="554" class="bp-axis"/>' +
         '<text x="10" y="18" class="bp-cap">' + esc(r.name) + ' · ' + esc(r.id) + ' · vue de face</text>';
-      BP_ZONES.forEach(function (z) {
+      bpZones(r.name).forEach(function (z) {
         var t = tone[z[0]] || 'none', tip = ids[z[0]] ? ids[z[0]].join(' ; ') : z[1] + ' : aucune pièce imprimée pour ce robot';
         h += '<g class="bp-zone bp-' + t + '"><title>' + esc(tip) + '</title>' + z[2] + '</g>';
       });
       h += '<line x1="40" y1="12" x2="40" y2="536" class="bp-dim"/><text x="34" y="280" class="bp-dimt" transform="rotate(-90 34 280)">1,85 m</text>';
       var svg = document.getElementById('bp-svg');
       svg.innerHTML = h;
+      document.getElementById('bp-note').textContent = (BP_MODELS[r.name] || BP_MODELS['T-800']).note + ' Plan schématique, échelle indicative.';
+      document.getElementById('bp-others').innerHTML = (D.robots || []).map(function (o) {
+        return '<a class="k-chip" href="#/robot/' + esc(o.id) + '"' + (o.id === r.id ? ' aria-current="page"' : '') + '>' + esc(o.id + ' ' + o.name) + '</a>';
+      }).join('');
       svg.setAttribute('aria-label', 'Plan de face de ' + r.name + ' (' + r.id + ') : ' + mine.length + ' pièces imprimées');
-      document.getElementById('bp-title').textContent = 'Plan de l\'endosquelette ' + r.name + ' (' + r.id + ')';
+      document.getElementById('bp-title').textContent = 'Plan de ' + r.name + ' (' + r.id + ')';
       document.getElementById('bp-legend').innerHTML = mine.map(function (p) {
-        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + ' <span class="k-badge k-badge-' + (window.PartStl && window.PartStl.has(p.id) ? 'ok' : 'warn') + '">' + (window.PartStl && window.PartStl.has(p.id) ? 'STL chargé' : 'STL manquant') + '</span></li>';
+        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + ' <span class="k-badge k-badge-' + (window.PartStl && window.PartStl.has(p.id) ? 'ok' : 'warn') + '">' + (window.PartStl && window.PartStl.has(p.id) ? 'STL chargé' : 'STL non disponible') + '</span></li>';
       }).join('') || '<li>Aucune pièce imprimée pour ce robot.</li>';
     }
     function paint() {
