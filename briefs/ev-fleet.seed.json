@@ -1,0 +1,2098 @@
+{
+  "schema": 1,
+  "app": "ev-fleet",
+  "now": "2026-11-04T17:30:00+00:00",
+  "briefSha": "4bb203df241c",
+  "collections": {
+    "vans": [
+      {
+        "id": "BW-01",
+        "model": "E-Transit",
+        "nominalKwh": 68,
+        "healthPct": 96,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Charging, TP-01",
+        "state": "Charging",
+        "chargerNow": "TP-01",
+        "backAt": null,
+        "fault": null,
+        "socPct": 34,
+        "route": "Altrincham AM",
+        "km": 88,
+        "departs": "06:30",
+        "needKwh": 33.4,
+        "inBatteryKwh": 22.2,
+        "toChargeKwh": 11.2,
+        "driver": "Emma Clarke",
+        "plate": "MX24 HTR",
+        "status": "Will be ready",
+        "plannedCharger": "TP-01",
+        "plannedStart": "00:30",
+        "plannedEnd": "01:31",
+        "socAtDeparturePct": 51
+      },
+      {
+        "id": "BW-02",
+        "model": "E-Transit",
+        "nominalKwh": 68,
+        "healthPct": 95,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Returning, back 18:10",
+        "state": "Returning",
+        "chargerNow": null,
+        "backAt": "18:10",
+        "fault": null,
+        "socPct": 22,
+        "route": "Sale and Stretford",
+        "km": 96,
+        "departs": "06:45",
+        "needKwh": 36.5,
+        "inBatteryKwh": 14.2,
+        "toChargeKwh": 22.3,
+        "driver": "Tom Hughes",
+        "plate": "MX24 HTS",
+        "status": "Will be ready",
+        "plannedCharger": "TP-02",
+        "plannedStart": "00:30",
+        "plannedEnd": "02:32",
+        "socAtDeparturePct": 57
+      },
+      {
+        "id": "BW-03",
+        "model": "E-Transit",
+        "nominalKwh": 68,
+        "healthPct": 91,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Ready",
+        "state": "Ready",
+        "chargerNow": null,
+        "backAt": null,
+        "fault": null,
+        "socPct": 88,
+        "route": "Wilmslow",
+        "km": 112,
+        "departs": "07:00",
+        "needKwh": 42.6,
+        "inBatteryKwh": 54.5,
+        "toChargeKwh": 0,
+        "driver": "Priya Shah",
+        "plate": "MX23 KLA",
+        "status": "Ready",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 88
+      },
+      {
+        "id": "BW-04",
+        "model": "eSprinter",
+        "nominalKwh": 81,
+        "healthPct": 97,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Parked",
+        "state": "Parked",
+        "chargerNow": null,
+        "backAt": null,
+        "fault": null,
+        "socPct": 41,
+        "route": "Didsbury",
+        "km": 74,
+        "departs": "06:30",
+        "needKwh": 28.1,
+        "inBatteryKwh": 32.2,
+        "toChargeKwh": 0,
+        "driver": "Liam Doyle",
+        "plate": "MX25 DBN",
+        "status": "Ready",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 41
+      },
+      {
+        "id": "BW-05",
+        "model": "eSprinter",
+        "nominalKwh": 81,
+        "healthPct": 94,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "On route, back 18:40",
+        "state": "On route",
+        "chargerNow": null,
+        "backAt": "18:40",
+        "fault": null,
+        "socPct": 18,
+        "route": "Cheadle Hulme",
+        "km": 102,
+        "departs": "07:15",
+        "needKwh": 38.8,
+        "inBatteryKwh": 13.7,
+        "toChargeKwh": 25.1,
+        "driver": "Aisha Khan",
+        "plate": "MX25 DBO",
+        "status": "Will be ready",
+        "plannedCharger": "TP-05",
+        "plannedStart": "00:30",
+        "plannedEnd": "02:47",
+        "socAtDeparturePct": 51
+      },
+      {
+        "id": "BW-06",
+        "model": "eSprinter",
+        "nominalKwh": 81,
+        "healthPct": 89,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Fault, charger TP-03",
+        "state": "Fault",
+        "chargerNow": "TP-03",
+        "backAt": null,
+        "fault": "charger TP-03",
+        "socPct": 29,
+        "route": "Altrincham PM",
+        "km": 81,
+        "departs": "11:30",
+        "needKwh": 30.8,
+        "inBatteryKwh": 20.9,
+        "toChargeKwh": 9.9,
+        "driver": "Owen Price",
+        "plate": "MX24 PLE",
+        "status": "At risk",
+        "plannedCharger": "TP-04",
+        "plannedStart": "00:30",
+        "plannedEnd": "01:24",
+        "socAtDeparturePct": 43
+      },
+      {
+        "id": "BW-07",
+        "model": "Kangoo",
+        "nominalKwh": 45,
+        "healthPct": 93,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Charging, TP-06",
+        "state": "Charging",
+        "chargerNow": "TP-06",
+        "backAt": null,
+        "fault": null,
+        "socPct": 52,
+        "route": "Urmston",
+        "km": 63,
+        "departs": "07:00",
+        "needKwh": 23.9,
+        "inBatteryKwh": 21.8,
+        "toChargeKwh": 2.1,
+        "driver": "Linda Okoro",
+        "plate": "MA24 ZPF",
+        "status": "Will be ready",
+        "plannedCharger": "TP-06",
+        "plannedStart": "00:30",
+        "plannedEnd": "00:41",
+        "socAtDeparturePct": 57
+      },
+      {
+        "id": "BW-08",
+        "model": "Kangoo",
+        "nominalKwh": 45,
+        "healthPct": 90,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Ready",
+        "state": "Ready",
+        "chargerNow": null,
+        "backAt": null,
+        "fault": null,
+        "socPct": 93,
+        "route": "Eccles",
+        "km": 58,
+        "departs": "07:30",
+        "needKwh": 22,
+        "inBatteryKwh": 37.7,
+        "toChargeKwh": 0,
+        "driver": "Jack Byrne",
+        "plate": "MA24 ZPG",
+        "status": "Ready",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 93
+      },
+      {
+        "id": "BW-09",
+        "model": "Kangoo",
+        "nominalKwh": 45,
+        "healthPct": 86,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Returning, back 18:00",
+        "state": "Returning",
+        "chargerNow": null,
+        "backAt": "18:00",
+        "fault": null,
+        "socPct": 15,
+        "route": "Sale PM",
+        "km": 69,
+        "departs": "12:00",
+        "needKwh": 26.2,
+        "inBatteryKwh": 5.8,
+        "toChargeKwh": 20.4,
+        "driver": "Nadia Rahman",
+        "plate": "MA22 VWE",
+        "status": "Will be ready",
+        "plannedCharger": "TP-07",
+        "plannedStart": "00:30",
+        "plannedEnd": "02:21",
+        "socAtDeparturePct": 68
+      },
+      {
+        "id": "BW-10",
+        "model": "E-Transit",
+        "nominalKwh": 68,
+        "healthPct": 97,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "On route, back 18:55",
+        "state": "On route",
+        "chargerNow": null,
+        "backAt": "18:55",
+        "fault": null,
+        "socPct": 12,
+        "route": "Knutsford",
+        "km": 121,
+        "departs": "07:15",
+        "needKwh": 46,
+        "inBatteryKwh": 7.9,
+        "toChargeKwh": 38.1,
+        "driver": "Chris Hall",
+        "plate": "MX24 HTU",
+        "status": "At risk",
+        "plannedCharger": "TP-08",
+        "plannedStart": "00:30",
+        "plannedEnd": "03:58",
+        "socAtDeparturePct": 70
+      },
+      {
+        "id": "BW-11",
+        "model": "eSprinter",
+        "nominalKwh": 81,
+        "healthPct": 98,
+        "depot": "Trafford",
+        "depotId": "TP",
+        "now": "Spare, idle",
+        "state": "Spare",
+        "chargerNow": null,
+        "backAt": null,
+        "fault": null,
+        "socPct": 96,
+        "route": null,
+        "km": 0,
+        "departs": null,
+        "needKwh": 0,
+        "inBatteryKwh": 76.2,
+        "toChargeKwh": 0,
+        "driver": "Relief pool",
+        "plate": "MX25 DBP",
+        "status": "Ready",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 96
+      },
+      {
+        "id": "BW-12",
+        "model": "Kangoo",
+        "nominalKwh": 45,
+        "healthPct": 95,
+        "depot": "Salford",
+        "depotId": "SQ",
+        "now": "Plugged in, SQ-01, idle",
+        "state": "Plugged in",
+        "chargerNow": "SQ-01",
+        "backAt": null,
+        "fault": null,
+        "socPct": 47,
+        "route": "Quays AM",
+        "km": 52,
+        "departs": "06:30",
+        "needKwh": 19.8,
+        "inBatteryKwh": 20.1,
+        "toChargeKwh": 0,
+        "driver": "Sophie Lane",
+        "plate": "MA24 ZPH",
+        "status": "Ready",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 47
+      },
+      {
+        "id": "BW-13",
+        "model": "Kangoo",
+        "nominalKwh": 45,
+        "healthPct": 92,
+        "depot": "Salford",
+        "depotId": "SQ",
+        "now": "Ready",
+        "state": "Ready",
+        "chargerNow": null,
+        "backAt": null,
+        "fault": null,
+        "socPct": 90,
+        "route": "Media City",
+        "km": 44,
+        "departs": "07:00",
+        "needKwh": 16.7,
+        "inBatteryKwh": 37.3,
+        "toChargeKwh": 0,
+        "driver": "Marek Nowak",
+        "plate": "MA23 QRT",
+        "status": "Ready",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 90
+      },
+      {
+        "id": "BW-14",
+        "model": "E-Transit",
+        "nominalKwh": 68,
+        "healthPct": 94,
+        "depot": "Salford",
+        "depotId": "SQ",
+        "now": "Returning, back 18:20",
+        "state": "Returning",
+        "chargerNow": null,
+        "backAt": "18:20",
+        "fault": null,
+        "socPct": 27,
+        "route": "Prestwich",
+        "km": 92,
+        "departs": "06:45",
+        "needKwh": 35,
+        "inBatteryKwh": 17.3,
+        "toChargeKwh": 17.7,
+        "driver": "Grace Allen",
+        "plate": "MX23 KLB",
+        "status": "Will be ready",
+        "plannedCharger": "SQ-02",
+        "plannedStart": "00:30",
+        "plannedEnd": "02:07",
+        "socAtDeparturePct": 55
+      },
+      {
+        "id": "BW-15",
+        "model": "E-Transit",
+        "nominalKwh": 68,
+        "healthPct": 88,
+        "depot": "Salford",
+        "depotId": "SQ",
+        "now": "Charging, SQ-03",
+        "state": "Charging",
+        "chargerNow": "SQ-03",
+        "backAt": null,
+        "fault": null,
+        "socPct": 38,
+        "route": "Bury",
+        "km": 118,
+        "departs": "07:00",
+        "needKwh": 44.8,
+        "inBatteryKwh": 22.7,
+        "toChargeKwh": 22.1,
+        "driver": "Ben Carter",
+        "plate": "MX22 FGH",
+        "status": "Will be ready",
+        "plannedCharger": "SQ-03",
+        "plannedStart": "00:30",
+        "plannedEnd": "02:31",
+        "socAtDeparturePct": 75
+      },
+      {
+        "id": "BW-16",
+        "model": "eSprinter",
+        "nominalKwh": 81,
+        "healthPct": 96,
+        "depot": "Salford",
+        "depotId": "SQ",
+        "now": "On route, back 18:50",
+        "state": "On route",
+        "chargerNow": null,
+        "backAt": "18:50",
+        "fault": null,
+        "socPct": 20,
+        "route": "Swinton",
+        "km": 67,
+        "departs": "07:30",
+        "needKwh": 25.5,
+        "inBatteryKwh": 15.6,
+        "toChargeKwh": 9.9,
+        "driver": "Hannah Moss",
+        "plate": "MX25 DBR",
+        "status": "Will be ready",
+        "plannedCharger": "SQ-04",
+        "plannedStart": "00:30",
+        "plannedEnd": "01:24",
+        "socAtDeparturePct": 33
+      },
+      {
+        "id": "BW-17",
+        "model": "eSprinter",
+        "nominalKwh": 81,
+        "healthPct": 92,
+        "depot": "Salford",
+        "depotId": "SQ",
+        "now": "Ready",
+        "state": "Ready",
+        "chargerNow": null,
+        "backAt": null,
+        "fault": null,
+        "socPct": 85,
+        "route": "Rochdale",
+        "km": 131,
+        "departs": "07:00",
+        "needKwh": 49.8,
+        "inBatteryKwh": 63.3,
+        "toChargeKwh": 0,
+        "driver": "Yusuf Ali",
+        "plate": "MX24 PLF",
+        "status": "Ready",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 85
+      },
+      {
+        "id": "BW-18",
+        "model": "Kangoo",
+        "nominalKwh": 45,
+        "healthPct": 84,
+        "depot": "Salford",
+        "depotId": "SQ",
+        "now": "Fault, battery cooling",
+        "state": "Fault",
+        "chargerNow": null,
+        "backAt": null,
+        "fault": "battery cooling",
+        "socPct": 31,
+        "route": "Quays PM",
+        "km": 60,
+        "departs": "12:30",
+        "needKwh": 22.8,
+        "inBatteryKwh": 11.7,
+        "toChargeKwh": 11.1,
+        "driver": "Ella Ward",
+        "plate": "MA22 VWF",
+        "status": "Blocked",
+        "plannedCharger": null,
+        "plannedStart": null,
+        "plannedEnd": null,
+        "socAtDeparturePct": 31
+      }
+    ],
+    "chargers": [
+      {
+        "id": "TP-01",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-01",
+        "vanNow": "BW-01"
+      },
+      {
+        "id": "TP-02",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-02",
+        "vanNow": null
+      },
+      {
+        "id": "TP-03",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "Out of service",
+        "dcUse": null,
+        "vanTonight": null,
+        "vanNow": "BW-06"
+      },
+      {
+        "id": "TP-04",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-06",
+        "vanNow": null
+      },
+      {
+        "id": "TP-05",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-05",
+        "vanNow": null
+      },
+      {
+        "id": "TP-06",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-07",
+        "vanNow": "BW-07"
+      },
+      {
+        "id": "TP-07",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-09",
+        "vanNow": null
+      },
+      {
+        "id": "TP-08",
+        "depotId": "TP",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-10",
+        "vanNow": null
+      },
+      {
+        "id": "TP-09",
+        "depotId": "TP",
+        "kind": "DC",
+        "kw": 50,
+        "state": "OK",
+        "dcUse": "emergencies only",
+        "vanTonight": null,
+        "vanNow": null
+      },
+      {
+        "id": "TP-10",
+        "depotId": "TP",
+        "kind": "DC",
+        "kw": 50,
+        "state": "OK",
+        "dcUse": "emergencies only",
+        "vanTonight": null,
+        "vanNow": null
+      },
+      {
+        "id": "SQ-01",
+        "depotId": "SQ",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": null,
+        "vanNow": "BW-12"
+      },
+      {
+        "id": "SQ-02",
+        "depotId": "SQ",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-14",
+        "vanNow": null
+      },
+      {
+        "id": "SQ-03",
+        "depotId": "SQ",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-15",
+        "vanNow": "BW-15"
+      },
+      {
+        "id": "SQ-04",
+        "depotId": "SQ",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": "BW-16",
+        "vanNow": null
+      },
+      {
+        "id": "SQ-05",
+        "depotId": "SQ",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": null,
+        "vanNow": null
+      },
+      {
+        "id": "SQ-06",
+        "depotId": "SQ",
+        "kind": "AC",
+        "kw": 22,
+        "state": "OK",
+        "dcUse": null,
+        "vanTonight": null,
+        "vanNow": null
+      }
+    ],
+    "sessions": [
+      {
+        "id": "S-01",
+        "van": "BW-01",
+        "charger": "TP-01",
+        "depotId": "TP",
+        "start": "00:30",
+        "end": "01:31",
+        "kw": 11,
+        "kwh": 11.2,
+        "band": "off-peak",
+        "costGbp": 1.06
+      },
+      {
+        "id": "S-02",
+        "van": "BW-02",
+        "charger": "TP-02",
+        "depotId": "TP",
+        "start": "00:30",
+        "end": "02:32",
+        "kw": 11,
+        "kwh": 22.3,
+        "band": "off-peak",
+        "costGbp": 2.12
+      },
+      {
+        "id": "S-06",
+        "van": "BW-06",
+        "charger": "TP-04",
+        "depotId": "TP",
+        "start": "00:30",
+        "end": "01:24",
+        "kw": 11,
+        "kwh": 9.9,
+        "band": "off-peak",
+        "costGbp": 0.94
+      },
+      {
+        "id": "S-05",
+        "van": "BW-05",
+        "charger": "TP-05",
+        "depotId": "TP",
+        "start": "00:30",
+        "end": "02:47",
+        "kw": 11,
+        "kwh": 25.1,
+        "band": "off-peak",
+        "costGbp": 2.38
+      },
+      {
+        "id": "S-07",
+        "van": "BW-07",
+        "charger": "TP-06",
+        "depotId": "TP",
+        "start": "00:30",
+        "end": "00:41",
+        "kw": 11,
+        "kwh": 2.1,
+        "band": "off-peak",
+        "costGbp": 0.2
+      },
+      {
+        "id": "S-09",
+        "van": "BW-09",
+        "charger": "TP-07",
+        "depotId": "TP",
+        "start": "00:30",
+        "end": "02:21",
+        "kw": 11,
+        "kwh": 20.4,
+        "band": "off-peak",
+        "costGbp": 1.94
+      },
+      {
+        "id": "S-10",
+        "van": "BW-10",
+        "charger": "TP-08",
+        "depotId": "TP",
+        "start": "00:30",
+        "end": "03:58",
+        "kw": 11,
+        "kwh": 38.1,
+        "band": "off-peak",
+        "costGbp": 3.62
+      },
+      {
+        "id": "S-14",
+        "van": "BW-14",
+        "charger": "SQ-02",
+        "depotId": "SQ",
+        "start": "00:30",
+        "end": "02:07",
+        "kw": 11,
+        "kwh": 17.7,
+        "band": "off-peak",
+        "costGbp": 1.68
+      },
+      {
+        "id": "S-15",
+        "van": "BW-15",
+        "charger": "SQ-03",
+        "depotId": "SQ",
+        "start": "00:30",
+        "end": "02:31",
+        "kw": 11,
+        "kwh": 22.1,
+        "band": "off-peak",
+        "costGbp": 2.1
+      },
+      {
+        "id": "S-16",
+        "van": "BW-16",
+        "charger": "SQ-04",
+        "depotId": "SQ",
+        "start": "00:30",
+        "end": "01:24",
+        "kw": 11,
+        "kwh": 9.9,
+        "band": "off-peak",
+        "costGbp": 0.94
+      }
+    ],
+    "planLoad": [
+      {
+        "id": "TP-17:00",
+        "depotId": "TP",
+        "from": "17:00",
+        "to": "17:30",
+        "demandKw": 80
+      },
+      {
+        "id": "SQ-17:00",
+        "depotId": "SQ",
+        "from": "17:00",
+        "to": "17:30",
+        "demandKw": 40
+      },
+      {
+        "id": "TP-17:30",
+        "depotId": "TP",
+        "from": "17:30",
+        "to": "18:00",
+        "demandKw": 80
+      },
+      {
+        "id": "SQ-17:30",
+        "depotId": "SQ",
+        "from": "17:30",
+        "to": "18:00",
+        "demandKw": 40
+      },
+      {
+        "id": "TP-18:00",
+        "depotId": "TP",
+        "from": "18:00",
+        "to": "18:30",
+        "demandKw": 80
+      },
+      {
+        "id": "SQ-18:00",
+        "depotId": "SQ",
+        "from": "18:00",
+        "to": "18:30",
+        "demandKw": 40
+      },
+      {
+        "id": "TP-18:30",
+        "depotId": "TP",
+        "from": "18:30",
+        "to": "19:00",
+        "demandKw": 80
+      },
+      {
+        "id": "SQ-18:30",
+        "depotId": "SQ",
+        "from": "18:30",
+        "to": "19:00",
+        "demandKw": 40
+      },
+      {
+        "id": "TP-19:00",
+        "depotId": "TP",
+        "from": "19:00",
+        "to": "19:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-19:00",
+        "depotId": "SQ",
+        "from": "19:00",
+        "to": "19:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-19:30",
+        "depotId": "TP",
+        "from": "19:30",
+        "to": "20:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-19:30",
+        "depotId": "SQ",
+        "from": "19:30",
+        "to": "20:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-20:00",
+        "depotId": "TP",
+        "from": "20:00",
+        "to": "20:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-20:00",
+        "depotId": "SQ",
+        "from": "20:00",
+        "to": "20:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-20:30",
+        "depotId": "TP",
+        "from": "20:30",
+        "to": "21:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-20:30",
+        "depotId": "SQ",
+        "from": "20:30",
+        "to": "21:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-21:00",
+        "depotId": "TP",
+        "from": "21:00",
+        "to": "21:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-21:00",
+        "depotId": "SQ",
+        "from": "21:00",
+        "to": "21:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-21:30",
+        "depotId": "TP",
+        "from": "21:30",
+        "to": "22:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-21:30",
+        "depotId": "SQ",
+        "from": "21:30",
+        "to": "22:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-22:00",
+        "depotId": "TP",
+        "from": "22:00",
+        "to": "22:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-22:00",
+        "depotId": "SQ",
+        "from": "22:00",
+        "to": "22:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-22:30",
+        "depotId": "TP",
+        "from": "22:30",
+        "to": "23:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-22:30",
+        "depotId": "SQ",
+        "from": "22:30",
+        "to": "23:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-23:00",
+        "depotId": "TP",
+        "from": "23:00",
+        "to": "23:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-23:00",
+        "depotId": "SQ",
+        "from": "23:00",
+        "to": "23:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-23:30",
+        "depotId": "TP",
+        "from": "23:30",
+        "to": "00:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-23:30",
+        "depotId": "SQ",
+        "from": "23:30",
+        "to": "00:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-00:00",
+        "depotId": "TP",
+        "from": "00:00",
+        "to": "00:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-00:00",
+        "depotId": "SQ",
+        "from": "00:00",
+        "to": "00:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-00:30",
+        "depotId": "TP",
+        "from": "00:30",
+        "to": "01:00",
+        "demandKw": 95.2
+      },
+      {
+        "id": "SQ-00:30",
+        "depotId": "SQ",
+        "from": "00:30",
+        "to": "01:00",
+        "demandKw": 45
+      },
+      {
+        "id": "TP-01:00",
+        "depotId": "TP",
+        "from": "01:00",
+        "to": "01:30",
+        "demandKw": 88.8
+      },
+      {
+        "id": "SQ-01:00",
+        "depotId": "SQ",
+        "from": "01:00",
+        "to": "01:30",
+        "demandKw": 42.8
+      },
+      {
+        "id": "TP-01:30",
+        "depotId": "TP",
+        "from": "01:30",
+        "to": "02:00",
+        "demandKw": 69.4
+      },
+      {
+        "id": "SQ-01:30",
+        "depotId": "SQ",
+        "from": "01:30",
+        "to": "02:00",
+        "demandKw": 34
+      },
+      {
+        "id": "TP-02:00",
+        "depotId": "TP",
+        "from": "02:00",
+        "to": "02:30",
+        "demandKw": 65.8
+      },
+      {
+        "id": "SQ-02:00",
+        "depotId": "SQ",
+        "from": "02:00",
+        "to": "02:30",
+        "demandKw": 25.4
+      },
+      {
+        "id": "TP-02:30",
+        "depotId": "TP",
+        "from": "02:30",
+        "to": "03:00",
+        "demandKw": 42.8
+      },
+      {
+        "id": "SQ-02:30",
+        "depotId": "SQ",
+        "from": "02:30",
+        "to": "03:00",
+        "demandKw": 12.2
+      },
+      {
+        "id": "TP-03:00",
+        "depotId": "TP",
+        "from": "03:00",
+        "to": "03:30",
+        "demandKw": 36
+      },
+      {
+        "id": "SQ-03:00",
+        "depotId": "SQ",
+        "from": "03:00",
+        "to": "03:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-03:30",
+        "depotId": "TP",
+        "from": "03:30",
+        "to": "04:00",
+        "demandKw": 35.2
+      },
+      {
+        "id": "SQ-03:30",
+        "depotId": "SQ",
+        "from": "03:30",
+        "to": "04:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-04:00",
+        "depotId": "TP",
+        "from": "04:00",
+        "to": "04:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-04:00",
+        "depotId": "SQ",
+        "from": "04:00",
+        "to": "04:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-04:30",
+        "depotId": "TP",
+        "from": "04:30",
+        "to": "05:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-04:30",
+        "depotId": "SQ",
+        "from": "04:30",
+        "to": "05:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-05:00",
+        "depotId": "TP",
+        "from": "05:00",
+        "to": "05:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-05:00",
+        "depotId": "SQ",
+        "from": "05:00",
+        "to": "05:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-05:30",
+        "depotId": "TP",
+        "from": "05:30",
+        "to": "06:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-05:30",
+        "depotId": "SQ",
+        "from": "05:30",
+        "to": "06:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-06:00",
+        "depotId": "TP",
+        "from": "06:00",
+        "to": "06:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-06:00",
+        "depotId": "SQ",
+        "from": "06:00",
+        "to": "06:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-06:30",
+        "depotId": "TP",
+        "from": "06:30",
+        "to": "07:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-06:30",
+        "depotId": "SQ",
+        "from": "06:30",
+        "to": "07:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-07:00",
+        "depotId": "TP",
+        "from": "07:00",
+        "to": "07:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-07:00",
+        "depotId": "SQ",
+        "from": "07:00",
+        "to": "07:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-07:30",
+        "depotId": "TP",
+        "from": "07:30",
+        "to": "08:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-07:30",
+        "depotId": "SQ",
+        "from": "07:30",
+        "to": "08:00",
+        "demandKw": 20
+      }
+    ],
+    "chargeOnArrivalLoad": [
+      {
+        "id": "TP-17:00",
+        "depotId": "TP",
+        "from": "17:00",
+        "to": "17:30",
+        "demandKw": 80
+      },
+      {
+        "id": "SQ-17:00",
+        "depotId": "SQ",
+        "from": "17:00",
+        "to": "17:30",
+        "demandKw": 40
+      },
+      {
+        "id": "TP-17:30",
+        "depotId": "TP",
+        "from": "17:30",
+        "to": "18:00",
+        "demandKw": 106.2
+      },
+      {
+        "id": "SQ-17:30",
+        "depotId": "SQ",
+        "from": "17:30",
+        "to": "18:00",
+        "demandKw": 51
+      },
+      {
+        "id": "TP-18:00",
+        "depotId": "TP",
+        "from": "18:00",
+        "to": "18:30",
+        "demandKw": 118.1
+      },
+      {
+        "id": "SQ-18:00",
+        "depotId": "SQ",
+        "from": "18:00",
+        "to": "18:30",
+        "demandKw": 54.7
+      },
+      {
+        "id": "TP-18:30",
+        "depotId": "TP",
+        "from": "18:30",
+        "to": "19:00",
+        "demandKw": 111.6
+      },
+      {
+        "id": "SQ-18:30",
+        "depotId": "SQ",
+        "from": "18:30",
+        "to": "19:00",
+        "demandKw": 65.7
+      },
+      {
+        "id": "TP-19:00",
+        "depotId": "TP",
+        "from": "19:00",
+        "to": "19:30",
+        "demandKw": 84
+      },
+      {
+        "id": "SQ-19:00",
+        "depotId": "SQ",
+        "from": "19:00",
+        "to": "19:30",
+        "demandKw": 53
+      },
+      {
+        "id": "TP-19:30",
+        "depotId": "TP",
+        "from": "19:30",
+        "to": "20:00",
+        "demandKw": 80.8
+      },
+      {
+        "id": "SQ-19:30",
+        "depotId": "SQ",
+        "from": "19:30",
+        "to": "20:00",
+        "demandKw": 35.1
+      },
+      {
+        "id": "TP-20:00",
+        "depotId": "TP",
+        "from": "20:00",
+        "to": "20:30",
+        "demandKw": 66.3
+      },
+      {
+        "id": "SQ-20:00",
+        "depotId": "SQ",
+        "from": "20:00",
+        "to": "20:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-20:30",
+        "depotId": "TP",
+        "from": "20:30",
+        "to": "21:00",
+        "demandKw": 60.9
+      },
+      {
+        "id": "SQ-20:30",
+        "depotId": "SQ",
+        "from": "20:30",
+        "to": "21:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-21:00",
+        "depotId": "TP",
+        "from": "21:00",
+        "to": "21:30",
+        "demandKw": 51
+      },
+      {
+        "id": "SQ-21:00",
+        "depotId": "SQ",
+        "from": "21:00",
+        "to": "21:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-21:30",
+        "depotId": "TP",
+        "from": "21:30",
+        "to": "22:00",
+        "demandKw": 51
+      },
+      {
+        "id": "SQ-21:30",
+        "depotId": "SQ",
+        "from": "21:30",
+        "to": "22:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-22:00",
+        "depotId": "TP",
+        "from": "22:00",
+        "to": "22:30",
+        "demandKw": 48.4
+      },
+      {
+        "id": "SQ-22:00",
+        "depotId": "SQ",
+        "from": "22:00",
+        "to": "22:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-22:30",
+        "depotId": "TP",
+        "from": "22:30",
+        "to": "23:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-22:30",
+        "depotId": "SQ",
+        "from": "22:30",
+        "to": "23:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-23:00",
+        "depotId": "TP",
+        "from": "23:00",
+        "to": "23:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-23:00",
+        "depotId": "SQ",
+        "from": "23:00",
+        "to": "23:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-23:30",
+        "depotId": "TP",
+        "from": "23:30",
+        "to": "00:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-23:30",
+        "depotId": "SQ",
+        "from": "23:30",
+        "to": "00:00",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-00:00",
+        "depotId": "TP",
+        "from": "00:00",
+        "to": "00:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-00:00",
+        "depotId": "SQ",
+        "from": "00:00",
+        "to": "00:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-00:30",
+        "depotId": "TP",
+        "from": "00:30",
+        "to": "01:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-00:30",
+        "depotId": "SQ",
+        "from": "00:30",
+        "to": "01:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-01:00",
+        "depotId": "TP",
+        "from": "01:00",
+        "to": "01:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-01:00",
+        "depotId": "SQ",
+        "from": "01:00",
+        "to": "01:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-01:30",
+        "depotId": "TP",
+        "from": "01:30",
+        "to": "02:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-01:30",
+        "depotId": "SQ",
+        "from": "01:30",
+        "to": "02:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-02:00",
+        "depotId": "TP",
+        "from": "02:00",
+        "to": "02:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-02:00",
+        "depotId": "SQ",
+        "from": "02:00",
+        "to": "02:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-02:30",
+        "depotId": "TP",
+        "from": "02:30",
+        "to": "03:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-02:30",
+        "depotId": "SQ",
+        "from": "02:30",
+        "to": "03:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-03:00",
+        "depotId": "TP",
+        "from": "03:00",
+        "to": "03:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-03:00",
+        "depotId": "SQ",
+        "from": "03:00",
+        "to": "03:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-03:30",
+        "depotId": "TP",
+        "from": "03:30",
+        "to": "04:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-03:30",
+        "depotId": "SQ",
+        "from": "03:30",
+        "to": "04:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-04:00",
+        "depotId": "TP",
+        "from": "04:00",
+        "to": "04:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-04:00",
+        "depotId": "SQ",
+        "from": "04:00",
+        "to": "04:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-04:30",
+        "depotId": "TP",
+        "from": "04:30",
+        "to": "05:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-04:30",
+        "depotId": "SQ",
+        "from": "04:30",
+        "to": "05:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-05:00",
+        "depotId": "TP",
+        "from": "05:00",
+        "to": "05:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-05:00",
+        "depotId": "SQ",
+        "from": "05:00",
+        "to": "05:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-05:30",
+        "depotId": "TP",
+        "from": "05:30",
+        "to": "06:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-05:30",
+        "depotId": "SQ",
+        "from": "05:30",
+        "to": "06:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-06:00",
+        "depotId": "TP",
+        "from": "06:00",
+        "to": "06:30",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-06:00",
+        "depotId": "SQ",
+        "from": "06:00",
+        "to": "06:30",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-06:30",
+        "depotId": "TP",
+        "from": "06:30",
+        "to": "07:00",
+        "demandKw": 25
+      },
+      {
+        "id": "SQ-06:30",
+        "depotId": "SQ",
+        "from": "06:30",
+        "to": "07:00",
+        "demandKw": 12
+      },
+      {
+        "id": "TP-07:00",
+        "depotId": "TP",
+        "from": "07:00",
+        "to": "07:30",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-07:00",
+        "depotId": "SQ",
+        "from": "07:00",
+        "to": "07:30",
+        "demandKw": 20
+      },
+      {
+        "id": "TP-07:30",
+        "depotId": "TP",
+        "from": "07:30",
+        "to": "08:00",
+        "demandKw": 40
+      },
+      {
+        "id": "SQ-07:30",
+        "depotId": "SQ",
+        "from": "07:30",
+        "to": "08:00",
+        "demandKw": 20
+      }
+    ],
+    "monthToDate": [
+      {
+        "id": "TP",
+        "depot": "Trafford Park",
+        "offPeakKwh": 1420,
+        "offPeakGbp": 134.9,
+        "dayKwh": 260,
+        "dayGbp": 62.4,
+        "redKwh": 95,
+        "redGbp": 36.1,
+        "solarKwh": 140,
+        "energyGbp": 233.4,
+        "peakKw": 110,
+        "peakAt": "Mon 2 Nov 17:30",
+        "peakGbp": 1265
+      },
+      {
+        "id": "SQ",
+        "depot": "Salford Quays",
+        "offPeakKwh": 610,
+        "offPeakGbp": 57.95,
+        "dayKwh": 140,
+        "dayGbp": 33.6,
+        "redKwh": 60,
+        "redGbp": 22.8,
+        "solarKwh": 0,
+        "energyGbp": 114.35,
+        "peakKw": 60,
+        "peakAt": null,
+        "peakGbp": 690
+      }
+    ],
+    "alerts": [
+      {
+        "id": "AL-01",
+        "severity": "High",
+        "subject": "BW-10",
+        "text": "needs 38.1 kWh, ready 03:58, 3 h 17 before departure",
+        "time": "17:20",
+        "timeIso": "2026-11-04T17:20",
+        "state": "Open"
+      },
+      {
+        "id": "AL-02",
+        "severity": "High",
+        "subject": "BW-18",
+        "text": "cooling fault, swap Quays PM to BW-11",
+        "time": "16:05",
+        "timeIso": "2026-11-04T16:05",
+        "state": "Open"
+      },
+      {
+        "id": "AL-03",
+        "severity": "Medium",
+        "subject": "TP-03",
+        "text": "out of service, move BW-06 to TP-04",
+        "time": "Tue 21:40",
+        "timeIso": "2026-11-03T21:40",
+        "state": "Open"
+      },
+      {
+        "id": "AL-04",
+        "severity": "Medium",
+        "subject": "BW-10",
+        "text": "back 18:55, late return",
+        "time": "17:25",
+        "timeIso": "2026-11-04T17:25",
+        "state": "Open"
+      },
+      {
+        "id": "AL-05",
+        "severity": "Low",
+        "subject": "BW-18",
+        "text": "health 84 %, under the 85 % warning",
+        "time": "Tue 08:00",
+        "timeIso": "2026-11-03T08:00",
+        "state": "Open"
+      },
+      {
+        "id": "AL-06",
+        "severity": "Low",
+        "subject": "Trafford",
+        "text": "peak 110 kW on Monday 17:30",
+        "time": "Tue 07:00",
+        "timeIso": "2026-11-03T07:00",
+        "state": "Open"
+      }
+    ]
+  },
+  "constants": {
+    "company": "Brightway Delivery Ltd.",
+    "nowLocal": "Wednesday 4 November 2026, 17:30",
+    "depots": {
+      "TP": {
+        "name": "Trafford Park",
+        "vans": 11,
+        "limitKw": 150,
+        "solarKwp": 60,
+        "baseLoadKw": {
+          "red": 80,
+          "night": 25,
+          "other": 40
+        }
+      },
+      "SQ": {
+        "name": "Salford Quays",
+        "vans": 7,
+        "limitKw": 100,
+        "solarKwp": 0,
+        "baseLoadKw": {
+          "red": 40,
+          "night": 12,
+          "other": 20
+        }
+      }
+    },
+    "models": {
+      "E-Transit": 68,
+      "eSprinter": 81,
+      "Kangoo": 45
+    },
+    "acMaxKw": 11,
+    "dcMaxKw": 50,
+    "kwhPerKm": 0.38,
+    "reservePct": 15,
+    "coldExtraPct": 18,
+    "coldBelowC": 5,
+    "tariff": [
+      {
+        "band": "off-peak",
+        "from": "00:30",
+        "to": "07:30",
+        "pPerKwh": 9.5
+      },
+      {
+        "band": "day",
+        "from": "07:30",
+        "to": "16:00",
+        "pPerKwh": 24
+      },
+      {
+        "band": "red",
+        "from": "16:00",
+        "to": "19:00",
+        "pPerKwh": 38
+      },
+      {
+        "band": "day",
+        "from": "19:00",
+        "to": "00:30",
+        "pPerKwh": 24
+      },
+      {
+        "band": "solar",
+        "pPerKwh": 0
+      }
+    ],
+    "peakChargeGbpPerKw": 11.5,
+    "timeline": {
+      "from": "17:00",
+      "to": "08:00"
+    },
+    "pastSessionsPerVan": 7,
+    "spare": "BW-11"
+  },
+  "totals": {
+    "vans": {
+      "value": 18,
+      "of": "rows of vans",
+      "from": {
+        "collection": "vans",
+        "count": true
+      }
+    },
+    "vansTrafford": {
+      "value": 11,
+      "of": "vans at Trafford",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "depotId": "TP"
+        },
+        "count": true
+      }
+    },
+    "vansSalford": {
+      "value": 7,
+      "of": "vans at Salford",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "depotId": "SQ"
+        },
+        "count": true
+      }
+    },
+    "ready": {
+      "value": 7,
+      "of": "status Ready",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "Ready"
+        },
+        "count": true
+      }
+    },
+    "willBeReady": {
+      "value": 8,
+      "of": "status Will be ready",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "Will be ready"
+        },
+        "count": true
+      }
+    },
+    "atRisk": {
+      "value": 2,
+      "of": "status At risk",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "At risk"
+        },
+        "count": true
+      }
+    },
+    "blocked": {
+      "value": 1,
+      "of": "status Blocked",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "Blocked"
+        },
+        "count": true
+      }
+    },
+    "kwhToAdd": {
+      "value": 189.9,
+      "of": "sum of vans.toChargeKwh",
+      "from": {
+        "collection": "vans",
+        "sum": "toChargeKwh"
+      }
+    },
+    "kwhPlanned": {
+      "value": 178.8,
+      "of": "sum of sessions.kwh",
+      "from": {
+        "collection": "sessions",
+        "sum": "kwh"
+      }
+    },
+    "kwhBlocked": {
+      "value": 11.1,
+      "of": "toChargeKwh of the Blocked van",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "Blocked"
+        },
+        "sum": "toChargeKwh"
+      }
+    },
+    "costTonightGbp": {
+      "value": 16.99,
+      "of": "kwhPlanned x 0.095 (all sessions off-peak), rounded to the penny"
+    },
+    "sessions": {
+      "value": 10,
+      "of": "rows of sessions",
+      "from": {
+        "collection": "sessions",
+        "count": true
+      }
+    },
+    "planLoadMaxKwTrafford": {
+      "value": 102,
+      "of": "base 25 kW + 7 sessions x 11 kW, 00:30 to 00:41 (instantaneous, the load line)"
+    },
+    "planPeak30minKwTrafford": {
+      "value": 95.2,
+      "of": "highest planLoad.demandKw at TP (00:30-01:00)",
+      "from": {
+        "collection": "planLoad",
+        "where": {
+          "depotId": "TP"
+        },
+        "max": "demandKw"
+      }
+    },
+    "planPeak30minKwSalford": {
+      "value": 45,
+      "of": "highest planLoad.demandKw at SQ (00:30-01:00)",
+      "from": {
+        "collection": "planLoad",
+        "where": {
+          "depotId": "SQ"
+        },
+        "max": "demandKw"
+      }
+    },
+    "arrivalCostGbp": {
+      "value": 53.22,
+      "of": "the same sessions started on arrival (BW-01, 07, 15, 06 at 17:30, the rest at backAt), priced per minute by band"
+    },
+    "arrivalPeak30minKwTrafford": {
+      "value": 118.1,
+      "of": "highest chargeOnArrivalLoad at TP (18:00)",
+      "from": {
+        "collection": "chargeOnArrivalLoad",
+        "where": {
+          "depotId": "TP"
+        },
+        "max": "demandKw"
+      }
+    },
+    "arrivalPeak30minKwSalford": {
+      "value": 65.7,
+      "of": "highest chargeOnArrivalLoad at SQ (18:30)",
+      "from": {
+        "collection": "chargeOnArrivalLoad",
+        "where": {
+          "depotId": "SQ"
+        },
+        "max": "demandKw"
+      }
+    },
+    "arrivalExtraPeakGbpTrafford": {
+      "value": 93.15,
+      "of": "(arrival peak - month peak) x 11.50"
+    },
+    "arrivalExtraPeakGbpSalford": {
+      "value": 65.55,
+      "of": "(arrival peak - month peak) x 11.50"
+    },
+    "monthEnergyGbpTrafford": {
+      "value": 233.4,
+      "of": "off-peak + day + red"
+    },
+    "monthPeakGbpTrafford": {
+      "value": 1265,
+      "of": "peakKw x 11.50"
+    },
+    "monthEnergyGbpSalford": {
+      "value": 114.35,
+      "of": "off-peak + day + red"
+    },
+    "monthPeakGbpSalford": {
+      "value": 690,
+      "of": "peakKw x 11.50"
+    },
+    "openAlerts": {
+      "value": 6,
+      "of": "rows of alerts",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open"
+        },
+        "count": true
+      }
+    }
+  },
+  "agree": [
+    {
+      "id": "counters",
+      "description": "Readiness counters Ready / Will be ready / At risk / Blocked follow the van statuses",
+      "totals": "ready",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "Ready"
+        },
+        "count": true
+      },
+      "label": "Ready"
+    },
+    {
+      "id": "counter-at-risk",
+      "description": "At risk counter",
+      "totals": "atRisk",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "At risk"
+        },
+        "count": true
+      },
+      "label": "At risk"
+    },
+    {
+      "id": "counter-blocked",
+      "description": "Blocked counter",
+      "totals": "blocked",
+      "from": {
+        "collection": "vans",
+        "where": {
+          "status": "Blocked"
+        },
+        "count": true
+      },
+      "label": "Blocked"
+    },
+    {
+      "id": "kwh-to-add",
+      "description": "kWh to add equals the sum of the vans",
+      "totals": "kwhToAdd",
+      "from": {
+        "collection": "vans",
+        "sum": "toChargeKwh"
+      },
+      "label": "kWh to add"
+    },
+    {
+      "id": "kwh-planned",
+      "description": "The schedule plans 178.8 kWh in 10 sessions",
+      "totals": "kwhPlanned",
+      "from": {
+        "collection": "sessions",
+        "sum": "kwh"
+      },
+      "label": "planned"
+    },
+    {
+      "id": "plan-peak-tp",
+      "description": "Highest 30-minute demand tonight at Trafford",
+      "totals": "planPeak30minKwTrafford",
+      "from": {
+        "collection": "planLoad",
+        "where": {
+          "depotId": "TP"
+        },
+        "max": "demandKw"
+      },
+      "label": "30-minute"
+    },
+    {
+      "id": "plan-peak-sq",
+      "description": "Highest 30-minute demand tonight at Salford",
+      "totals": "planPeak30minKwSalford",
+      "from": {
+        "collection": "planLoad",
+        "where": {
+          "depotId": "SQ"
+        },
+        "max": "demandKw"
+      },
+      "label": "30-minute"
+    },
+    {
+      "id": "alerts-open",
+      "description": "Alerts screen lists 6 open alerts",
+      "totals": "openAlerts",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open"
+        },
+        "count": true
+      },
+      "label": "Alerts"
+    }
+  ],
+  "seedOnly": [
+    "vans.driver",
+    "vans.plate",
+    "vans.socAtDeparturePct",
+    "chargers (from the depot description)",
+    "planLoad and chargeOnArrivalLoad (computed)",
+    "sessions ids and costGbp"
+  ]
+}

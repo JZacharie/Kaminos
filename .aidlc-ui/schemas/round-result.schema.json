@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/aidlc-ui-first/addon/schemas/round-result.schema.json",
+  "title": "AI-DLC UI-first round result (bridge output for one round, D-31)",
+  "description": "Last-line JSON of the ONE bridge call per round: applies the round's batched open answers to the scratch prototype (one new version) and proposes the next round's questions. Planner-owned. Single requests outside rounds keep refine-result.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "round",
+    "applied",
+    "touchedIds",
+    "summary",
+    "nextQuestions",
+    "cannotApply"
+  ],
+  "properties": {
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "applied": {
+      "description": "Question references whose open answers were applied in this version.",
+      "type": "array",
+      "maxItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*-questions#Q[1-9][0-9]*$"
+      }
+    },
+    "touchedIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 30,
+      "items": {
+        "type": "string",
+        "pattern": "^a-[a-z0-9]+(-[a-z0-9]+)*$",
+        "maxLength": 64
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "nextQuestions": {
+      "description": "0-5 high-impact questions for the next round (round 1: no fixed cap, the ceiling is 5; round 2: at most 3); Canvas appends them to the waiting stage's questions file and their effects to #aidlc-effects.",
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "anchor",
+          "text",
+          "whyWeAsk",
+          "options",
+          "effects"
+        ],
+        "properties": {
+          "anchor": {
+            "type": "string",
+            "pattern": "^a-[a-z0-9]+(-[a-z0-9]+)*$",
+            "maxLength": 64
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "whyWeAsk": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "options": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 4,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "effects": {
+            "description": "One entry per option letter (A.. in order) with ANCHORS.md section 2b ops.",
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 4,
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 6,
+              "items": {
+                "type": "object",
+                "required": [
+                  "op",
+                  "target"
+                ],
+                "additionalProperties": true,
+                "properties": {
+                  "op": {
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "hide",
+                      "show",
+                      "class",
+                      "badge"
+                    ]
+                  },
+                  "target": {
+                    "type": "string",
+                    "pattern": "^a-[a-z0-9]+(-[a-z0-9]+)*$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cannotApply": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "outside-selection",
+            "unsupported",
+            "conflicting-answers"
+          ]
+        }
+      ]
+    }
+  }
+}

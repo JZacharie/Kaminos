@@ -1,0 +1,146 @@
+#!/usr/bin/env node
+'use strict';
+// activity-hook: a Kiro CLI `postToolUse` hook that appends ONE line per tool call to <project>/aidlc/.ui-first/kiro-activity.jsonl
+//   {"ts":"<ISO time>","tool":"<tool name>","summary":"Writes src/screens/02-map.html"}
+// Canvas reads that file (read only) to show "What Kiro is doing" while the first UI is built.
+//
+// Input (STDIN, JSON, one object; kiro-cli 2.x and 3.x): { hook_event_name, cwd, session_id, tool_name, tool_input, tool_response }.
+//   tool_name varies by Kiro generation: shell|execute_bash, read|fs_read, write|fs_write|str_replace|fs_append, delete_file, grep, glob,
+//   subagent|invoke_sub_agent, todo_list, web_fetch ... A path arrives as `path`, `file_path`, `targetFile`, `paths[]` or `operations[].path`.
+// The summary is short and safe: a verb plus a project-relative path, or plus the first word of a command. It never holds file content, the
+// rest of a command, a URL, a prompt or the tool response. Max 120 characters.
+//
+// This hook must never block or fail a tool: it ALWAYS exits 0, whatever the input, and gives up after 1 s (a stdin that never closes included).
+// The log is capped at 1 MB: at 1 MB the file is renamed to kiro-activity.jsonl.1 (one old file kept) and a new one starts.
+// Project: --project <dir>, else the project that holds this file (<project>/.aidlc-ui/bin/), else the current directory.
+// Node core modules only.
+const fs = require('node:fs');
+const path = require('node:path');
+
+const MAX_STDIN = 256 * 1024;      // a payload bigger than this is not parsed: it is a file dump, never a tool name and a path
+const MAX_SUMMARY = 120;
+const MAX_LOG = 1024 * 1024;
+const BUDGET_MS = 1000;
+const LOG_REL = path.join('aidlc', '.ui-first', 'kiro-activity.jsonl');
+
+const clean = (s) => String(s).replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]+/g, ' ').replace(/\s+/g, ' ').trim();
+const clip = (s, n = MAX_SUMMARY) => (s.length > n ? s.slice(0, n - 1) + '\u2026' : s);
+const str = (v) => (typeof v === 'string' && v ? v : '');
+
+/** The first path a tool call names, or ''. */
+function pathOf(ti) {
+  if (!ti || typeof ti !== 'object') return '';
+  for (const k of ['path', 'file_path', 'filePath', 'targetFile']) if (str(ti[k])) return ti[k];
+  if (Array.isArray(ti.paths) && str(ti.paths[0])) return ti.paths[0];
+  if (Array.isArray(ti.operations)) for (const o of ti.operations) if (o && typeof o === 'object' && str(o.path)) return o.path;
+  return '';
+}
+
+/** Project-relative path with forward slashes. A path outside the project shows only its file name: no absolute path leaves the machine. */
+function relPath(p, project, cwd) {
+  let s = clean(p);
+  if (!s) return '';
+  if (path.isAbsolute(s) || /^[A-Za-z]:[\\/]/.test(s)) {
+    const r = path.relative(project, s);
+    s = r && !r.startsWith('..') && !path.isAbsolute(r) ? r : path.basename(s);
+  } else {
+    const c = str(cwd) && path.isAbsolute(cwd) ? path.relative(project, cwd) : '..';
+    const base = c.startsWith('..') || path.isAbsolute(c) ? project : path.resolve(cwd);   // a cwd outside the project is not trusted
+    const abs = path.resolve(base, s);
+    const r = path.relative(project, abs);
+    s = r && !r.startsWith('..') && !path.isAbsolute(r) ? r : path.basename(s);
+  }
+  return s.split(path.sep).join('/').replace(/^\.\//, '');
+}
+
+const INTERPRETERS = new Set(['node', 'nodejs', 'python', 'python3', 'bash', 'sh', 'zsh', 'npx', 'npm', 'pnpm', 'yarn', 'uv', 'uvx', 'bun', 'deno', 'ruby', 'perl']);
+/** "Runs ui-build": the first command word; after an interpreter the script name, when it is a plain file name. Never an option or its value. */
+function commandWord(cmd) {
+  const toks = clean(cmd).split(' ').filter(Boolean);
+  let i = 0;
+  while (i < toks.length && /^[A-Za-z_][A-Za-z0-9_]*=/.test(toks[i])) i++;      // VAR=value prefixes can hold secrets: skipped, never shown
+  const first = toks[i] || '';
+  if (!first || /^[-$`(<>|&;]/.test(first)) return '';
+  let word = path.basename(first.replace(/^['"]|['"]$/g, ''));
+  if (INTERPRETERS.has(word) && /^[\w./@-]+$/.test(toks[i + 1] || '') && !/^-/.test(toks[i + 1])) word = path.basename(toks[i + 1]);
+  return /^[\w.@+-]{1,60}$/.test(word) ? word : '';
+}
+
+const READ = new Set(['read', 'fs_read']);
+const WRITE = new Set(['write', 'fs_write', 'str_replace', 'fs_append', 'create']);
+const SHELL = new Set(['shell', 'execute_bash', 'execute_pwsh', 'bash']);
+const SEARCH = new Set(['grep', 'glob', 'code', 'search']);
+const WEB = new Set(['web_fetch', 'web_search']);
+
+/** @returns {{tool:string, summary:string}|null} null = nothing to log */
+function summarize(input, project) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
+  const tool = clean(str(input.tool_name)).slice(0, 60);
+  if (!tool) return null;
+  const ti = input.tool_input && typeof input.tool_input === 'object' ? input.tool_input : {};
+  const rel = () => relPath(pathOf(ti), project, input.cwd);
+  let s;
+  if (READ.has(tool)) { const p = rel(); s = p ? `Reads ${p}` : 'Reads files'; }
+  else if (WRITE.has(tool)) { const p = rel(); s = p ? `Writes ${p}` : 'Writes a file'; }
+  else if (tool === 'delete_file') { const p = rel(); s = p ? `Deletes ${p}` : 'Deletes a file'; }
+  else if (SHELL.has(tool)) { const w = commandWord(ti.command); s = w ? `Runs ${w}` : 'Runs a command'; }
+  else if (SEARCH.has(tool)) s = 'Searches the project';
+  else if (WEB.has(tool)) s = 'Looks something up on the web';
+  else if (tool === 'todo_list') s = 'Updates its task list';
+  else if (tool === 'subagent' || tool === 'invoke_sub_agent' || tool.startsWith('subagent_')) {
+    const n = clean(str(ti.name) || str(ti.subagent_type) || str(ti.role) || tool.replace(/^subagent_/, ''));
+    s = /^[\w.-]{1,60}$/.test(n) && n !== 'subagent' ? `Hands work to ${n}` : 'Hands work to a helper';
+  } else s = `Uses ${/^[\w@/.-]{1,60}$/.test(tool) ? tool : 'a tool'}`;
+  return { tool, summary: clip(clean(s)) };
+}
+
+/** Append one line. Refuses a link at the folder or the file (nothing is written outside the project). */
+function appendLine(project, line) {
+  const file = path.join(project, LOG_REL);
+  const dir = path.dirname(file);
+  if (!fs.statSync(project).isDirectory()) return false;       // no project here: create nothing
+  fs.mkdirSync(dir, { recursive: true });
+  if (fs.lstatSync(dir).isSymbolicLink() || fs.lstatSync(path.join(project, 'aidlc')).isSymbolicLink()) return false;
+  try { if (fs.lstatSync(file).size >= MAX_LOG) fs.renameSync(file, file + '.1'); } catch (_) { /* no file yet */ }
+  const fd = fs.openSync(file, fs.constants.O_WRONLY | fs.constants.O_APPEND | fs.constants.O_CREAT | (fs.constants.O_NOFOLLOW || 0), 0o644);
+  try { fs.writeSync(fd, line + '\n'); } finally { fs.closeSync(fd); }
+  return true;
+}
+
+function projectOf(argv) {
+  const i = argv.indexOf('--project');
+  if (i >= 0 && argv[i + 1]) return path.resolve(argv[i + 1]);
+  const kit = path.resolve(__dirname, '..');
+  if (path.basename(kit) === '.aidlc-ui') return path.dirname(kit);
+  return process.cwd();
+}
+
+function handle(raw, project, now = new Date()) {
+  let input;
+  try { input = JSON.parse(raw); } catch (_) { return false; }
+  const r = summarize(input, project);
+  if (!r) return false;
+  return appendLine(project, JSON.stringify({ ts: now.toISOString(), tool: r.tool, summary: r.summary }));
+}
+
+function main() {
+  const project = projectOf(process.argv.slice(2));
+  const done = () => process.exit(0);
+  setTimeout(done, BUDGET_MS);                          // the hard stop: a stdin that never closes, a slow disk
+  if (process.stdin.isTTY) return done();
+  const chunks = [];
+  let n = 0;
+  let over = false;
+  process.stdin.on('data', (c) => { n += c.length; if (n > MAX_STDIN) over = true; else chunks.push(c); });
+  process.stdin.on('error', done);
+  process.stdin.on('end', () => {
+    try { if (!over) handle(Buffer.concat(chunks).toString('utf8'), project); } catch (_) { /* never fail the tool */ }
+    done();
+  });
+  process.stdin.on('close', done);
+}
+
+if (require.main === module) {
+  try { main(); } catch (_) { process.exit(0); }
+}
+module.exports = { summarize, handle, commandWord, relPath, MAX_LOG };

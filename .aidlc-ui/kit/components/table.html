@@ -1,0 +1,159 @@
+<!-- Filter bar + data table with sorting, text filter, select filter, chips, paging and empty state (all driven by data- attributes, see README).
+     Rules: wrap in .k-table-wrap; every <td> except the first has data-label (below 640 px each row becomes a card, the first cell is the card title);
+     mark low-priority columns class="k-opt" (hidden between 640 and 1023 px); numbers get class="k-num" and data-v with the raw value;
+     ids and times in the cells never wrap (kit.js); a table of 7+ columns scrolls inside the wrapper and keeps its first column in view; a filter bar is class k-filterbar:
+     chip groups as `k-field k-chip-group` (they take a full row), then selects, and `k-field k-search` last (it sits at the end of the row). Keep at least 12 rows; the anchored element is the wrapper or one <th id="a-col-...">. -->
+<div class="k-filterbar" role="search" aria-label="Filter vehicles">
+  <div class="k-field k-chip-group">
+    <span class="k-label" id="tb-status-label">Status</span>
+    <div class="k-chips" role="group" aria-labelledby="tb-status-label">
+      <button class="k-chip" type="button" aria-pressed="true" data-k-filter="#tbl-vehicles" data-k-col="4" data-k-value="">All</button>
+      <button class="k-chip" type="button" aria-pressed="false" data-k-filter="#tbl-vehicles" data-k-col="4" data-k-value="In service">In service</button>
+      <button class="k-chip" type="button" aria-pressed="false" data-k-filter="#tbl-vehicles" data-k-col="4" data-k-value="In workshop">In workshop</button>
+    </div>
+  </div>
+  <div class="k-field">
+    <label for="tb-depot">Depot</label>
+    <select class="k-select" id="tb-depot" data-k-filter="#tbl-vehicles" data-k-col="2">
+      <option value="">All depots</option>
+      <option>Zaragoza</option><option>Madrid</option><option>Valencia</option><option>Barcelona</option><option>Huesca</option><option>Sevilla</option>
+    </select>
+  </div>
+  <div class="k-field k-only-sm">
+    <label for="tb-sort">Sort by</label>
+    <select class="k-select" id="tb-sort" data-k-sortby="#tbl-vehicles">
+      <option value="">Default order</option>
+      <option value="3:desc">Odometer, highest first</option>
+      <option value="5:asc">Next service, soonest first</option>
+    </select>
+  </div>
+  <div class="k-field k-search">
+    <label for="tb-search">Search</label>
+    <input class="k-input" id="tb-search" type="search" placeholder="Plate, driver or depot" data-k-filter="#tbl-vehicles">
+  </div>
+</div>
+<p class="k-muted" data-k-count="#tbl-vehicles" aria-live="polite">12 results</p>
+<div class="k-table-wrap" id="a-demo-table">
+  <table class="k-table" id="tbl-vehicles" data-k-table data-k-pagesize="12">
+    <caption class="k-sr">Vehicles</caption>
+    <thead>
+      <tr>
+        <th scope="col" data-k-sort="text"><span class="k-th-text">Vehicle</span></th>
+        <th scope="col">Driver</th>
+        <th scope="col" class="k-opt">Depot</th>
+        <th scope="col" class="k-num" data-k-sort="num"><span class="k-th-text">Odometer (km)</span></th>
+        <th scope="col">Status</th>
+        <th scope="col" data-k-sort="text"><span class="k-th-text">Next service</span></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><a href="#/table">ZG-4471</a></td>
+          <td data-label="Driver">Marta Ibáñez</td>
+          <td class="k-opt" data-label="Depot">Zaragoza</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="184220">184,220</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2026-12-12">12 Dec 2026</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">ZG-3208</a></td>
+          <td data-label="Driver">Hugo Lasheras</td>
+          <td class="k-opt" data-label="Depot">Zaragoza</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="231870">231,870</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2027-01-08">8 Jan 2027</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">ZG-5120</a></td>
+          <td data-label="Driver">Carmen Soria</td>
+          <td class="k-opt" data-label="Depot">Huesca</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="96410">96,410</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2026-11-20">20 Nov 2026</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">MD-1187</a></td>
+          <td data-label="Driver">Álvaro Prieto</td>
+          <td class="k-opt" data-label="Depot">Madrid</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="142005">142,005</td>
+          <td data-label="Status"><span class="k-badge k-badge-warn">In workshop</span></td>
+          <td data-label="Next service" data-v="2026-11-09">9 Nov 2026</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">MD-2260</a></td>
+          <td data-label="Driver">Lucía Cano</td>
+          <td class="k-opt" data-label="Depot">Madrid</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="78330">78,330</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2027-02-15">15 Feb 2027</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">MD-0934</a></td>
+          <td data-label="Driver">Iván Redondo</td>
+          <td class="k-opt" data-label="Depot">Madrid</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="305140">305,140</td>
+          <td data-label="Status"><span class="k-badge k-badge-bad">Out of service</span></td>
+          <td data-label="Next service" data-v="2026-11-02">2 Nov 2026</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">VL-6402</a></td>
+          <td data-label="Driver">Nuria Climent</td>
+          <td class="k-opt" data-label="Depot">Valencia</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="58790">58,790</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2027-03-01">1 Mar 2027</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">VL-5518</a></td>
+          <td data-label="Driver">Joan Ferrer</td>
+          <td class="k-opt" data-label="Depot">Valencia</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="120660">120,660</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2026-12-28">28 Dec 2026</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">BC-3371</a></td>
+          <td data-label="Driver">Anna Puig</td>
+          <td class="k-opt" data-label="Depot">Barcelona</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="167950">167,950</td>
+          <td data-label="Status"><span class="k-badge k-badge-warn">In workshop</span></td>
+          <td data-label="Next service" data-v="2026-11-12">12 Nov 2026</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">BC-4046</a></td>
+          <td data-label="Driver">Pau Vidal</td>
+          <td class="k-opt" data-label="Depot">Barcelona</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="89200">89,200</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2027-01-22">22 Jan 2027</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">BC-1209</a></td>
+          <td data-label="Driver">Marc Solé</td>
+          <td class="k-opt" data-label="Depot">Barcelona</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="254710">254,710</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2026-11-30">30 Nov 2026</td>
+        </tr>
+        <tr>
+          <td><a href="#/table">SE-7714</a></td>
+          <td data-label="Driver">Rocío Delgado</td>
+          <td class="k-opt" data-label="Depot">Sevilla</td>
+          <td class="k-num" data-label="Odometer (km)" data-v="44380">44,380</td>
+          <td data-label="Status"><span class="k-badge k-badge-ok">In service</span></td>
+          <td data-label="Next service" data-v="2027-04-10">10 Apr 2027</td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+<div class="k-empty" data-k-empty="#tbl-vehicles" hidden>
+  <h3>No vehicles match</h3>
+  <p>Clear the search box or choose another depot.</p>
+</div>
+<div class="k-pager" data-k-pager="#tbl-vehicles">
+  <span data-k-range>1–12 of 12</span>
+  <div class="k-row">
+    <button class="k-btn k-btn-sm" type="button" data-k-prev>Previous</button>
+    <button class="k-btn k-btn-sm" type="button" data-k-next>Next</button>
+  </div>
+</div>

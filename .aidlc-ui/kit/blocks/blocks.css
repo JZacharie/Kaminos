@@ -1,0 +1,161 @@
+/* AI-DLC UI blocks 1.1 (MIT-0). Tokens for 3 themes + shared block primitives. Theme: <html data-k-theme="ops|control|warm">.
+   Light/dark: ops and warm follow color-scheme (prefers-color-scheme or kit data-theme=light|dark); control is always dark.
+   Categorical palettes: 8 steps per theme, each step kept apart from the others and from ok/warn/crit/info under normal,
+   protan, deutan and tritan vision (OKLab, Machado 2009); marks reach 3:1 on the surface (4.5:1 in the dark themes). */
+:root{color-scheme:light dark;
+--k-font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--k-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"DejaVu Sans Mono",monospace;
+--k-font-title:var(--k-font);--k-font-num:var(--k-font);
+--k-fs-xs:.6875rem;--k-fs-sm:.75rem;--k-fs-md:.8125rem;--k-fs-base:.875rem;--k-fs-lg:1rem;--k-fs-xl:1.25rem;--k-fs-2xl:1.625rem;--k-fs-3xl:2rem;
+--k-lh:1.45;--k-fw-regular:400;--k-fw-medium:500;--k-fw-semi:600;--k-fw-bold:700;
+--k-1:.25rem;--k-2:.5rem;--k-3:.75rem;--k-4:1rem;--k-5:1.25rem;--k-6:1.5rem;--k-8:2rem;--k-10:2.5rem;
+--k-r-sm:4px;--k-r:8px;--k-r-lg:12px;--k-r-pill:999px;
+--k-pad:var(--k-4);--k-gap:var(--k-4);--k-row:2.25rem;
+--k-title-fs:var(--k-fs-lg);--k-title-fw:var(--k-fw-semi);--k-title-tt:none;--k-title-ls:-.005em;--k-title-c:var(--k-text);
+/* ops: light operations console, cool greys, one cobalt accent */
+--k-bg:light-dark(#f4f6f9,#0c1016);--k-surface:light-dark(#fff,#141a22);--k-surface-2:light-dark(#f1f3f7,#1a212b);--k-surface-3:light-dark(#e7ebf0,#222a36);
+--k-line:light-dark(#e1e5eb,#252d39);--k-line-strong:light-dark(#c9d0da,#36404e);
+--k-text:light-dark(#101828,#e7eaf0);--k-text-2:light-dark(#475467,#a9b2c0);--k-text-3:light-dark(#646d7b,#8c96a5);
+--k-accent:light-dark(#2457d6,#79a8ff);--k-on-accent:light-dark(#fff,#0b1220);--k-accent-soft:light-dark(#eaf0fd,#18263f);
+--k-ok:light-dark(#157a3d,#4cc985);--k-warn:light-dark(#a8560a,#f2b34b);--k-crit:light-dark(#c2251f,#ff7b72);--k-info:light-dark(#2457d6,#79a8ff);--k-neutral:light-dark(#646d7b,#8c96a5);
+--k-ok-bg:light-dark(#e8f6ee,#13291d);--k-warn-bg:light-dark(#fdf3e3,#2e2312);--k-crit-bg:light-dark(#fdecea,#341a1a);--k-info-bg:light-dark(#eaf0fd,#18263f);--k-neutral-bg:light-dark(#eef0f3,#222a36);
+--k-ok-t:light-dark(#0f5c2d,#9ee6bd);--k-warn-t:light-dark(#7a3d05,#fbd38d);--k-crit-t:light-dark(#951b16,#ffb4ad);--k-info-t:light-dark(#1a409e,#bcd3ff);--k-neutral-t:light-dark(#374151,#c9d0da);
+/* categorical (ops): cobalt, teal, violet, rose, ochre, sky, clay, slate */
+--k-cat-1:light-dark(#0b6fd6,#5fa1d3);--k-cat-2:light-dark(#04857a,#78d6ce);--k-cat-3:light-dark(#8357c0,#a38cf5);--k-cat-4:light-dark(#d84a8a,#cf7fa3);
+--k-cat-5:light-dark(#a68a12,#edd58e);--k-cat-6:light-dark(#4f97b0,#9bdbee);--k-cat-7:light-dark(#946757,#c29892);--k-cat-8:light-dark(#475a6c,#a1aab3);
+/* charts and maps */
+--k-grid:light-dark(#eceff3,#20272f);--k-grid-dash:none;--k-axis:var(--k-line-strong);
+--k-map-sea:light-dark(#e6eef7,#0d141c);--k-map-land:light-dark(#fff,#1b232d);--k-map-coast:light-dark(#c9d3df,#36404e);
+--k-shadow-c:light-dark(rgb(16 24 40/.06),rgb(0 0 0/.35));
+--k-e1:0 1px 2px var(--k-shadow-c);--k-e2:0 1px 2px var(--k-shadow-c),0 8px 24px var(--k-shadow-c);
+--k-focus:0 0 0 2px var(--k-surface),0 0 0 4px var(--k-accent)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+/* control: dark control room. Blue-black, luminous teal accent, crisp hairlines, small-caps panel labels, no shadows */
+:root[data-k-theme=control]{color-scheme:dark;
+--k-bg:#070b11;--k-surface:#0d141d;--k-surface-2:#121b26;--k-surface-3:#18232f;--k-line:#1f2c3a;--k-line-strong:#2f4256;
+--k-text:#e6edf5;--k-text-2:#9fb0c3;--k-text-3:#8095ab;--k-accent:#3dd6c3;--k-on-accent:#022320;--k-accent-soft:#0b2b2a;
+--k-ok:#3fcf8e;--k-warn:#f2b544;--k-crit:#ff6e6e;--k-info:#79b0ff;--k-neutral:#8095ab;
+--k-ok-bg:#0f2a20;--k-warn-bg:#2d2210;--k-crit-bg:#331718;--k-info-bg:#13233d;--k-neutral-bg:#18232f;
+--k-ok-t:#93e9bf;--k-warn-t:#fbd38d;--k-crit-t:#ffb3ad;--k-info-t:#bdd6ff;--k-neutral-t:#c3cfdc;
+/* categorical (control): luminous, never neon: sky, aqua, lavender, orchid, wheat, ice, rosewood, steel */
+--k-cat-1:#5fa1d3;--k-cat-2:#78d6ce;--k-cat-3:#a38cf5;--k-cat-4:#cf7fa3;--k-cat-5:#edd58e;--k-cat-6:#9bdbee;--k-cat-7:#c29892;--k-cat-8:#a1aab3;
+--k-grid:#17222e;--k-axis:#2f4256;--k-map-sea:#081019;--k-map-land:#152130;--k-map-coast:#2b3d50;
+--k-r-sm:3px;--k-r:5px;--k-r-lg:8px;
+--k-title-fs:var(--k-fs-sm);--k-title-tt:uppercase;--k-title-ls:.08em;--k-title-c:var(--k-text-2);
+--k-shadow-c:rgb(0 0 0/.55);--k-e1:0 0 0 1px rgb(255 255 255/.015) inset;--k-e2:0 12px 32px rgb(0 0 0/.55);
+--k-focus:0 0 0 2px var(--k-surface),0 0 0 4px var(--k-accent),0 0 12px 2px color-mix(in srgb,var(--k-accent) 35%,transparent)}
+/* warm: warm brand. Paper and cream, ink text, terracotta accent, serif titles and figures, soft radius and shadow, dotted grids */
+:root[data-k-theme=warm]{--k-font-title:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,P052,Georgia,serif;--k-font-num:var(--k-font-title);
+--k-bg:light-dark(#f5efe6,#14110e);--k-surface:light-dark(#fffcf6,#1d1915);--k-surface-2:light-dark(#f7f0e5,#25201b);--k-surface-3:light-dark(#ece2d3,#2e2822);
+--k-line:light-dark(#e7dccb,#352d26);--k-line-strong:light-dark(#d3c3ac,#4a4037);
+--k-text:light-dark(#241d16,#efe8df);--k-text-2:light-dark(#5d5145,#c2b6a8);--k-text-3:light-dark(#6e6155,#a39686);
+--k-accent:light-dark(#b2471c,#f0956a);--k-on-accent:light-dark(#fff,#2a1003);--k-accent-soft:light-dark(#f8e8dc,#3a2216);
+--k-ok:light-dark(#3d7a35,#7fcf86);--k-warn:light-dark(#a35a00,#f0b65a);--k-crit:light-dark(#a8182e,#ff8a80);--k-info:light-dark(#2b5f8a,#86bde6);--k-neutral:light-dark(#6e6155,#a39686);
+--k-ok-bg:light-dark(#ecf3e6,#1b2a19);--k-warn-bg:light-dark(#fbf0dc,#30230f);--k-crit-bg:light-dark(#fbe9ea,#3a1a1c);--k-info-bg:light-dark(#e8f0f6,#16263a);--k-neutral-bg:light-dark(#f0e9de,#2e2822);
+--k-ok-t:light-dark(#2c5a26,#b5e6b8);--k-warn-t:light-dark(#7a4300,#f8d49a);--k-crit-t:light-dark(#8a1426,#ffc0b9);--k-info-t:light-dark(#1d4466,#c3def3);--k-neutral-t:light-dark(#4a4037,#d6ccc0);
+/* categorical (warm): earthy inks: indigo, deep teal, plum, rose, ochre, dusty sky, clay, umber */
+--k-cat-1:light-dark(#3f73ab,#61afec);--k-cat-2:light-dark(#0f8f93,#89d1d0);--k-cat-3:light-dark(#7d4072,#c096c9);--k-cat-4:light-dark(#c05d79,#e17b90);
+--k-cat-5:light-dark(#ab8f3f,#e9d18d);--k-cat-6:light-dark(#559ab4,#a0d8ea);--k-cat-7:light-dark(#956a54,#da996a);--k-cat-8:light-dark(#5b5046,#bdaa97);
+--k-grid:light-dark(#e4d8c6,#3a3129);--k-grid-dash:2 3;
+--k-map-sea:light-dark(#e3ece9,#121a1b);--k-map-land:light-dark(#fdf8ef,#26201a);--k-map-coast:light-dark(#d2c3ab,#4a4037);
+--k-r-sm:6px;--k-r:10px;--k-r-lg:16px;
+--k-title-fs:1.0625rem;--k-title-fw:var(--k-fw-bold);--k-title-ls:0;
+--k-shadow-c:light-dark(rgb(70 45 20/.06),rgb(0 0 0/.4));--k-e1:0 1px 1px var(--k-shadow-c),0 4px 14px rgb(70 45 20/.04);--k-e2:0 2px 4px var(--k-shadow-c),0 14px 32px rgb(70 45 20/.1)}
+/* accent presets: <html data-k-accent="blue|green|teal|gold|indigo|violet|rose|orange"> (head.json "accent", K.theme.accent(name)) replaces the accent of any theme, light or dark;
+   no attribute = the theme's own accent. --ka-l / --ka-d = accent on light / dark surfaces, --ka-od = text on the dark accent; white text on the light one. The soft tint mixes the accent into the theme surface.
+   Contrast (text 4.5:1 on surface, bg, surface-2, tint; ring 3:1) is computed per theme x light/dark x accent in tests/blocks/core.test.mjs. */
+:root[data-k-accent]{--ka-ol:#fff;--k-accent:light-dark(var(--ka-l),var(--ka-d));--k-on-accent:light-dark(var(--ka-ol),var(--ka-od));--k-accent-soft:light-dark(color-mix(in srgb,var(--ka-l) 10%,var(--k-surface)),color-mix(in srgb,var(--ka-d) 16%,var(--k-surface)))}
+:root[data-k-accent=blue]{--ka-l:#2457d6;--ka-d:#79a8ff;--ka-od:#0b1220}
+:root[data-k-accent=green]{--ka-l:#166534;--ka-d:#86efac;--ka-od:#052e16}
+:root[data-k-accent=teal]{--ka-l:#0f766e;--ka-d:#5eead4;--ka-od:#042f2e}
+:root[data-k-accent=gold]{--ka-l:#8a5a00;--ka-d:#f5c04a;--ka-od:#1f1400}
+:root[data-k-accent=indigo]{--ka-l:#4338ca;--ka-d:#a5b4fc;--ka-od:#1e1b4b}
+:root[data-k-accent=violet]{--ka-l:#6d28d9;--ka-d:#c4b5fd;--ka-od:#2e1065}
+:root[data-k-accent=rose]{--ka-l:#be123c;--ka-d:#fda4af;--ka-od:#4c0519}
+:root[data-k-accent=orange]{--ka-l:#9a3412;--ka-d:#fdba74;--ka-od:#431407}
+:root[data-k-density=compact]{--k-pad:var(--k-3);--k-gap:var(--k-3);--k-row:2rem}
+/* the kit's variables follow the block tokens when a block theme is set, so kit.css components match */
+:root[data-k-theme]{--font:var(--k-font);--accent:var(--k-accent);--on-accent:var(--k-on-accent);--accent-soft:var(--k-accent-soft);
+--bg:var(--k-bg);--surface:var(--k-surface);--surface-2:var(--k-surface-2);--line:var(--k-line);--border:var(--k-line-strong);
+--text:var(--k-text);--text-muted:var(--k-text-2);--disabled-ink:var(--k-text-3);
+--ok:var(--k-ok);--warn:var(--k-warn);--bad:var(--k-crit);--info:var(--k-info);
+--ok-bg:var(--k-ok-bg);--ok-t:var(--k-ok-t);--warn-bg:var(--k-warn-bg);--warn-t:var(--k-warn-t);--bad-bg:var(--k-crit-bg);--bad-t:var(--k-crit-t);
+--info-bg:var(--k-info-bg);--info-t:var(--k-info-t);--neutral-bg:var(--k-neutral-bg);--neutral-t:var(--k-neutral-t);
+--c1:var(--k-cat-1);--c2:var(--k-cat-2);--c3:var(--k-cat-3);--c4:var(--k-cat-4);--c5:var(--k-cat-5);
+--shadow-c:var(--k-shadow-c);--shadow:var(--k-e1);--shadow-lg:var(--k-e2);--r1:var(--k-r-sm);--r2:var(--k-r);--r3:var(--k-r-lg)}
+:root[data-k-theme] body{background:var(--k-bg);color:var(--k-text)}
+
+/* block root: every block owns its typography, so it looks right with or without kit.css */
+.k-b{box-sizing:border-box;min-width:0;font-family:var(--k-font);font-size:var(--k-fs-base);line-height:var(--k-lh);color:var(--k-text);
+font-variant-numeric:tabular-nums;overflow-wrap:normal;word-break:normal;-webkit-font-smoothing:antialiased}
+.k-b *,.k-b *::before,.k-b *::after{box-sizing:border-box}
+.k-b :is(h2,h3,h4,h5,h6,p,ul,ol,dl,dd){margin:0}
+.k-b-card{background:var(--k-surface);border:1px solid var(--k-line);border-radius:var(--k-r-lg);box-shadow:var(--k-e1);padding:var(--k-pad)}
+.k-b-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--k-3);margin-bottom:var(--k-3)}
+.k-b-titles{min-width:0;flex:1 1 auto}
+.k-b-title{font-family:var(--k-font-title);font-size:var(--k-title-fs);font-weight:var(--k-title-fw);line-height:1.3;letter-spacing:var(--k-title-ls);text-transform:var(--k-title-tt);color:var(--k-title-c);
+display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.k-b-sub{margin-top:2px;font-size:var(--k-fs-md);color:var(--k-text-2);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+[data-k-theme=control] .k-b-head{padding-bottom:var(--k-2);border-bottom:1px solid var(--k-line)}
+.k-b-actions{display:flex;flex:none;gap:var(--k-2);align-items:center}
+.k-b-body{min-width:0}
+/* row-height fill (fill: true | 'scroll', or a k-row-fill grid): frame stretches to the row, body is a flex column, core's h.fit grows rows (DESIGN.md) */
+.k-b-fitting,.k-b-fitting *{transition:none!important}
+.k-row-fill{align-items:stretch}
+.k-b-fill{display:flex;flex-direction:column;align-self:stretch}
+:is(.k-grid,.k-row-fill)>*:has(>.k-b-fill){display:flex;flex-direction:column;align-self:stretch}
+:is(.k-grid,.k-row-fill)>*>.k-b-fill{flex:1 1 auto}
+.k-row-fill>.k-b-nofill,.k-row-fill>*:has(>.k-b-nofill){align-self:start}
+.k-b-fill-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.k-b-fill-body>.k-b-grow{flex:1 1 auto;min-height:0}
+.k-b-fill-scroll{contain:size;min-height:var(--k-fill-min,16rem)}
+.k-b-fill-scroll .k-b-fill-body:not(.k-b-own-scroll){overflow:auto;scrollbar-width:thin}
+[data-k-fade]{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 2rem),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 2rem),transparent)}
+/* single-line text that never breaks: ids, times, numbers, names in tight cells. Add title= with the full text. */
+.k-b-line{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k-b-nw{white-space:nowrap}
+.k-b-tok-x{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
+.k-b-num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.k-b-mono{font-family:var(--k-mono);font-size:.92em}
+.k-b-muted{color:var(--k-text-2)}.k-b-faint{color:var(--k-text-3)}
+/* buttons */
+.k-b-btn{display:inline-flex;align-items:center;gap:var(--k-2);height:2rem;padding:0 var(--k-3);border:1px solid var(--k-line-strong);border-radius:var(--k-r);
+background:var(--k-surface);color:var(--k-text);font:var(--k-fw-medium) var(--k-fs-md)/1 var(--k-font);white-space:nowrap;text-decoration:none;cursor:pointer}
+.k-b-btn:hover{background:var(--k-surface-2)}
+.k-b-btn-primary{background:var(--k-accent);border-color:var(--k-accent);color:var(--k-on-accent)}
+.k-b-btn-primary:hover{background:color-mix(in srgb,var(--k-accent) 88%,var(--k-text))}
+.k-b :focus-visible,.k-b-btn:focus-visible{outline:none;box-shadow:var(--k-focus);border-radius:var(--k-r-sm)}
+/* status: pill (text on soft tint, AA) and dot (any colour on any surface) */
+.k-b-pill{display:inline-flex;align-items:center;gap:6px;height:1.375rem;padding:0 var(--k-2);border-radius:var(--k-r-pill);background:var(--k-neutral-bg);color:var(--k-neutral-t);
+font-size:var(--k-fs-sm);font-weight:var(--k-fw-semi);white-space:nowrap}
+.k-b-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.k-b-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--k-neutral);flex:none}
+.k-s-ok{--k-s:var(--k-ok);--k-s-bg:var(--k-ok-bg);--k-s-t:var(--k-ok-t)}.k-s-warn{--k-s:var(--k-warn);--k-s-bg:var(--k-warn-bg);--k-s-t:var(--k-warn-t)}
+.k-s-crit{--k-s:var(--k-crit);--k-s-bg:var(--k-crit-bg);--k-s-t:var(--k-crit-t)}.k-s-info{--k-s:var(--k-info);--k-s-bg:var(--k-info-bg);--k-s-t:var(--k-info-t)}
+.k-s-neutral{--k-s:var(--k-neutral);--k-s-bg:var(--k-neutral-bg);--k-s-t:var(--k-neutral-t)}
+.k-b-pill[class*=k-s-]{background:var(--k-s-bg);color:var(--k-s-t)}.k-b-dot[class*=k-s-]{background:var(--k-s)}
+/* legend: swatch colours come from the same --k-cat-N / status token as the marks */
+.k-b-legend{display:flex;flex-wrap:wrap;gap:var(--k-1) var(--k-4);margin-top:var(--k-3);font-size:var(--k-fs-sm);color:var(--k-text-2)}
+.k-b-legend>span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.k-b-legend i{width:10px;height:10px;border-radius:2px;background:var(--sw,var(--k-cat-1));flex:none}
+.k-b-legend i.k-b-sw-line{height:2px;border-radius:1px}.k-b-legend i.k-b-sw-dot{border-radius:50%}
+/* svg text: axis ticks and labels use the token type scale, never scale with the viewBox */
+.k-b svg{display:block;overflow:visible}
+.k-b-tick{font-size:var(--k-fs-xs);fill:var(--k-text-3)}
+.k-b-label{font-size:var(--k-fs-sm);fill:var(--k-text-2)}
+.k-b-grid{stroke:var(--k-grid);stroke-width:1;stroke-dasharray:var(--k-grid-dash);shape-rendering:crispEdges}
+.k-b-halo{paint-order:stroke;stroke:var(--k-surface);stroke-width:3px;stroke-linejoin:round}
+/* states: empty/loading sized to content; compact = one row for toolbars and small blocks; error = a quiet card with a crit edge */
+.k-block-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--k-1);min-height:5.5rem;padding:var(--k-5) var(--k-4);
+border:1px dashed var(--k-line-strong);border-radius:var(--k-r);background:color-mix(in srgb,var(--k-surface-2) 55%,var(--k-surface));text-align:center;color:var(--k-text-2);font-size:var(--k-fs-base)}
+.k-block-state-t{font-weight:var(--k-fw-semi);color:var(--k-text)}
+.k-block-state-d{font-size:var(--k-fs-md);color:var(--k-text-2);max-width:42rem}
+.k-block-compact{display:inline-flex;flex-direction:row;flex-wrap:wrap;min-height:2.25rem;padding:var(--k-1) var(--k-3);gap:var(--k-1) var(--k-2);font-size:var(--k-fs-md);text-align:left}
+.k-block-compact .k-block-state-d{font-size:var(--k-fs-sm)}.k-block-compact .k-b-spin{width:14px;height:14px}
+.k-block-error{border:1px solid var(--k-line-strong);border-left:3px solid var(--k-crit);background:var(--k-surface);align-items:flex-start;text-align:left;min-height:0}
+.k-block-error .k-block-state-t{color:var(--k-text)}.k-block-error .k-block-state-d{color:var(--k-text-2);font-family:var(--k-mono);font-size:var(--k-fs-sm)}
+.k-block-error .k-block-state-t::before{content:"!";display:inline-grid;place-items:center;width:1.1em;height:1.1em;margin-right:6px;border-radius:50%;background:var(--k-crit);color:var(--k-surface);font-size:.8em;font-weight:800}
+.k-b-spin{width:18px;height:18px;border:2px solid var(--k-line-strong);border-top-color:var(--k-accent);border-radius:50%;animation:k-b-spin .8s linear infinite}
+@keyframes k-b-spin{to{transform:rotate(360deg)}}
+.k-b-skel{display:block;height:.75rem;border-radius:var(--k-r-sm);background:linear-gradient(90deg,var(--k-surface-2),var(--k-surface-3),var(--k-surface-2));background-size:200% 100%;animation:k-b-sk 1.4s ease infinite}
+@keyframes k-b-sk{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.k-b-spin,.k-b-skel{animation:none}}

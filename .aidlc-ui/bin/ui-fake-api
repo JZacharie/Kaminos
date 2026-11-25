@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+'use strict';
+// ui-fake-api <seed.json> [--port 8787]
+// Serves GET /api/<collection> and GET /api/<collection>/<id> (item with that "id") from seed.json, on 127.0.0.1 only,
+// so the frozen UI can call a fake API. Read-only; not a backend. Exit 2 usage or unreadable seed.
+const fs = require('node:fs');
+const http = require('node:http');
+const path = require('node:path');
+
+const argv = process.argv.slice(2);
+const pi = argv.indexOf('--port');
+const port = pi > -1 ? Number(argv.splice(pi, 2)[1]) : 8787;
+if (argv.length !== 1 || argv[0].startsWith('--') || !Number.isInteger(port) || port < 1 || port > 65535) {
+  console.error('usage: ui-fake-api <seed.json> [--port 8787]');
+  process.exit(2);
+}
+let seed;
+try { seed = JSON.parse(fs.readFileSync(path.resolve(argv[0]), 'utf8')); } catch (err) { console.error(`ui-fake-api: ${argv[0]}: ${err.message}`); process.exit(2); }
+
+const server = http.createServer((req, res) => {
+  const send = (code, body) => { res.writeHead(code, { 'content-type': 'application/json', 'access-control-allow-origin': '*' }); res.end(JSON.stringify(body)); };
+  if (req.method !== 'GET') return send(405, { error: 'read-only' });
+  let parts;
+  try { parts = decodeURIComponent(req.url.split('?')[0]).split('/'); } catch { return send(400, { error: 'bad url' }); }
+  const [, api, name, id] = parts;
+  if (api !== 'api' || !name || !Object.hasOwn(seed, name)) return send(404, { error: 'unknown collection' });
+  if (id === undefined || id === '') return send(200, seed[name]);
+  const item = Array.isArray(seed[name]) ? seed[name].find((r) => String(r.id) === id) : undefined;
+  return item ? send(200, item) : send(404, { error: 'unknown id' });
+});
+server.listen(port, '127.0.0.1', () => console.log(`fake api: http://127.0.0.1:${port}/api/<${Object.keys(seed).join('|')}>`));

@@ -1,0 +1,8 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Workshop terminal", "type": "shell", "command": "exec bash -l", "options": { "cwd": "/workshop/spudtrack" },
+      "presentation": { "reveal": "always", "focus": false, "panel": "dedicated", "showReuseMessage": false, "clear": true },
+      "runOptions": { "runOn": "folderOpen" }, "problemMatcher": [] }
+  ]
+}

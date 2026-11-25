@@ -1,0 +1,18 @@
+<!-- Badges / status pills and the alert list. A badge always carries text (colour is never the only signal).
+     Alert list: <ul class="k-alerts"> with one <li class="k-alert k-alert-bad|warn|ok"> per alert (default border = info). -->
+<div class="k-row">
+  <span class="k-badge">Draft</span>
+  <span class="k-badge k-badge-ok">Delivered</span>
+  <span class="k-badge k-badge-warn">In customs</span>
+  <span class="k-badge k-badge-bad">Delayed</span>
+  <span class="k-badge k-badge-info">At port</span>
+</div>
+<article class="k-card" id="a-demo-alerts" style="margin-top:1rem">
+  <div class="k-card-head"><h2 class="k-card-title">Open alerts</h2><a href="#/more">All alerts</a></div>
+  <ul class="k-alerts">
+    <li class="k-alert k-alert-bad"><span class="k-alert-title">Reefer temperature above limit on ZG-4471</span><span class="k-badge k-badge-bad">Critical</span><span class="k-alert-meta">Raised 4 Nov 07:40 · Depot Zaragoza</span></li>
+    <li class="k-alert k-alert-warn"><span class="k-alert-title">Service due in 3 days for MD-1187</span><span class="k-badge k-badge-warn">Warning</span><span class="k-alert-meta">Raised 3 Nov 16:05 · Depot Madrid</span></li>
+    <li class="k-alert"><span class="k-alert-title">Driver licence renewal confirmed</span><span class="k-badge k-badge-info">Info</span><span class="k-alert-meta">Raised 3 Nov 09:12 · Depot Valencia</span></li>
+    <li class="k-alert k-alert-ok"><span class="k-alert-title">Workshop booking confirmed for BC-3371</span><span class="k-badge k-badge-ok">Done</span><span class="k-alert-meta">Raised 2 Nov 18:30 · Depot Barcelona</span></li>
+  </ul>
+</article>

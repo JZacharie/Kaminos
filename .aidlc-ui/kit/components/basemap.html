@@ -1,0 +1,33 @@
+<!-- Geography is never drawn by hand. data/basemap.js (inlined for you by ui-build) draws Europe from real borders and projects real
+     latitude/longitude. ALWAYS crop the map to the places it shows (see ../LAYOUT-RULES.md, Maps); call it from src/data.js:
+       const frame = basemapFit([[lat, lon], ...], { aspect: 1.5 })     the crop; aspect 1.5 for a k-span-6 card, 1.8-2.2 for k-span-8|12
+       el.innerHTML = basemapEurope({ title, fit: frame, overlay })       inline SVG of that crop (light and dark theme), shaped like the crop
+       basemapMarkers([{ id: 'a-map-par', lat, lon, label, tone }], { frame })   all markers; each label goes where it hits no other label
+       basemapRoute('a-route-x', lat1, lon1, lat2, lon2, { tone, dash? })        a great-circle route <path> in the colour of its tone
+       basemapEdge('a-map-ny', lat, lon, frame, { label, tone })                 a place outside the crop: arrow on the frame edge
+       basemapLegend([{ label, tone }])                                          legend with the same colours as markers and routes
+       basemapProject(lat, lon, frame) -> { xPct, yPct }                         for DOM chips placed over the map
+       distanceKm(lat1, lon1, lat2, lon2)                                        haversine kilometres
+       BASEMAP_AIRPORTS                                                          30 airports { iata, name, lat, lon }
+     Tones: accent, ok, warn, bad, info, neutral. Markers and labels are 10 and 12 px on screen whatever the crop.
+     Distances: say what each one measures in its label and compute it once in data.js with distanceKm, never type it.
+     Every marker or route a person can point at needs its own a-... id. The anchored element is the card. -->
+<article class="k-card k-span-6" id="a-demo-map">
+  <div class="k-card-head"><h2 class="k-card-title">Network</h2></div>
+  <figure class="k-chart" id="demo-map"></figure>
+  <div id="demo-legend"></div>
+</article>
+<script>
+  // in src/data.js:
+  var P = { par: [48.86, 2.35], ber: [52.52, 13.4], mad: [40.42, -3.7] };
+  var frame = basemapFit([P.par, P.ber, P.mad], { aspect: 1.5 });
+  document.querySelector('#demo-map').innerHTML = basemapEurope({
+    title: 'Routes between Paris, Berlin and Madrid', fit: frame,
+    overlay:
+      basemapRoute('a-route-par-ber', P.par[0], P.par[1], P.ber[0], P.ber[1], { tone: 'accent' }) +
+      basemapRoute('a-route-par-mad', P.par[0], P.par[1], P.mad[0], P.mad[1], { tone: 'warn' }) +
+      basemapMarkers([{ id: 'a-map-paris', lat: P.par[0], lon: P.par[1], label: 'Paris' }, { id: 'a-map-berlin', lat: P.ber[0], lon: P.ber[1], label: 'Berlin' },
+        { id: 'a-map-madrid', lat: P.mad[0], lon: P.mad[1], label: 'Madrid', tone: 'warn' }], { frame: frame })
+  });
+  document.querySelector('#demo-legend').innerHTML = basemapLegend([{ label: 'Paris to Berlin', tone: 'accent' }, { label: 'Paris to Madrid', tone: 'warn' }]);
+</script>

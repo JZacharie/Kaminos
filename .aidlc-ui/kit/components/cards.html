@@ -1,0 +1,63 @@
+<!-- Page header, breadcrumb, KPI cards, card, description list, timeline, plain list.
+     Section skeleton for one screen (src/screens/20-name.html):
+     <section data-route="#/name" aria-labelledby="h-name"> ... one <h1 id="h-name"> ... </section> -->
+<nav class="k-crumbs" aria-label="Breadcrumb"><a href="#/dashboard">Dashboard</a> / <span>Fleet</span></nav>
+<div class="k-page-header">
+  <div>
+    <h1 id="h-cards-demo">Fleet overview</h1>
+    <p>Depot Zaragoza · updated 08:45</p>
+  </div>
+  <div class="k-actions">
+    <button class="k-btn" type="button" data-k-toast="Report exported">Export</button>
+    <button class="k-btn k-btn-primary" type="button">Add vehicle</button>
+  </div>
+</div>
+<div class="k-grid">
+  <div class="k-span-12 k-kpis">
+    <article class="k-card" id="a-demo-kpi-vehicles">
+      <p class="k-kpi-label">Vehicles on the road</p>
+      <p class="k-kpi-value">42</p>
+      <p class="k-kpi-note"><span class="k-up">+3</span> since yesterday</p>
+    </article>
+    <article class="k-card">
+      <p class="k-kpi-label">Average delay</p>
+      <p class="k-kpi-value">18 min</p>
+      <p class="k-kpi-note"><span class="k-down">+6 min</span> vs. last week</p>
+    </article>
+    <article class="k-card">
+      <p class="k-kpi-label">Fuel per 100 km</p>
+      <p class="k-kpi-value">27.4 L</p>
+      <p class="k-kpi-note">target 28 L</p>
+    </article>
+    <article class="k-card">
+      <p class="k-kpi-label">Open work orders</p>
+      <p class="k-kpi-value">9</p>
+      <p class="k-kpi-note">2 overdue</p>
+    </article>
+  </div>
+  <article class="k-card k-span-6">
+    <div class="k-card-head"><h2 class="k-card-title">Vehicle ZG-4471</h2><span class="k-badge k-badge-ok">In service</span></div>
+    <dl class="k-dl">
+      <dt>Driver</dt><dd>Marta Ibáñez</dd>
+      <dt>Odometer</dt><dd>184,220 km</dd>
+      <dt>Next service</dt><dd>12 Dec 2026</dd>
+      <dt>Depot</dt><dd>Zaragoza</dd>
+    </dl>
+  </article>
+  <article class="k-card k-span-6">
+    <div class="k-card-head"><h2 class="k-card-title">Today's route</h2></div>
+    <ol class="k-timeline">
+      <li class="is-done"><div class="k-tl-title">Depart Zaragoza depot</div><div class="k-tl-meta">Done 06:10</div></li>
+      <li class="is-current"><div class="k-tl-title">Unload at Tudela</div><div class="k-tl-meta">In progress, expected 09:30</div></li>
+      <li><div class="k-tl-title">Return to depot</div><div class="k-tl-meta">Planned 13:45</div></li>
+    </ol>
+  </article>
+  <article class="k-card k-span-12">
+    <div class="k-card-head"><h2 class="k-card-title">Recent service visits</h2></div>
+    <ul class="k-list">
+      <li><span>ZG-4471 · Brake pads replaced</span><span class="k-muted">2 Nov 2026</span></li>
+      <li><span>ZG-3208 · Annual inspection</span><span class="k-muted">29 Oct 2026</span></li>
+      <li><span>ZG-5120 · Tyre rotation</span><span class="k-muted">27 Oct 2026</span></li>
+    </ul>
+  </article>
+</div>

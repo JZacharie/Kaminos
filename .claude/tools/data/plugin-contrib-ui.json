@@ -1,0 +1,491 @@
+{
+  "build-and-test": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "requires_stage": [
+      "ui-freeze"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:10",
+        "order": 100,
+        "hash": "45d5aa66"
+      },
+      {
+        "anchor": "before-step:10",
+        "order": 110,
+        "hash": "3064bbdb"
+      },
+      {
+        "anchor": "before-step:9",
+        "order": 100,
+        "hash": "05412af7"
+      },
+      {
+        "anchor": "before-step:9",
+        "order": 110,
+        "hash": "6207ab06"
+      }
+    ]
+  },
+  "ci-pipeline": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "requires_stage": [
+      "ui-freeze"
+    ]
+  },
+  "code-generation": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "requires_stage": [
+      "ui-freeze"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:2",
+        "order": 100,
+        "hash": "ff88cc4f"
+      },
+      {
+        "anchor": "before-step:3",
+        "order": 100,
+        "hash": "65e30a56"
+      },
+      {
+        "anchor": "before-step:3",
+        "order": 110,
+        "hash": "2233fa31"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 100,
+        "hash": "3e5e8b39"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 110,
+        "hash": "98388b91"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 120,
+        "hash": "5d01225f"
+      },
+      {
+        "anchor": "before-step:5",
+        "order": 90,
+        "hash": "4a6d6222"
+      },
+      {
+        "anchor": "before-step:5",
+        "order": 100,
+        "hash": "653ff289"
+      }
+    ]
+  },
+  "functional-design": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "requires_stage": [
+      "ui-freeze"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:1",
+        "order": 100,
+        "hash": "10179369"
+      }
+    ]
+  },
+  "infrastructure-design": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "requires_stage": [
+      "ui-freeze"
+    ]
+  },
+  "nfr-design": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "requires_stage": [
+      "ui-freeze"
+    ]
+  },
+  "nfr-requirements": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "requires_stage": [
+      "ui-freeze"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:3",
+        "order": 100,
+        "hash": "8705f77f"
+      },
+      {
+        "anchor": "before-step:6",
+        "order": 100,
+        "hash": "1e4446a8"
+      }
+    ]
+  },
+  "approval-handoff": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "after-step:2",
+        "order": 130,
+        "hash": "b34da6db"
+      }
+    ]
+  },
+  "feasibility": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:2",
+        "order": 100,
+        "hash": "351ebf42"
+      },
+      {
+        "anchor": "before-step:2",
+        "order": 110,
+        "hash": "5d205f2b"
+      },
+      {
+        "anchor": "before-step:3",
+        "order": 90,
+        "hash": "e53fae2f"
+      }
+    ]
+  },
+  "intent-capture": {
+    "produces": [
+      "ui-prototype-v1"
+    ],
+    "sensors": [
+      "ui-v1-present"
+    ],
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:1",
+        "order": 90,
+        "hash": "201e81a6"
+      },
+      {
+        "anchor": "before-step:2",
+        "order": 50,
+        "hash": "03c7eee7"
+      },
+      {
+        "anchor": "before-step:2",
+        "order": 100,
+        "hash": "f50f328c"
+      },
+      {
+        "anchor": "before-step:2",
+        "order": 120,
+        "hash": "20d718ce"
+      },
+      {
+        "anchor": "before-step:5",
+        "order": 100,
+        "hash": "bcb4412f"
+      }
+    ]
+  },
+  "rough-mockups": {
+    "produces": [
+      "ui-prototype-index"
+    ],
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "after-step:1",
+        "order": 100,
+        "hash": "41c96fba"
+      },
+      {
+        "anchor": "after-step:2",
+        "order": 100,
+        "hash": "bd3e7851"
+      },
+      {
+        "anchor": "after-step:4",
+        "order": 100,
+        "hash": "006304bb"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 100,
+        "hash": "3c89b928"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 110,
+        "hash": "24b36d73"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 115,
+        "hash": "90577c3e"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 120,
+        "hash": "b1da4af4"
+      }
+    ]
+  },
+  "scope-definition": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:2",
+        "order": 100,
+        "hash": "20850016"
+      },
+      {
+        "anchor": "before-step:2",
+        "order": 110,
+        "hash": "bbe0d1c3"
+      },
+      {
+        "anchor": "before-step:3",
+        "order": 90,
+        "hash": "e53fae2f"
+      }
+    ]
+  },
+  "contract-design": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "delivery-planning": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "domain-design": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:2",
+        "order": 100,
+        "hash": "3cb009ed"
+      },
+      {
+        "anchor": "before-step:3",
+        "order": 90,
+        "hash": "e53fae2f"
+      },
+      {
+        "anchor": "before-step:7",
+        "order": 100,
+        "hash": "a535b271"
+      }
+    ]
+  },
+  "practices-discovery": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:4",
+        "order": 100,
+        "hash": "0de26cfe"
+      }
+    ]
+  },
+  "refined-mockups": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "after-step:4",
+        "order": 100,
+        "hash": "f6db38ef"
+      },
+      {
+        "anchor": "before-step:2",
+        "order": 100,
+        "hash": "52be6e30"
+      },
+      {
+        "anchor": "before-step:3",
+        "order": 90,
+        "hash": "e53fae2f"
+      }
+    ]
+  },
+  "requirements-analysis": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "after-step:10",
+        "order": 100,
+        "hash": "a67b4cad"
+      },
+      {
+        "anchor": "before-step:6",
+        "order": 100,
+        "hash": "774b5bb5"
+      },
+      {
+        "anchor": "before-step:6",
+        "order": 110,
+        "hash": "1034551e"
+      },
+      {
+        "anchor": "before-step:6",
+        "order": 120,
+        "hash": "a6227ba5"
+      },
+      {
+        "anchor": "before-step:7",
+        "order": 90,
+        "hash": "e53fae2f"
+      }
+    ]
+  },
+  "reverse-engineering": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "units-generation": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "user-stories": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ],
+    "fragments": [
+      {
+        "anchor": "before-step:10",
+        "order": 100,
+        "hash": "b7c04dd2"
+      },
+      {
+        "anchor": "before-step:4",
+        "order": 100,
+        "hash": "85f263eb"
+      },
+      {
+        "anchor": "before-step:5",
+        "order": 90,
+        "hash": "e53fae2f"
+      }
+    ]
+  },
+  "state-init": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "workspace-detection": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "workspace-scaffold": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "deployment-execution": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "deployment-pipeline": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "environment-provisioning": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "feedback-optimization": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "incident-response": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "observability-setup": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  },
+  "performance-validation": {
+    "scopes": [
+      "ui-first",
+      "ui-workshop"
+    ]
+  }
+}

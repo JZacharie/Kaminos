@@ -1,0 +1,16 @@
+{
+  "name": "aidlc-ui-quality-gate-deps",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dependencies of addon/bin/quality-gate (installed as .aidlc-ui/quality/node_modules). Exact versions only.",
+  "license": "MIT-0",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "3.1161.0",
+    "axe-core": "4.10.3",
+    "lighthouse": "13.6.0",
+    "playwright-core": "1.64.1"
+  }
+}

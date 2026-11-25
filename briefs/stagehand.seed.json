@@ -1,0 +1,1731 @@
+{
+  "schema": 1,
+  "app": "stagehand",
+  "now": "2027-06-19T14:20:00+02:00",
+  "briefSha": "1e42a80d0462",
+  "collections": {
+    "stages": [
+      {
+        "id": "A",
+        "name": "Lighthouse",
+        "kind": "main",
+        "limitKind": "curfew",
+        "limit": "00:00",
+        "gear": [
+          "4x CDJ-3000",
+          "DJM-V10"
+        ]
+      },
+      {
+        "id": "B",
+        "name": "The Dock",
+        "kind": "club tent",
+        "limitKind": "curfew",
+        "limit": "02:00",
+        "gear": [
+          "DJM-900NXS2",
+          "3x CDJ-3000",
+          "2x Technics SL-1210"
+        ]
+      },
+      {
+        "id": "C",
+        "name": "Sandbar",
+        "kind": "beach",
+        "limitKind": "noise limit",
+        "limit": "23:30",
+        "gear": [
+          "live monitors only"
+        ]
+      }
+    ],
+    "artists": [
+      {
+        "id": "AR-01",
+        "name": "Nova Kest",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "A",
+        "day": "Fri",
+        "start": "21:00",
+        "end": "22:10",
+        "travel": "car, left Fri 23:50",
+        "travelInfo": {
+          "mode": "car",
+          "ref": null,
+          "event": "left",
+          "time": "23:50",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "4x CDJ-3000, DJM-V10",
+        "state": "Played",
+        "mustBeOnSiteBy": null
+      },
+      {
+        "id": "AR-02",
+        "name": "Juno Harker",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "A",
+        "day": "Fri",
+        "start": "22:30",
+        "end": "00:00",
+        "travel": "train, left Sat 09:40",
+        "travelInfo": {
+          "mode": "train",
+          "ref": null,
+          "event": "left",
+          "time": "09:40",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "4x CDJ-3000, DJM-V10",
+        "state": "Played",
+        "mustBeOnSiteBy": null
+      },
+      {
+        "id": "AR-03",
+        "name": "Mirelle",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "B",
+        "day": "Fri",
+        "start": "23:00",
+        "end": "02:00",
+        "travel": "flight GW 88, left Sat 11:05",
+        "travelInfo": {
+          "mode": "flight",
+          "ref": "GW 88",
+          "event": "left",
+          "time": "11:05",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "Xone:96, 2x CDJ-3000",
+        "state": "Played",
+        "mustBeOnSiteBy": null
+      },
+      {
+        "id": "AR-04",
+        "name": "DJ Halcyon",
+        "act": "Live",
+        "liveAct": true,
+        "stage": "C",
+        "day": "Fri",
+        "start": "19:30",
+        "end": "21:00",
+        "travel": "van, left Sat 10:00",
+        "travelInfo": {
+          "mode": "van",
+          "ref": null,
+          "event": "left",
+          "time": "10:00",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "laptop rig, 6 in",
+        "state": "Played",
+        "mustBeOnSiteBy": null
+      },
+      {
+        "id": "AR-05",
+        "name": "Aria Voss",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "A",
+        "day": "Sat",
+        "start": "16:00",
+        "end": "17:10",
+        "travel": "at hotel since Fri",
+        "travelInfo": {
+          "mode": "hotel",
+          "ref": null,
+          "event": "since",
+          "time": null,
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "4x CDJ-3000, DJM-V10",
+        "state": "Soundcheck 14:40",
+        "mustBeOnSiteBy": "15:30"
+      },
+      {
+        "id": "AR-06",
+        "name": "Kito & Oba",
+        "act": "Live duo",
+        "liveAct": true,
+        "stage": "A",
+        "day": "Sat",
+        "start": "17:30",
+        "end": "19:10",
+        "travel": "car, arrives 15:10",
+        "travelInfo": {
+          "mode": "car",
+          "ref": null,
+          "event": "arrives",
+          "time": "15:10",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "2 synths, drum machine, 10 inputs",
+        "state": "On time",
+        "mustBeOnSiteBy": "17:00"
+      },
+      {
+        "id": "AR-07",
+        "name": "Vela Quint",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "A",
+        "day": "Sat",
+        "start": "19:30",
+        "end": "20:55",
+        "travel": "flight GW 412, lands 17:55, was 14:15",
+        "travelInfo": {
+          "mode": "flight",
+          "ref": "GW 412",
+          "event": "lands",
+          "time": "17:55",
+          "was": "14:15",
+          "cancelled": false
+        },
+        "rider": "4x CDJ-3000, DJM-V10",
+        "state": "Delayed 3 h 40",
+        "mustBeOnSiteBy": "19:00"
+      },
+      {
+        "id": "AR-08",
+        "name": "Orbit Kane",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "A",
+        "day": "Sat",
+        "start": "21:15",
+        "end": "22:40",
+        "travel": "train TR 905, arrives 16:42",
+        "travelInfo": {
+          "mode": "train",
+          "ref": "TR 905",
+          "event": "arrives",
+          "time": "16:42",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "3x CDJ-3000, DJM-V10",
+        "state": "On time",
+        "mustBeOnSiteBy": "20:45"
+      },
+      {
+        "id": "AR-09",
+        "name": "Lumen Fray",
+        "act": "Live headliner",
+        "liveAct": true,
+        "stage": "A",
+        "day": "Sat",
+        "start": "23:00",
+        "end": "00:00",
+        "travel": "private jet, lands 18:30",
+        "travelInfo": {
+          "mode": "private jet",
+          "ref": null,
+          "event": "lands",
+          "time": "18:30",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "modular rig, 24 inputs, 4 monitors",
+        "state": "On time",
+        "mustBeOnSiteBy": "22:30"
+      },
+      {
+        "id": "AR-10",
+        "name": "Bastian Holt",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "B",
+        "day": "Sat",
+        "start": "14:00",
+        "end": "15:10",
+        "travel": "at hotel since Fri",
+        "travelInfo": {
+          "mode": "hotel",
+          "ref": null,
+          "event": "since",
+          "time": null,
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "Xone:92, 2x CDJ-3000",
+        "state": "On stage",
+        "mustBeOnSiteBy": "13:30"
+      },
+      {
+        "id": "AR-11",
+        "name": "Tamsin Rook",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "B",
+        "day": "Sat",
+        "start": "15:30",
+        "end": "17:10",
+        "travel": "shuttle pickup 14:45",
+        "travelInfo": {
+          "mode": "shuttle",
+          "ref": null,
+          "event": "pickup",
+          "time": "14:45",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "2x SL-1210, DJM-900NXS2",
+        "state": "On time",
+        "mustBeOnSiteBy": "15:00"
+      },
+      {
+        "id": "AR-12",
+        "name": "Ione Marsh",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "B",
+        "day": "Sat",
+        "start": "17:30",
+        "end": "19:10",
+        "travel": "flight GW 301, lands 15:50",
+        "travelInfo": {
+          "mode": "flight",
+          "ref": "GW 301",
+          "event": "lands",
+          "time": "15:50",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "3x CDJ-3000, DJM-900NXS2",
+        "state": "On time",
+        "mustBeOnSiteBy": "17:00"
+      },
+      {
+        "id": "AR-13",
+        "name": "Cass Delaney",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "B",
+        "day": "Sat",
+        "start": "19:30",
+        "end": "21:40",
+        "travel": "car, arrives 17:00",
+        "travelInfo": {
+          "mode": "car",
+          "ref": null,
+          "event": "arrives",
+          "time": "17:00",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "Xone:96, 2x SL-1210",
+        "state": "On time",
+        "mustBeOnSiteBy": "19:00"
+      },
+      {
+        "id": "AR-14",
+        "name": "Rhea Solen",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "B",
+        "day": "Sat",
+        "start": "22:00",
+        "end": "23:10",
+        "travel": "flight GW 520, lands 19:40",
+        "travelInfo": {
+          "mode": "flight",
+          "ref": "GW 520",
+          "event": "lands",
+          "time": "19:40",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "4x CDJ-3000, DJM-V10",
+        "state": "Rider gap",
+        "mustBeOnSiteBy": "21:30"
+      },
+      {
+        "id": "AR-15",
+        "name": "Dax Orion",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "B",
+        "day": "Sat",
+        "start": "23:30",
+        "end": "01:40",
+        "travel": "flight GW 520, lands 19:40",
+        "travelInfo": {
+          "mode": "flight",
+          "ref": "GW 520",
+          "event": "lands",
+          "time": "19:40",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "3x CDJ-3000, DJM-V10",
+        "state": "Rider gap",
+        "mustBeOnSiteBy": "23:00"
+      },
+      {
+        "id": "AR-16",
+        "name": "Okra Beat",
+        "act": "Live band (5)",
+        "liveAct": true,
+        "stage": "C",
+        "day": "Sat",
+        "start": "15:00",
+        "end": "16:40",
+        "travel": "train TR 771 cancelled",
+        "travelInfo": {
+          "mode": "train",
+          "ref": "TR 771",
+          "event": "cancelled",
+          "time": null,
+          "was": null,
+          "cancelled": true
+        },
+        "rider": "backline, 12 inputs, 5 monitors",
+        "state": "At risk",
+        "mustBeOnSiteBy": "14:30"
+      },
+      {
+        "id": "AR-17",
+        "name": "Neon Heron",
+        "act": "Live",
+        "liveAct": true,
+        "stage": "C",
+        "day": "Sat",
+        "start": "17:00",
+        "end": "18:10",
+        "travel": "shuttle, arrived 13:30",
+        "travelInfo": {
+          "mode": "shuttle",
+          "ref": null,
+          "event": "arrived",
+          "time": "13:30",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "3 synths, 8 inputs",
+        "state": "On time",
+        "mustBeOnSiteBy": "16:30"
+      },
+      {
+        "id": "AR-18",
+        "name": "Mara Teng",
+        "act": "DJ set",
+        "liveAct": false,
+        "stage": "C",
+        "day": "Sat",
+        "start": "18:30",
+        "end": "19:55",
+        "travel": "at hotel since Fri",
+        "travelInfo": {
+          "mode": "hotel",
+          "ref": null,
+          "event": "since",
+          "time": null,
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "2x CDJ-3000, mixer",
+        "state": "On time",
+        "mustBeOnSiteBy": "18:00"
+      },
+      {
+        "id": "AR-19",
+        "name": "Pyre Vale",
+        "act": "Live band (4)",
+        "liveAct": true,
+        "stage": "C",
+        "day": "Sat",
+        "start": "20:15",
+        "end": "21:25",
+        "travel": "van, arrives 17:30",
+        "travelInfo": {
+          "mode": "van",
+          "ref": null,
+          "event": "arrives",
+          "time": "17:30",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "backline, 10 inputs, 4 monitors",
+        "state": "Singer ill",
+        "mustBeOnSiteBy": "19:45"
+      },
+      {
+        "id": "AR-20",
+        "name": "Sable Ghost",
+        "act": "Live closing",
+        "liveAct": true,
+        "stage": "C",
+        "day": "Sat",
+        "start": "21:45",
+        "end": "23:30",
+        "travel": "car, arrives 18:15",
+        "travelInfo": {
+          "mode": "car",
+          "ref": null,
+          "event": "arrives",
+          "time": "18:15",
+          "was": null,
+          "cancelled": false
+        },
+        "rider": "2 synths, 8 inputs",
+        "state": "Curfew 23:30",
+        "mustBeOnSiteBy": "21:15"
+      }
+    ],
+    "flights": [
+      {
+        "id": "GW 412",
+        "artists": [
+          "AR-07"
+        ],
+        "from": "LIS",
+        "to": "AMS",
+        "km": 1846,
+        "blockMin": 170,
+        "scheduledDep": "11:25",
+        "scheduledArr": "14:15",
+        "dep": "15:05",
+        "arr": "17:55",
+        "status": "Delayed",
+        "delayMin": 220
+      },
+      {
+        "id": "GW 301",
+        "artists": [
+          "AR-12"
+        ],
+        "from": "BCN",
+        "to": "AMS",
+        "km": 1241,
+        "blockMin": 125,
+        "scheduledDep": "13:45",
+        "scheduledArr": "15:50",
+        "dep": "13:45",
+        "arr": "15:50",
+        "status": "On time",
+        "delayMin": 0
+      },
+      {
+        "id": "GW 520",
+        "artists": [
+          "AR-14",
+          "AR-15"
+        ],
+        "from": "ATH",
+        "to": "AMS",
+        "km": 2182,
+        "blockMin": 200,
+        "scheduledDep": "16:20",
+        "scheduledArr": "19:40",
+        "dep": "16:20",
+        "arr": "19:40",
+        "status": "On time",
+        "delayMin": 0
+      },
+      {
+        "id": "Private jet",
+        "artists": [
+          "AR-09"
+        ],
+        "from": "CPH",
+        "to": "AMS",
+        "km": 633,
+        "blockMin": 80,
+        "scheduledDep": "17:10",
+        "scheduledArr": "18:30",
+        "dep": "17:10",
+        "arr": "18:30",
+        "status": "On time",
+        "delayMin": 0
+      },
+      {
+        "id": "GW 88",
+        "artists": [
+          "AR-03"
+        ],
+        "from": "AMS",
+        "to": "MAN",
+        "km": 487,
+        "blockMin": 65,
+        "scheduledDep": "11:05",
+        "scheduledArr": "12:10",
+        "dep": "11:05",
+        "arr": "12:10",
+        "status": "Departed",
+        "delayMin": 0
+      }
+    ],
+    "arrivals": [
+      {
+        "id": "ARR-GW412",
+        "kind": "flight",
+        "ref": "GW 412",
+        "artists": [
+          "AR-07"
+        ],
+        "at": "17:55",
+        "place": "AMS",
+        "status": "Delayed"
+      },
+      {
+        "id": "ARR-GW301",
+        "kind": "flight",
+        "ref": "GW 301",
+        "artists": [
+          "AR-12"
+        ],
+        "at": "15:50",
+        "place": "AMS",
+        "status": "On time"
+      },
+      {
+        "id": "ARR-GW520",
+        "kind": "flight",
+        "ref": "GW 520",
+        "artists": [
+          "AR-14",
+          "AR-15"
+        ],
+        "at": "19:40",
+        "place": "AMS",
+        "status": "On time"
+      },
+      {
+        "id": "ARR-Privatejet",
+        "kind": "private jet",
+        "ref": "Private jet",
+        "artists": [
+          "AR-09"
+        ],
+        "at": "18:30",
+        "place": "AMS",
+        "status": "On time"
+      },
+      {
+        "id": "ARR-AR-06",
+        "kind": "car",
+        "ref": null,
+        "artists": [
+          "AR-06"
+        ],
+        "at": "15:10",
+        "place": "Main gate",
+        "status": "On time"
+      },
+      {
+        "id": "ARR-AR-08",
+        "kind": "train",
+        "ref": "TR 905",
+        "artists": [
+          "AR-08"
+        ],
+        "at": "16:42",
+        "place": "Saltmouth Central",
+        "status": "On time"
+      },
+      {
+        "id": "ARR-AR-13",
+        "kind": "car",
+        "ref": null,
+        "artists": [
+          "AR-13"
+        ],
+        "at": "17:00",
+        "place": "Main gate",
+        "status": "On time"
+      },
+      {
+        "id": "ARR-AR-16",
+        "kind": "train",
+        "ref": "TR 771",
+        "artists": [
+          "AR-16"
+        ],
+        "at": null,
+        "place": "Saltmouth Central",
+        "status": "Cancelled"
+      },
+      {
+        "id": "ARR-AR-19",
+        "kind": "van",
+        "ref": null,
+        "artists": [
+          "AR-19"
+        ],
+        "at": "17:30",
+        "place": "Main gate",
+        "status": "On time"
+      },
+      {
+        "id": "ARR-AR-20",
+        "kind": "car",
+        "ref": null,
+        "artists": [
+          "AR-20"
+        ],
+        "at": "18:15",
+        "place": "Main gate",
+        "status": "On time"
+      }
+    ],
+    "crew": [
+      {
+        "id": "CR-01",
+        "name": "Pia Lindgren",
+        "skill": "monitor",
+        "stage": "A",
+        "start": "12:00",
+        "end": "22:00",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": true,
+        "alsoBooked": {
+          "stage": "C",
+          "at": "15:30"
+        }
+      },
+      {
+        "id": "CR-02",
+        "name": "Jonas Brandt",
+        "skill": "FOH",
+        "stage": "A",
+        "start": "12:00",
+        "end": "22:00",
+        "shiftHours": 10,
+        "restHours": 8.5,
+        "fatigue": true,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-03",
+        "name": "Mae Okoro",
+        "skill": "lighting",
+        "stage": "A",
+        "start": "14:30",
+        "end": "00:30",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-04",
+        "name": "Ravi Desai",
+        "skill": "backline",
+        "stage": "A",
+        "start": "08:00",
+        "end": "19:00",
+        "shiftHours": 11,
+        "restHours": null,
+        "fatigue": true,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-05",
+        "name": "Elif Kaya",
+        "skill": "monitor",
+        "stage": "B",
+        "start": "13:00",
+        "end": "23:00",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-06",
+        "name": "Lucia Ferrer",
+        "skill": "backline",
+        "stage": "B",
+        "start": "13:00",
+        "end": "23:00",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-07",
+        "name": "Noor Bakker",
+        "skill": "lighting",
+        "stage": "B",
+        "start": "16:00",
+        "end": "02:00",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-08",
+        "name": "Tom Haverkamp",
+        "skill": "FOH",
+        "stage": "B",
+        "start": "16:30",
+        "end": "02:30",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-09",
+        "name": "Sven Moller",
+        "skill": "VJ",
+        "stage": "B",
+        "start": "17:00",
+        "end": "02:30",
+        "shiftHours": 9.5,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-10",
+        "name": "Kai Jansen",
+        "skill": "FOH",
+        "stage": "C",
+        "start": "13:30",
+        "end": "23:30",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-11",
+        "name": "Bea Novak",
+        "skill": "backline",
+        "stage": "C",
+        "start": "13:30",
+        "end": "23:30",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-12",
+        "name": "Omar Haddad",
+        "skill": "lighting",
+        "stage": "C",
+        "start": "14:00",
+        "end": "23:30",
+        "shiftHours": 9.5,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-13",
+        "name": "Fenna de Vries",
+        "skill": "backline",
+        "stage": "float",
+        "start": "10:00",
+        "end": "20:00",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      },
+      {
+        "id": "CR-14",
+        "name": "Luca Moretti",
+        "skill": "monitor",
+        "stage": "float",
+        "start": "14:00",
+        "end": "00:00",
+        "shiftHours": 10,
+        "restHours": null,
+        "fatigue": false,
+        "conflict": false,
+        "alsoBooked": null
+      }
+    ],
+    "incidents": [
+      {
+        "id": "INC-1",
+        "text": "AR-07 flight GW 412 lands 17:55, set 19:30. Ranked: car from the kerb 18:25, on site 18:47 (EUR 95); swap with AR-08 (AR-08 19:30-20:55, AR-07 21:15-22:40); shuttle 18:30, on site 18:55; extend AR-06 by 30 minutes (Stage A ends 00:30, breaks the curfew).",
+        "severity": "High",
+        "state": "Open",
+        "title": "GW 412 delayed 3 h 40",
+        "kind": "travel",
+        "stage": "A",
+        "artists": [
+          "AR-07"
+        ],
+        "raisedAt": "14:05",
+        "decideBy": "17:30",
+        "options": [
+          {
+            "rank": 1,
+            "label": "Car from the kerb at 18:25, on site 18:47",
+            "costEur": 95,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "none",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 2,
+            "label": "Swap with AR-08: AR-08 19:30-20:55, AR-07 21:15-22:40",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "AR-07 and AR-08 swap slots",
+              "crew": "none",
+              "curfew": "none"
+            },
+            "swap": [
+              "AR-07",
+              "AR-08"
+            ]
+          },
+          {
+            "rank": 3,
+            "label": "Shuttle at 18:30, on site 18:55",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "none",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 4,
+            "label": "Extend AR-06 by 30 minutes",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "Stage A runs 30 minutes later",
+              "crew": "+30 min for Stage A crew",
+              "curfew": "Stage A ends 00:30, breaks the 00:00 curfew"
+            }
+          }
+        ]
+      },
+      {
+        "id": "INC-2",
+        "text": "the DJM-V10 for AR-14 and AR-15 is missing at Stage B: rent one 45 minutes away (EUR 180); move Stage A's after 22:40 (AR-09 is live; covers AR-15 only); accept the DJM-900NXS2.",
+        "severity": "High",
+        "state": "Open",
+        "title": "DJM-V10 missing at Stage B",
+        "kind": "rider",
+        "stage": "B",
+        "artists": [
+          "AR-14",
+          "AR-15"
+        ],
+        "raisedAt": "13:40",
+        "decideBy": "19:00",
+        "options": [
+          {
+            "rank": 1,
+            "label": "Rent a DJM-V10 45 minutes away",
+            "costEur": 180,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "Dev Nair sends a driver",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 2,
+            "label": "Move Stage A's DJM-V10 to Stage B after 22:40 (AR-09 is live)",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "Luca Moretti moves it",
+              "curfew": "none",
+              "covers": [
+                "AR-15"
+              ]
+            }
+          },
+          {
+            "rank": 3,
+            "label": "Accept the DJM-900NXS2",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "none",
+              "curfew": "none",
+              "consent": [
+                "AR-14",
+                "AR-15"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "INC-3",
+        "text": "gusts of 62 km/h forecast 17:00 to 19:00 at Stage C: hold, AR-17 cancelled, AR-18 plays 19:00-19:55.",
+        "severity": "High",
+        "state": "Open",
+        "title": "Gusts of 62 km/h at Stage C",
+        "kind": "weather",
+        "stage": "C",
+        "artists": [
+          "AR-17",
+          "AR-18"
+        ],
+        "raisedAt": "13:15",
+        "decideBy": "16:30",
+        "options": [
+          {
+            "rank": 1,
+            "label": "Hold Stage C 17:00 to 19:00: AR-17 cancelled, AR-18 plays 19:00-19:55",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "AR-17 cancelled, AR-18 starts 19:00",
+              "crew": "Stage C crew stand by",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 2,
+            "label": "Keep the plan and hold automatically at 55 km/h measured",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "may stop AR-17 mid-set",
+              "crew": "none",
+              "curfew": "none"
+            }
+          }
+        ]
+      },
+      {
+        "id": "INC-4",
+        "text": "AR-19 singer ill.",
+        "severity": "Medium",
+        "state": "Open",
+        "title": "AR-19 singer ill",
+        "kind": "artist",
+        "stage": "C",
+        "artists": [
+          "AR-19"
+        ],
+        "raisedAt": "12:40",
+        "decideBy": "18:00",
+        "options": [
+          {
+            "rank": 1,
+            "label": "Instrumental set in the same slot, 20:15-21:25",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "none",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 2,
+            "label": "Cancel the set; Stage C is dark 20:15-21:25",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "AR-19 removed",
+              "crew": "Stage C crew break",
+              "curfew": "none"
+            }
+          }
+        ]
+      },
+      {
+        "id": "INC-5",
+        "text": "Noor Bakker, lighting at Stage B, called in sick for 16:00.",
+        "severity": "Medium",
+        "state": "Open",
+        "title": "Noor Bakker called in sick",
+        "kind": "crew",
+        "stage": "B",
+        "artists": [],
+        "crew": [
+          "Noor Bakker"
+        ],
+        "raisedAt": "13:10",
+        "decideBy": "15:00",
+        "options": [
+          {
+            "rank": 1,
+            "label": "Book a freelance lighting technician, on site 15:30",
+            "costEur": 420,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "freelancer on B 16:00-02:00",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 2,
+            "label": "Run Stage B on the house preset; Omar Haddad covers after Stage C closes at 23:30",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "Omar Haddad shift to 02:00, fatigue",
+              "curfew": "none"
+            }
+          }
+        ]
+      },
+      {
+        "id": "INC-6",
+        "text": "AR-16 train cancelled, five people.",
+        "severity": "Medium",
+        "state": "Open",
+        "title": "TR 771 cancelled, Okra Beat (5) stranded",
+        "kind": "travel",
+        "stage": "C",
+        "artists": [
+          "AR-16"
+        ],
+        "raisedAt": "13:55",
+        "decideBy": "14:30",
+        "options": [
+          {
+            "rank": 1,
+            "label": "Minibus from Haarlem station, on site 14:50; set 15:20-16:40",
+            "costEur": 140,
+            "impact": {
+              "runningOrder": "AR-16 starts 20 minutes late",
+              "crew": "none",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 2,
+            "label": "Cancel AR-16; Stage C opens at 17:00",
+            "costEur": 0,
+            "impact": {
+              "runningOrder": "AR-16 removed",
+              "crew": "Stage C crew start later",
+              "curfew": "none"
+            }
+          }
+        ]
+      },
+      {
+        "id": "INC-7",
+        "text": "a shuttle bus broke down at 13:50, shuttles every 45 minutes until 16:00.",
+        "severity": "Medium",
+        "state": "Open",
+        "title": "Shuttle bus broke down",
+        "kind": "transport",
+        "stage": null,
+        "artists": [],
+        "raisedAt": "13:50",
+        "decideBy": "15:00",
+        "options": [
+          {
+            "rank": 1,
+            "label": "Hire a replacement coach from 15:00",
+            "costEur": 650,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "none",
+              "curfew": "none"
+            }
+          },
+          {
+            "rank": 2,
+            "label": "Keep 45-minute shuttles; car for AR-12 at 16:20",
+            "costEur": 60,
+            "impact": {
+              "runningOrder": "none",
+              "crew": "none",
+              "curfew": "none"
+            }
+          }
+        ]
+      }
+    ],
+    "agentLog": [
+      {
+        "id": "LOG-1",
+        "time": "11:05",
+        "who": "Dev Nair",
+        "text": "AR-03 checked in on GW 88 to MAN"
+      },
+      {
+        "id": "LOG-2",
+        "time": "12:40",
+        "who": "Agent",
+        "text": "Raised INC-4: AR-19 singer ill, 2 options"
+      },
+      {
+        "id": "LOG-3",
+        "time": "13:10",
+        "who": "Agent",
+        "text": "Raised INC-5: Noor Bakker called in sick for 16:00"
+      },
+      {
+        "id": "LOG-4",
+        "time": "13:15",
+        "who": "Agent",
+        "text": "Raised INC-3: gusts of 62 km/h forecast at Stage C"
+      },
+      {
+        "id": "LOG-5",
+        "time": "13:30",
+        "who": "Lena Okafor",
+        "text": "AR-17 arrived by shuttle"
+      },
+      {
+        "id": "LOG-6",
+        "time": "13:40",
+        "who": "Agent",
+        "text": "Raised INC-2: DJM-V10 missing at Stage B, 3 options"
+      },
+      {
+        "id": "LOG-7",
+        "time": "13:50",
+        "who": "Dev Nair",
+        "text": "Raised INC-7: shuttle bus broke down"
+      },
+      {
+        "id": "LOG-8",
+        "time": "13:55",
+        "who": "Agent",
+        "text": "Raised INC-6: TR 771 cancelled, AR-16 stranded"
+      },
+      {
+        "id": "LOG-9",
+        "time": "14:05",
+        "who": "Agent",
+        "text": "Raised INC-1: GW 412 now lands 17:55, 4 options"
+      }
+    ],
+    "weather": [
+      {
+        "id": "W-14",
+        "from": "14:00",
+        "to": "15:00",
+        "gustKmh": 35,
+        "hold": false
+      },
+      {
+        "id": "W-15",
+        "from": "15:00",
+        "to": "16:00",
+        "gustKmh": 40,
+        "hold": false
+      },
+      {
+        "id": "W-16",
+        "from": "16:00",
+        "to": "17:00",
+        "gustKmh": 48,
+        "hold": false
+      },
+      {
+        "id": "W-17",
+        "from": "17:00",
+        "to": "18:00",
+        "gustKmh": 62,
+        "hold": true
+      },
+      {
+        "id": "W-18",
+        "from": "18:00",
+        "to": "19:00",
+        "gustKmh": 62,
+        "hold": true
+      },
+      {
+        "id": "W-19",
+        "from": "19:00",
+        "to": "20:00",
+        "gustKmh": 52,
+        "hold": false
+      },
+      {
+        "id": "W-20",
+        "from": "20:00",
+        "to": "21:00",
+        "gustKmh": 40,
+        "hold": false
+      },
+      {
+        "id": "W-21",
+        "from": "21:00",
+        "to": "22:00",
+        "gustKmh": 32,
+        "hold": false
+      },
+      {
+        "id": "W-22",
+        "from": "22:00",
+        "to": "23:00",
+        "gustKmh": 28,
+        "hold": false
+      },
+      {
+        "id": "W-23",
+        "from": "23:00",
+        "to": "24:00",
+        "gustKmh": 25,
+        "hold": false
+      }
+    ],
+    "walks": [
+      {
+        "id": "WK-gate-A",
+        "from": "gate",
+        "to": "A",
+        "m": 350,
+        "minutes": 5
+      },
+      {
+        "id": "WK-gate-B",
+        "from": "gate",
+        "to": "B",
+        "m": 500,
+        "minutes": 7
+      },
+      {
+        "id": "WK-gate-C",
+        "from": "gate",
+        "to": "C",
+        "m": 800,
+        "minutes": 10
+      },
+      {
+        "id": "WK-A-B",
+        "from": "A",
+        "to": "B",
+        "m": 300,
+        "minutes": 4
+      },
+      {
+        "id": "WK-A-C",
+        "from": "A",
+        "to": "C",
+        "m": 450,
+        "minutes": 6
+      },
+      {
+        "id": "WK-B-C",
+        "from": "B",
+        "to": "C",
+        "m": 600,
+        "minutes": 8
+      },
+      {
+        "id": "WK-station-gate",
+        "from": "station",
+        "to": "gate",
+        "m": 600,
+        "minutes": 8
+      }
+    ],
+    "stagesNow": [
+      {
+        "id": "A",
+        "now": "Soundcheck AR-05 at 14:40",
+        "nowArtist": "AR-05",
+        "next": "AR-05 16:00",
+        "nextArtist": "AR-05",
+        "status": "On time"
+      },
+      {
+        "id": "B",
+        "now": "AR-10 on stage to 15:10",
+        "nowArtist": "AR-10",
+        "next": "AR-11 15:30",
+        "nextArtist": "AR-11",
+        "status": "On time"
+      },
+      {
+        "id": "C",
+        "now": "Empty",
+        "nowArtist": null,
+        "next": "AR-16 15:00",
+        "nextArtist": "AR-16",
+        "status": "At risk"
+      }
+    ]
+  },
+  "constants": {
+    "festival": "Tidewave Festival",
+    "town": "Saltmouth",
+    "realPosition": "Zandvoort",
+    "venue": {
+      "lat": 52.373,
+      "lon": 4.526
+    },
+    "hotel": {
+      "name": "Hotel Marée",
+      "lat": 52.392,
+      "lon": 4.611,
+      "km": 6
+    },
+    "station": {
+      "name": "Saltmouth Central",
+      "lat": 52.3755,
+      "lon": 4.5339,
+      "mFromGate": 600
+    },
+    "timezone": "CEST",
+    "airports": {
+      "AMS": {
+        "iata": "AMS",
+        "name": "Amsterdam Schiphol",
+        "lat": 52.309,
+        "lon": 4.764,
+        "kmToAms": 0
+      },
+      "LIS": {
+        "iata": "LIS",
+        "name": "Lisbon",
+        "lat": 38.781,
+        "lon": -9.136,
+        "kmToAms": 1846
+      },
+      "BCN": {
+        "iata": "BCN",
+        "name": "Barcelona El Prat",
+        "lat": 41.297,
+        "lon": 2.078,
+        "kmToAms": 1241
+      },
+      "ATH": {
+        "iata": "ATH",
+        "name": "Athens",
+        "lat": 37.936,
+        "lon": 23.945,
+        "kmToAms": 2182
+      },
+      "CPH": {
+        "iata": "CPH",
+        "name": "Copenhagen",
+        "lat": 55.618,
+        "lon": 12.656,
+        "kmToAms": 633
+      },
+      "MAN": {
+        "iata": "MAN",
+        "name": "Manchester",
+        "lat": 53.349,
+        "lon": -2.28,
+        "kmToAms": 487
+      }
+    },
+    "headline": "18 km from Amsterdam Schiphol (AMS)",
+    "mapMarker": "Tidewave, 18 km from AMS",
+    "transfers": {
+      "landingToKerbMin": 30,
+      "shuttleAmsGateMin": 25,
+      "carAmsGateMin": 22,
+      "amsHotelMin": 20,
+      "hotelGateMin": 12,
+      "shuttleEveryMin": 30,
+      "shuttleDepartsAt": [
+        ":00",
+        ":30"
+      ]
+    },
+    "rules": {
+      "changeoverMin": 20,
+      "onSiteBeforeSetMin": 30,
+      "maxShiftH": 10,
+      "minRestH": 11,
+      "windHoldKmh": 55
+    },
+    "walkMPerMin": 80,
+    "artistVillageBehindAM": 150
+  },
+  "totals": {
+    "artists": {
+      "value": 20,
+      "of": "rows of artists",
+      "from": {
+        "collection": "artists",
+        "count": true
+      }
+    },
+    "openIncidents": {
+      "value": 7,
+      "of": "incidents with state Open",
+      "from": {
+        "collection": "incidents",
+        "where": {
+          "state": "Open"
+        },
+        "count": true
+      }
+    },
+    "highIncidents": {
+      "value": [
+        "INC-1",
+        "INC-2",
+        "INC-3"
+      ],
+      "of": "High incidents",
+      "from": {
+        "collection": "incidents",
+        "where": {
+          "severity": "High"
+        },
+        "list": "id"
+      }
+    },
+    "kmFromAms": {
+      "value": 18,
+      "of": "distanceKm(venue, AMS), rounded"
+    },
+    "flightsToAms": {
+      "value": 4,
+      "of": "arrivals by flight or private jet",
+      "from": {
+        "collection": "arrivals",
+        "where": {
+          "kind": {
+            "in": [
+              "flight",
+              "private jet"
+            ]
+          }
+        },
+        "count": true
+      }
+    },
+    "flightsDelayed": {
+      "value": [
+        "GW 412"
+      ],
+      "of": "delayed flights",
+      "from": {
+        "collection": "flights",
+        "where": {
+          "status": "Delayed"
+        },
+        "list": "id"
+      }
+    },
+    "trainArrivals": {
+      "value": [
+        "TR 905",
+        "TR 771"
+      ],
+      "of": "train rows on arrivals (TR 771 Cancelled)",
+      "from": {
+        "collection": "arrivals",
+        "where": {
+          "kind": "train"
+        },
+        "list": "ref"
+      }
+    },
+    "roadArrivals": {
+      "value": 4,
+      "of": "car and van arrivals",
+      "from": {
+        "collection": "arrivals",
+        "where": {
+          "kind": {
+            "in": [
+              "car",
+              "van"
+            ]
+          }
+        },
+        "count": true
+      }
+    },
+    "arrivals": {
+      "value": 10,
+      "of": "rows of arrivals",
+      "from": {
+        "collection": "arrivals",
+        "count": true
+      }
+    },
+    "crew": {
+      "value": 14,
+      "of": "rows of crew",
+      "from": {
+        "collection": "crew",
+        "count": true
+      }
+    },
+    "fatigue": {
+      "value": [
+        "Jonas Brandt",
+        "Ravi Desai"
+      ],
+      "of": "crew with a fatigue mark",
+      "from": {
+        "collection": "crew",
+        "where": {
+          "fatigue": true
+        },
+        "list": "name"
+      }
+    },
+    "conflicts": {
+      "value": [
+        "Pia Lindgren"
+      ],
+      "of": "crew booked twice",
+      "from": {
+        "collection": "crew",
+        "where": {
+          "conflict": true
+        },
+        "list": "name"
+      }
+    },
+    "windHoldHours": {
+      "value": 2,
+      "of": "weather rows with gusts of 55 km/h or more (17:00-19:00)",
+      "from": {
+        "collection": "weather",
+        "where": {
+          "hold": true
+        },
+        "count": true
+      }
+    },
+    "peakGustKmh": {
+      "value": 62,
+      "of": "highest gust",
+      "from": {
+        "collection": "weather",
+        "max": "gustKmh"
+      }
+    }
+  },
+  "agree": [
+    {
+      "id": "headline-km",
+      "description": "The header says \"18 km from Amsterdam Schiphol (AMS)\"",
+      "totals": "kmFromAms",
+      "label": "km from Amsterdam Schiphol"
+    },
+    {
+      "id": "open-incidents",
+      "description": "Open incidents KPI equals the rows on #/incidents",
+      "totals": "openIncidents",
+      "from": {
+        "collection": "incidents",
+        "where": {
+          "state": "Open"
+        },
+        "count": true
+      },
+      "label": "incidents"
+    },
+    {
+      "id": "high-incidents",
+      "description": "Only INC-1 to INC-3 are High",
+      "totals": "highIncidents",
+      "from": {
+        "collection": "incidents",
+        "where": {
+          "severity": "High"
+        },
+        "list": "id"
+      },
+      "label": "High"
+    },
+    {
+      "id": "arrivals-flights",
+      "description": "Today's arrivals: one row per flight to AMS, 4 rows",
+      "totals": "flightsToAms",
+      "from": {
+        "collection": "arrivals",
+        "where": {
+          "kind": {
+            "in": [
+              "flight",
+              "private jet"
+            ]
+          }
+        },
+        "count": true
+      },
+      "label": "arrivals"
+    },
+    {
+      "id": "arrivals-trains",
+      "description": "Arrivals list TR 905 and TR 771 (cancelled), no other train",
+      "totals": "trainArrivals",
+      "from": {
+        "collection": "arrivals",
+        "where": {
+          "kind": "train"
+        },
+        "list": "ref"
+      },
+      "label": "TR"
+    },
+    {
+      "id": "fatigue",
+      "description": "Crew planner marks fatigue on Jonas Brandt and Ravi Desai only",
+      "totals": "fatigue",
+      "from": {
+        "collection": "crew",
+        "where": {
+          "fatigue": true
+        },
+        "list": "name"
+      },
+      "label": "fatigue"
+    },
+    {
+      "id": "conflict",
+      "description": "Crew planner marks Pia Lindgren double-booked",
+      "totals": "conflicts",
+      "from": {
+        "collection": "crew",
+        "where": {
+          "conflict": true
+        },
+        "list": "name"
+      },
+      "label": "conflict"
+    },
+    {
+      "id": "wind",
+      "description": "Weather strip and INC-3: gusts of 55+ from 17:00 to 19:00, peak 62",
+      "totals": "windHoldHours",
+      "from": {
+        "collection": "weather",
+        "where": {
+          "hold": true
+        },
+        "count": true
+      },
+      "label": "km/h"
+    }
+  ],
+  "seedOnly": [
+    "incidents title/kind/raisedAt/decideBy and options of INC-4..INC-7 (options of INC-1..3 follow the brief)",
+    "agentLog",
+    "crew ids",
+    "arrivals rows (derived from the artist and flight tables)",
+    "stagesNow wording",
+    "constants.hotel/station coordinates"
+  ]
+}

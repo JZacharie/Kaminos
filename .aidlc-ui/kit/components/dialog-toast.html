@@ -1,0 +1,23 @@
+<!-- Dialog: native <dialog class="k-dialog">. Open with a button data-k-open="#id"; close with a <form method="dialog"> button,
+     data-k-close, Escape or a click on the backdrop. Always give the dialog a heading and aria-labelledby.
+     Toast: any button with data-k-toast="message" (+ optional data-k-toast-kind) or kitToast("message") in data.js.
+     Put dialogs in src/overlays.html (screens mode) or at the end of body.html. -->
+<div class="k-row">
+  <button class="k-btn k-btn-primary" type="button" data-k-open="#dlg-demo">Reassign vehicle</button>
+  <button class="k-btn" type="button" data-k-toast="Route plan saved for 5 Nov">Show toast</button>
+</div>
+<dialog class="k-dialog" id="dlg-demo" aria-labelledby="dlg-demo-title">
+  <form method="dialog">
+    <div class="k-dialog-head"><h2 id="dlg-demo-title">Reassign ZG-4471</h2></div>
+    <div class="k-dialog-body k-form">
+      <div class="k-field">
+        <label for="dlg-demo-driver">New driver</label>
+        <select class="k-select" id="dlg-demo-driver"><option>Hugo Lasheras</option><option>Carmen Soria</option></select>
+      </div>
+    </div>
+    <div class="k-dialog-foot">
+      <button class="k-btn" type="submit" value="cancel">Cancel</button>
+      <button class="k-btn k-btn-primary" type="submit" value="ok" data-k-toast="Vehicle reassigned">Reassign</button>
+    </div>
+  </form>
+</dialog>

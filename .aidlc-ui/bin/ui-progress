@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+'use strict';
+// ui-progress <ui-dir> --phase P --status S [--screen id] [--check c] [--n i] [--of N] [--version N] --message "text"
+// ui-progress <ui-dir> --plan | --sync | --watch | --stop-watch      (progress without a model: see lib/progress-sync.js)
+// Appends one event to <ui-dir>/progress.jsonl (contract: addon/templates/progress-events.md). Exit 0 ok, 2 usage.
+const path = require('node:path');
+const { appendProgress, PHASES, STATUSES, CHECKS } = require(path.join(__dirname, '..', 'lib', 'progress.js'));
+const sync = require(path.join(__dirname, '..', 'lib', 'progress-sync.js'));
+
+function usage(msg) {
+  if (msg) console.error(`ui-progress: ${msg}`);
+  console.error(`usage: ui-progress <ui-dir> --phase ${PHASES.join('|')} --status ${STATUSES.join('|')} --message "text"\n` +
+    `                   [--screen id] [--check ${CHECKS.join('|')}] [--n i] [--of N] [--version N]\n` +
+    '       ui-progress <ui-dir> --plan         brief.json exists: brief done + a "start" per screen and the dataset\n' +
+    '       ui-progress <ui-dir> --sync         a "done" per screen file / data.js that now exists (run after every builder returns)\n' +
+    '       ui-progress <ui-dir> --watch        start a detached watcher that runs --plan and --sync every 3 s until the build ends (45 min max)\n' +
+    '       ui-progress <ui-dir> --stop-watch   stop it');
+  process.exit(2);
+}
+
+const argv = process.argv.slice(2);
+if (argv.length === 0 || argv[0].startsWith('--')) usage('missing <ui-dir>');
+const uiDir = path.resolve(argv[0]);
+const rest = argv.slice(1);
+const MODES = ['--plan', '--sync', '--watch', '--stop-watch', '--watch-loop'];
+const modes = rest.filter((a) => MODES.includes(a));
+if (modes.length) {
+  const num = (name, dflt) => { const i = rest.indexOf(name); return i >= 0 ? Number(rest[i + 1]) : dflt; };
+  if (modes.includes('--watch-loop')) {
+    sync.watchLoop(uiDir, { intervalMs: num('--interval', 3) * 1000, maxMinutes: num('--max-minutes', 45) }).then(() => process.exit(0));
+  } else if (modes.includes('--stop-watch')) {
+    const pid = sync.stopWatcher(uiDir);
+    console.log(pid ? `progress: watcher ${pid} stopped` : 'progress: no watcher running');
+  } else {
+    const written = sync.syncProgress(uiDir, { plan: modes.includes('--plan') || modes.includes('--watch'), sync: modes.includes('--sync') || modes.includes('--watch') });
+    for (const e of written) console.log(`progress: ${e.phase}/${e.status}${e.screen ? ' ' + e.screen : ''} - ${e.message}`);
+    if (!written.length) console.log('progress: nothing new');
+    if (modes.includes('--watch')) {
+      const w = sync.startWatcher(uiDir, __filename);
+      console.log(w.started ? `progress: watcher started (pid ${w.pid}); it stops when the build ends` : `progress: watcher already running (pid ${w.pid})`);
+    }
+  }
+} else {
+  const ev = {};
+  const flags = { '--phase': 'phase', '--status': 'status', '--screen': 'screen', '--check': 'check', '--n': 'n', '--of': 'of', '--version': 'version', '--message': 'message' };
+  for (let i = 0; i < rest.length; i += 2) {
+    const k = flags[rest[i]];
+    if (!k || i + 1 >= rest.length) usage(`unknown or incomplete option "${rest[i]}"`);
+    ev[k] = rest[i + 1];
+  }
+  try {
+    const e = appendProgress(uiDir, ev);
+    console.log(`progress: ${e.phase}/${e.status}${e.screen ? ' ' + e.screen : ''}${e.check ? ' ' + e.check : ''} - ${e.message}`);
+  } catch (err) {
+    usage(err.message);
+  }
+}

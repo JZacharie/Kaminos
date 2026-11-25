@@ -1,0 +1,102 @@
+#!/usr/bin/env node
+'use strict';
+// ui-brief <record-dir> [--check] [--brief-only] [--questions-file <rel path>]
+// ui-brief --check-brief <file> [--strict]
+// Validates the design brief <record>/ui/src/brief.json and derives effects.json, ui-map.json and the questions of
+// intent-capture-questions.md from it. Contract: addon/templates/ui-brief.schema.json, addon/agents/README.md.
+// Exit 0 = OK, 1 = findings (one line each on stdout), 2 = usage error. Node core only (+ ajv from ../node_modules when present).
+
+const path = require('node:path');
+const lib = require(path.join(__dirname, '..', 'lib', 'ui-brief.js'));
+
+const USAGE = `usage: ui-brief <record-dir> [--check] [--brief-only] [--questions-file <rel path>]
+       ui-brief --check-brief <file> [--strict]
+
+  <record-dir>        the intent record (aidlc/spaces/<space>/intents/<YYMMDD>-<label>/); reads <record>/ui/src/brief.json
+  --check             validate only: brief schema + cross rules, the anchors of src/shell.html and src/screens/*.html
+                      against the brief, and src/data.js against the data contract (dataEntities, dataDerived; data.js
+                      is run in a sandbox) (BRIEF-<CODE> lines, exit 1 on any error); writes nothing
+  --brief-only        with --check: skip the source files and data.js (use right after writing brief.json, before the
+                      screens and the dataset exist)
+  --questions-file    questions file relative to the record (default ${lib.DEFAULT_QUESTIONS_REL})
+  (neither)           run the check, then write ui/src/effects.json, ui/ui-map.json and the questions file
+  --check-brief FILE  check an app brief (app-brief.md): size 4000-12000 bytes, template headings in order, >= 18 sample
+                      records, quality bar stated; BRIEFCHK-<CODE> lines
+  --strict            with --check-brief: require all nine template headings (the default tolerates a brief that
+                      predates the template, such as the SpudTrack golden example, with a WARN line)`;
+
+function usage(msg) {
+  if (msg) process.stderr.write(`ui-brief: ${msg}\n`);
+  process.stderr.write(`${USAGE}\n`);
+  process.exit(2);
+}
+
+const argv = process.argv.slice(2);
+if (argv.includes('-h') || argv.includes('--help')) { process.stdout.write(`${USAGE}\n`); process.exit(0); }
+const opts = { check: false, briefOnly: false, strict: false, questionsFile: lib.DEFAULT_QUESTIONS_REL, checkBrief: null };
+const positional = [];
+for (let i = 0; i < argv.length; i++) {
+  const a = argv[i];
+  if (a === '--check') opts.check = true;
+  else if (a === '--brief-only') opts.briefOnly = true;
+  else if (a === '--strict') opts.strict = true;
+  else if (a === '--questions-file') { if (i + 1 >= argv.length) usage('--questions-file needs a path'); opts.questionsFile = argv[++i]; }
+  else if (a === '--check-brief') { if (i + 1 >= argv.length) usage('--check-brief needs a file'); opts.checkBrief = argv[++i]; }
+  else if (a.startsWith('--')) usage(`unknown option ${a}`);
+  else positional.push(a);
+}
+
+function print(prefix, list) {
+  for (const f of list) process.stdout.write(`${prefix}${f.code} ${f.message}\n`);
+}
+
+if (opts.checkBrief !== null) {
+  if (positional.length || opts.check || opts.briefOnly) usage('--check-brief takes only a file (and --strict)');
+  const r = lib.checkBriefFile(path.resolve(opts.checkBrief), { strict: opts.strict });
+  print('BRIEFCHK-', r.errors);
+  print('WARN BRIEFCHK-', r.warnings);
+  process.stderr.write(r.errors.length ? `ui-brief --check-brief: FAIL (${r.errors.length} errors, ${r.warnings.length} warnings)\n` : `ui-brief --check-brief: PASS (${r.warnings.length} warnings)\n`);
+  process.exit(r.errors.length ? 1 : 0);
+}
+
+if (positional.length !== 1) usage('exactly one <record-dir> is required');
+if (opts.strict) usage('--strict only applies to --check-brief');
+if (opts.briefOnly && !opts.check) usage('--brief-only only applies to --check');
+if (path.isAbsolute(opts.questionsFile) || opts.questionsFile.split(/[\\/]/).includes('..')) usage('--questions-file must be a relative path inside the record');
+const recordDir = path.resolve(positional[0]);
+
+let loaded;
+try {
+  loaded = lib.loadBrief(recordDir);
+} catch (e) {
+  process.stderr.write(`ui-brief: ${e.message}\n`);
+  process.exit(2);
+}
+const errors = [...loaded.errors];
+const warnings = [...loaded.warnings];
+if (loaded.brief && !opts.briefOnly && (opts.check || errors.length === 0)) {
+  const src = lib.checkSources(loaded.brief, path.join(recordDir, 'ui'));
+  errors.push(...src.errors);
+  warnings.push(...src.warnings);
+  const data = lib.checkData(loaded.brief, path.join(recordDir, 'ui'));
+  errors.push(...data.errors);
+  warnings.push(...data.warnings);
+}
+print('BRIEF-', errors);
+print('WARN BRIEF-', warnings);
+if (errors.length) {
+  process.stderr.write(`ui-brief: FAIL (${errors.length} errors, ${warnings.length} warnings)${loaded.engine ? ` [schema: ${loaded.engine}]` : ''}\n`);
+  process.exit(1);
+}
+if (opts.check) {
+  process.stderr.write(`ui-brief --check: PASS (${warnings.length} warnings) [schema: ${loaded.engine}]\n`);
+  process.exit(0);
+}
+try {
+  const r = lib.generate(recordDir, loaded.brief, { questionsRel: opts.questionsFile });
+  process.stdout.write(`${r.report.join('\n')}\n`);
+  process.stderr.write(`ui-brief: OK (${warnings.length} warnings) [schema: ${loaded.engine}]\n`);
+} catch (e) {
+  process.stderr.write(`ui-brief: ${e.message}\n`);
+  process.exit(2);
+}

@@ -1,0 +1,81 @@
+#!/usr/bin/env node
+'use strict';
+// addon/bin/validate <record-dir> [--json] [--print-digests] [--check-freeze]
+// Rules: addon/ANCHORS.md sections 5-6. Codes: addon/bin/README.md.
+
+const fs = require('node:fs');
+const path = require('node:path');
+
+const USAGE = `usage: validate <record-dir> [--json] [--print-digests] [--check-freeze]
+
+  <record-dir>      AI-DLC intent record directory (aidlc/spaces/<space>/intents/<YYMMDD>-<label>/): the prototype is
+                    <record>/ui/ (v1.2) or, when ui/ has none, ideation/rough-mockups/ (v1.0/1.1);
+                    or a Canvas sketch directory (ui-map.json + prototype.html at its root; rule 9 findings are warnings).
+                    Layout order: ui/ > ideation/rough-mockups/ > sketch dir (ui/ and rough-mockups/ both present: ui/ wins, WARN LAYOUT-BOTH)
+  --json            print {"ok", "errors", "warnings"} as JSON instead of one line per finding
+  --print-digests   print {"uiVersion","prototypeSha256","uiMapSha256"} as JSON and exit (files of the resolved layout)
+  --check-freeze    also compare inception/ui-freeze/ui-freeze-record.md with the current files, require ui/mock-only.md and warn about answered questions that are on no ui version
+
+exit 0 = PASS, 1 = FAIL (findings on stdout), 2 = usage error`;
+
+function usage(msg) {
+  if (msg) process.stderr.write(`validate: ${msg}\n`);
+  process.stderr.write(USAGE + '\n');
+  process.exit(2);
+}
+
+function main(argv) {
+  const flags = new Set();
+  const positional = [];
+  for (const a of argv) {
+    if (a === '--help' || a === '-h') {
+      process.stdout.write(USAGE + '\n');
+      process.exit(0);
+    }
+    if (a.startsWith('--')) {
+      if (!['--json', '--print-digests', '--check-freeze'].includes(a)) usage(`unknown option ${a}`);
+      flags.add(a);
+    } else positional.push(a);
+  }
+  if (positional.length !== 1) usage(positional.length === 0 ? 'missing <record-dir>' : 'expected exactly one <record-dir>');
+  if (flags.has('--print-digests') && flags.has('--check-freeze')) usage('--print-digests and --check-freeze cannot be combined');
+
+  const recordDir = path.resolve(positional[0]);
+  let st;
+  try {
+    st = fs.statSync(recordDir);
+  } catch {
+    usage(`record directory not found: ${positional[0]}`);
+  }
+  if (!st.isDirectory()) usage(`not a directory: ${positional[0]}`);
+
+  const lib = require('../lib/validate-record');
+  const line = (kind, f) => `${kind} ${f.code} ${f.file}: ${f.message}`;
+
+  if (flags.has('--print-digests')) {
+    const r = lib.printDigests(recordDir);
+    if (r.errors) {
+      for (const e of r.errors) process.stderr.write(line('ERROR', e) + '\n');
+      process.exit(1);
+    }
+    process.stdout.write(JSON.stringify(r.digests) + '\n');
+    process.exit(0);
+  }
+
+  const result = lib.validateRecord(recordDir, { checkFreeze: flags.has('--check-freeze') });
+  if (flags.has('--json')) {
+    process.stdout.write(JSON.stringify({ ok: result.ok, errors: result.errors, warnings: result.warnings }, null, 2) + '\n');
+  } else {
+    const out = [...result.errors.map((f) => line('ERROR', f)), ...result.warnings.map((f) => line('WARN', f))];
+    if (out.length) process.stdout.write(out.join('\n') + '\n');
+    process.stderr.write(`${result.ok ? 'PASS' : 'FAIL'} (${result.errors.length} errors, ${result.warnings.length} warnings)\n`);
+  }
+  process.exit(result.ok ? 0 : 1);
+}
+
+try {
+  main(process.argv.slice(2));
+} catch (e) {
+  process.stderr.write(`validate: internal error: ${e && e.message ? e.message : e}\n`);
+  process.exit(2);
+}

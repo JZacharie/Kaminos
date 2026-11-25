@@ -1,0 +1,461 @@
+#!/usr/bin/env node
+'use strict';
+// ui-build <ui-dir> [--version N] [--check] [--no-progress]
+// Assembles <ui-dir>/prototype.html from the build inputs in <ui-dir>/src/ and the design kit (../kit).
+// Contract: addon/kit/README.md. No dependencies beyond Node core.
+
+const fs = require('node:fs');
+const path = require('node:path');
+
+const KIT = path.join(__dirname, '..', 'kit');
+const BLOCKS = path.join(KIT, 'blocks');
+const NOT_BLOCKS = new Set(['define', 'h', 'list', 'mount', 'warnings', 'core', 'palette']); // K.block.<these> are API, not blocks
+const BLOCK_DEPS = { table: ['filterbar'] };                                      // blocks another block calls at run time (table search and filters use filterbar); inlined too
+const MEDIA_BLOCKS = ['calendar', 'chat', 'comments', 'rows', 'player', 'posts', 'profile', 'tiles', 'tracks']; // consumer-style blocks (and tracks, KC1: clip and track kind icons) that draw avatars, covers, stars and icons with kit/blocks/media.lib.{js,css} (shared helpers, not a block)
+const BLOCK_DATA = { map: ['basemap.js'] };                                         // kit/data files a block needs, inlined in front of it
+const ACCENTS = ['blue', 'gold', 'teal', 'indigo', 'green', 'orange', 'violet', 'rose'];
+const USAGE = `usage: ui-build <ui-dir> [--version N] [--check] [--no-progress]
+
+  <ui-dir>        the living UI directory (<record>/ui). Build inputs live in <ui-dir>/src/:
+                    body.html                 body content (top bar, nav, <main> with one <section data-route> per screen)
+                    -- or --
+                    shell.html                optional, before <main> (skip link is added for you)
+                    screens/*.html            one <section data-route="#/x"> per file, sorted by file name, wrapped in <main id="k-main">
+                    overlays.html             optional, after <main> (dialogs)
+                    screens/NN-<id>.blocks.js optional, screens mode: block configs of that screen (window.UI_BLOCKS.<key> = function (CANON, el) { return {...}; }); inlined after
+                                              data.js, one <script> per file. Block placeholders in the markup: <div data-k-block="table" data-k-cfg="<key>"></div>
+                    data.js                   optional; seed.js and charts.js helpers (and basemap.js when data.js uses it) are inlined in front of it
+                    data.seed.js              optional, written by ui-seed-import (canonical seed of a workshop app); inlined between the kit helpers and data.js
+                    effects.json              optional {"effects":[...]} (ANCHORS 2b); written as the single #aidlc-effects block
+                    head.json                 optional {"title","lang","themeColor","accent","await","blocks","motion"}; accent is one of ${ACCENTS.join('|')} (kit components via data-accent; the blocks, when used, via data-k-accent on <html>, in every block theme); await:true adds data-k-await to <html>;
+                                              blocks: ["table","map",...] = UI blocks to inline (kit/blocks/<name>.js + .css). Blocks called as K.block.<name>( or
+                                              placed as data-k-block="<name>" in the screens, shell, data.js or *.blocks.js are detected and added automatically; none used = no blocks code in the output
+                                              motion: true = inline the motion kit (kit/motion.css + motion.js; "fx" adds the wow pack kit/motion-fx.{css,js}: morph, tilt, aurora, scramble, drag, particles, story, magnetic, shatter, trail, carousel, flip, spotlight, fireworks, found by their data-k-* attributes; animations: kit/README.md "Motion"); detected automatically from data-k-anim, data-k-stagger, data-k-countup, data-k-progress, data-k-ring, data-k-load, data-k-confetti, data-k-motion, k-skel, k-lift, k-glow, k-press and kitMotion; none used = no motion code in the output
+                    extra.css                 optional, appended after the kit CSS (keep it small; no layout rules)
+  --version N     value of <meta name="aidlc-ui-version"> (default: uiVersion of <ui-dir>/ui-map.json, else 1)
+  --check         validate the inputs only, write nothing
+  --no-progress   do not append assemble events to <ui-dir>/progress.jsonl
+
+exit 0 = OK, 1 = input errors (listed on stderr), 2 = usage error`;
+
+function usage(msg) {
+  if (msg) process.stderr.write(`ui-build: ${msg}\n`);
+  process.stderr.write(USAGE + '\n');
+  process.exit(2);
+}
+
+const errors = [];
+const warnings = [];
+const err = (file, line, msg) => errors.push({ file, line, msg });
+const warn = (file, line, msg) => warnings.push({ file, line, msg });
+const fmt = (kind, f) => `${kind} ${f.file}${f.line ? ':' + f.line : ''}: ${f.msg}`;
+
+const lineOf = (text, index) => text.slice(0, index).split('\n').length;
+const blank = (text, re) => text.replace(re, (m) => m.replace(/[^\n]/g, ' '));
+const read = (p) => fs.readFileSync(p, 'utf8').replace(/\r\n?/g, '\n');
+const isFile = (p) => fs.statSync(p, { throwIfNoEntry: false })?.isFile() === true;
+const isDir = (p) => fs.statSync(p, { throwIfNoEntry: false })?.isDirectory() === true;
+
+// ---------------------------------------------------------------------------------------------
+// Scans
+
+const NS = /http:\/\/www\.w3\.org\/(?:2000\/svg|1999\/xlink|1999\/xhtml|2000\/xmlns|XML\/1998\/namespace|1998\/Math\/MathML)\/?(?![\w/.\-])/g;
+const JS_NET = [
+  [/\bfetch\s*\(/, 'fetch()'], [/XMLHttpRequest/, 'XMLHttpRequest'], [/\bWebSocket\b/, 'WebSocket'], [/EventSource/, 'EventSource'],
+  [/sendBeacon/, 'sendBeacon'], [/importScripts/, 'importScripts'], [/\bimport\s*\(/, 'dynamic import()'], [/serviceWorker/, 'serviceWorker'],
+];
+
+/** Network and external-file references in any source text (html, css, js). */
+function scanNetwork(file, text, kind) {
+  const t = blank(blank(text, NS), kind === 'html' ? /<!--[\s\S]*?-->/g : /\/\*[\s\S]*?\*\//g);
+  for (const m of t.matchAll(/\b(?:https?|wss?|ftp):\/\/[^\s"'<>)`]+/gi)) {
+    err(file, lineOf(t, m.index), `network URL "${m[0].slice(0, 60)}": prototypes must work offline (inline SVG / data: URIs only)`);
+  }
+  for (const m of t.matchAll(/\b(?:src|href|srcset|action|poster|formaction)\s*=\s*["']?\s*\/\/[^\s"'/]/gi)) {
+    err(file, lineOf(t, m.index), 'protocol-relative URL');
+  }
+  for (const m of t.matchAll(/url\(\s*["']?(?!data:|#)[^)]/gi)) {
+    if (kind === 'js' && /(?:\bnew\s+|[\w$.])$/.test(t.slice(Math.max(0, m.index - 5), m.index))) continue; // the JS constructor "new URL(x)" and calls like decodeURL( are not CSS
+    err(file, lineOf(t, m.index), 'CSS url() to an external file (use data: URIs or inline SVG)');
+  }
+  for (const m of t.matchAll(/@import\b/g)) err(file, lineOf(t, m.index), '@import');
+  if (kind !== 'css') {
+    for (const [re, name] of JS_NET) {
+      const m = re.exec(t);
+      if (m) err(file, lineOf(t, m.index), `${name}: network APIs are not allowed`);
+    }
+  }
+  if (kind === 'html') {
+    for (const m of t.matchAll(/<script\b[^>]*\bsrc\s*=/gi)) err(file, lineOf(t, m.index), '<script src>: scripts must be inline');
+    for (const m of t.matchAll(/<link\b/gi)) err(file, lineOf(t, m.index), '<link> is not allowed (CSS goes into src/extra.css)');
+    for (const m of t.matchAll(/<(?:img|source|video|audio|iframe|embed|object)\b[^>]*?\b(?:src|data)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi)) {
+      if (/^\s*data:/i.test(m[1] ?? m[2] ?? m[3] ?? '')) continue;
+      err(file, lineOf(t, m.index), 'external file reference in src: use inline <svg> or a data: URI');
+    }
+  }
+}
+
+/** Markup lint: ids, document tags, advisory warnings. Returns the ids found. */
+function scanHtml(file, text) {
+  const t = blank(blank(blank(text, /<!--[\s\S]*?-->/g), /<script\b[\s\S]*?<\/script>/gi), /<style\b[\s\S]*?<\/style>/gi);
+  const ids = [];
+  for (const m of t.matchAll(/\sid\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) ids.push({ id: m[1] ?? m[2], file, line: lineOf(t, m.index) });
+  for (const m of t.matchAll(/<\/?(html|head|body)[\s>]/gi)) err(file, lineOf(t, m.index), `<${m[1].toLowerCase()}> tag: sources contain body content only`);
+  for (const m of t.matchAll(/<table\b([^>]*)>/gi)) {
+    if (!/\bk-table\b/.test(m[1])) warn(file, lineOf(t, m.index), '<table> without class "k-table": no mobile card view, will overflow at 375 px');
+  }
+  for (const m of t.matchAll(/<img\b([^>]*)>/gi)) {
+    if (!/\balt\s*=/.test(m[1])) warn(file, lineOf(t, m.index), '<img> without alt');
+  }
+  for (const m of t.matchAll(/\bstyle\s*=\s*"([^"]*)"/gi)) {
+    for (const w of m[1].matchAll(/(?:^|[;\s])(?:min-)?width\s*:\s*(\d+)px/gi)) {
+      if (+w[1] > 340) warn(file, lineOf(t, m.index), `fixed width ${w[1]}px in a style attribute overflows at 375 px; use the grid/utility classes`);
+    }
+  }
+  return ids;
+}
+
+// ---------------------------------------------------------------------------------------------
+
+function main(argv) {
+  let version = null;
+  let check = false;
+  let progress = true;
+  const pos = [];
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--help' || a === '-h') { process.stdout.write(USAGE + '\n'); process.exit(0); }
+    else if (a === '--check') check = true;
+    else if (a === '--no-progress') progress = false;
+    else if (a === '--version') {
+      const v = argv[++i];
+      if (!/^[1-9][0-9]*$/.test(v ?? '')) usage('--version needs a positive integer');
+      version = Number(v);
+    } else if (a.startsWith('--')) usage(`unknown option ${a}`);
+    else pos.push(a);
+  }
+  if (pos.length !== 1) usage(pos.length ? 'expected exactly one <ui-dir>' : 'missing <ui-dir>');
+  const ui = path.resolve(pos[0]);
+  if (!isDir(ui)) usage(`not a directory: ${pos[0]}`);
+  const src = path.join(ui, 'src');
+  if (!isDir(src)) { process.stderr.write(`ERROR src: ${src} not found (build inputs go to <ui-dir>/src/)\n`); process.exit(1); }
+
+  // ---- progress events (never fatal)
+  let appendProgress = null;
+  try { ({ appendProgress } = require(path.join(__dirname, '..', 'lib', 'progress.js'))); } catch (_) { /* optional */ }
+  const emit = (ev) => { if (progress && !check && appendProgress) appendProgress(ui, { phase: 'assemble', ...ev }, { quiet: true }); };
+
+  // ---- kit files
+  const kitFile = (rel) => {
+    const p = path.join(KIT, rel);
+    if (!isFile(p)) { process.stderr.write(`ui-build: kit file missing: ${p}\n`); process.exit(2); }
+    return read(p);
+  };
+  const kitCss = kitFile('kit.css');
+  const kitJs = kitFile('kit.js');
+
+  // ---- ui-map (optional, for defaults and soft cross-checks)
+  let uiMap = null;
+  const mapPath = path.join(ui, 'ui-map.json');
+  if (isFile(mapPath)) {
+    try { uiMap = JSON.parse(read(mapPath)); } catch (e) { warn('ui-map.json', 0, `not valid JSON (${e.message})`); }
+  }
+  if (version == null) version = Number.isInteger(uiMap?.uiVersion) && uiMap.uiVersion >= 1 ? uiMap.uiVersion : 1;
+
+  // ---- body / screens
+  const pieces = []; // { rel, text }
+  const bodyPath = path.join(src, 'body.html');
+  const screensDir = path.join(src, 'screens');
+  const screens = isDir(screensDir) ? fs.readdirSync(screensDir).filter((n) => n.endsWith('.html')).sort() : [];
+  let body = '';
+  if (isFile(bodyPath) && screens.length) {
+    err('src', 0, 'both body.html and screens/*.html exist: use one of them');
+  } else if (isFile(bodyPath)) {
+    pieces.push({ rel: 'src/body.html', text: read(bodyPath) });
+    body = pieces[0].text.trimEnd();
+  } else if (screens.length) {
+    const shell = path.join(src, 'shell.html');
+    const over = path.join(src, 'overlays.html');
+    const parts = ['<a class="k-skip" href="#k-main">Skip to content</a>'];
+    if (isFile(shell)) { const p = { rel: 'src/shell.html', text: read(shell) }; pieces.push(p); parts.push(p.text.trimEnd()); }
+    parts.push('<main id="k-main" class="k-main k-container" tabindex="-1">');
+    for (const n of screens) { const p = { rel: `src/screens/${n}`, text: read(path.join(screensDir, n)) }; pieces.push(p); parts.push(p.text.trimEnd()); }
+    parts.push('</main>');
+    if (isFile(over)) { const p = { rel: 'src/overlays.html', text: read(over) }; pieces.push(p); parts.push(p.text.trimEnd()); }
+    body = parts.join('\n');
+  } else {
+    err('src', 0, 'missing body: expected src/body.html or src/screens/*.html');
+  }
+  for (const p of pieces) if (!p.text.trim()) err(p.rel, 0, 'file is empty');
+
+  // ---- per-screen consistency (screens mode): one section per file, route matches ui-map.json, file name NN-<screen-id>.html
+  const screenInfo = []; // { file, route, bytes }
+  const mapScreens = Array.isArray(uiMap?.screens) ? uiMap.screens : null;
+  for (const n of screens) {
+    const rel = `src/screens/${n}`;
+    const p = pieces.find((x) => x.rel === rel);
+    if (!p) continue;
+    const t = blank(p.text, /<!--[\s\S]*?-->/g);
+    const routes = [...t.matchAll(/<section\b[^>]*\bdata-route\s*=\s*"([^"]*)"/g)].map((m) => m[1]);
+    const total = (t.match(/\bdata-route\s*=/g) || []).length;
+    if (!/^[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*\.html$/.test(n)) warn(rel, 0, 'file name should be NN-<screen-id>.html (for example 20-shipments.html)');
+    if (routes.length !== 1 || total !== 1) err(rel, 0, `must contain exactly one <section data-route="#/..."> (found ${routes.length} sections, ${total} data-route attributes)`);
+    else if (!/^#\/[A-Za-z0-9/_-]*$/.test(routes[0])) err(rel, 0, `route "${routes[0]}" is not a hash route like #/shipments`);
+    for (const m of t.matchAll(/<section\b[^>]*\bdata-route\s*=\s*"[^"]*"[^>]*>/g)) {
+      if (/\s(?:hidden|aria-hidden)(?=[\s=>\/])/.test(m[0])) err(rel, 0, 'the <section data-route> must not carry hidden or aria-hidden: the kit router skips such sections, so the screen never shows (A27 run 4). The router hides the inactive screens itself');
+    }
+    if (routes.length === 1 && mapScreens) {
+      const id = (/^[0-9]{2}-(.+)\.html$/.exec(n) || [])[1];
+      const byId = mapScreens.find((s) => s.id === id);
+      if (byId && byId.route !== routes[0]) err(rel, 0, `route "${routes[0]}" differs from ui-map.json screen "${id}" (${byId.route})`);
+      else if (!byId && !mapScreens.some((s) => s.route === routes[0])) err(rel, 0, `route "${routes[0]}" is not in ui-map.json screens[]`);
+    }
+    screenInfo.push({ file: n, route: routes[0] || '-', bytes: Buffer.byteLength(p.text), anchors: (t.match(/\sid\s*=\s*"a-[a-z0-9-]+"/g) || []).length });
+  }
+  const dupRoutes = screenInfo.map((s) => s.route).filter((r, i, a) => r !== '-' && a.indexOf(r) !== i);
+  for (const r of new Set(dupRoutes)) err('src/screens', 0, `route "${r}" is used by more than one screen file`);
+  const nScreens = screens.length || (isFile(bodyPath) ? 1 : 0);
+  emit({ status: 'start', n: 0, of: Math.max(nScreens, 1), version, message: `Assembling the prototype from ${nScreens} screen${nScreens === 1 ? '' : 's'}` });
+
+  // ---- optional files
+  const dataPath = path.join(src, 'data.js');
+  const data = isFile(dataPath) ? read(dataPath) : null;
+  const seedJsPath = path.join(src, 'data.seed.js');
+  const seedJs = isFile(seedJsPath) ? read(seedJsPath) : null;
+  if (seedJs != null && /<\/script/i.test(seedJs)) err('src/data.seed.js', lineOf(seedJs, seedJs.search(/<\/script/i)), 'contains "</script": run ui-seed-import again');
+  const blockCfgs = (isDir(screensDir) ? fs.readdirSync(screensDir).filter((n) => /\.blocks\.js$/.test(n)).sort() : []).map((n) => ({ rel: `src/screens/${n}`, text: read(path.join(screensDir, n)) })); // screens/NN-<id>.blocks.js
+  for (const b of blockCfgs) if (/<\/script/i.test(b.text)) err(b.rel, lineOf(b.text, b.text.search(/<\/script/i)), 'contains "</script": split the string');
+  const extraPath = path.join(src, 'extra.css');
+  const extra = isFile(extraPath) ? read(extraPath) : '';
+  if (data != null && /<\/script/i.test(data)) err('src/data.js', lineOf(data, data.search(/<\/script/i)), 'contains "</script": split the string');
+  if (/<\/style/i.test(extra)) err('src/extra.css', 0, 'contains "</style"');
+
+  let head = {};
+  const headPath = path.join(src, 'head.json');
+  if (isFile(headPath)) {
+    try { head = JSON.parse(read(headPath)); } catch (e) { err('src/head.json', 0, `not valid JSON (${e.message})`); head = {}; }
+    if (head === null || typeof head !== 'object' || Array.isArray(head)) { err('src/head.json', 0, 'must be an object'); head = {}; }
+    for (const k of Object.keys(head)) if (!['title', 'lang', 'themeColor', 'accent', 'await', 'blocks', 'motion'].includes(k)) err('src/head.json', 0, `unknown key "${k}"`);
+    if (head.title != null && (typeof head.title !== 'string' || !head.title.trim())) err('src/head.json', 0, 'title must be a non-empty string');
+    if (head.lang != null && !/^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(head.lang)) err('src/head.json', 0, 'lang must be a BCP 47 tag such as "en" or "es-ES"');
+    if (head.themeColor != null && !/^#[0-9a-fA-F]{6}$/.test(head.themeColor)) err('src/head.json', 0, 'themeColor must be #rrggbb');
+    if (head.await != null && typeof head.await !== 'boolean') err('src/head.json', 0, 'await must be true or false');
+    if (head.motion != null && typeof head.motion !== 'boolean' && head.motion !== 'fx') err('src/head.json', 0, 'motion must be true, false or "fx"');
+    if (head.blocks != null && (!Array.isArray(head.blocks) || head.blocks.some((b) => typeof b !== 'string'))) err('src/head.json', 0, 'blocks must be an array of block names, for example ["table","map"]');
+    if (head.accent != null && !ACCENTS.includes(head.accent)) err('src/head.json', 0, `accent must be one of ${ACCENTS.join(', ')}`);
+  }
+
+  let effects = [];
+  const effPath = path.join(src, 'effects.json');
+  if (isFile(effPath)) {
+    let j = null;
+    try { j = JSON.parse(read(effPath)); } catch (e) { err('src/effects.json', 0, `not valid JSON (${e.message})`); }
+    if (j !== null) {
+      if (typeof j !== 'object' || Array.isArray(j) || !Array.isArray(j.effects) || Object.keys(j).some((k) => k !== 'effects')) {
+        err('src/effects.json', 0, 'must be {"effects":[...]} and nothing else');
+      } else {
+        effects = j.effects;
+        effects.forEach((e, i) => {
+          if (!e || typeof e.question !== 'string' || typeof e.answer !== 'string' || !Array.isArray(e.ops) || !e.ops.length) err('src/effects.json', 0, `effects[${i}] needs question, answer and a non-empty ops array`);
+        });
+      }
+    }
+  }
+
+  // ---- scans
+  const ids = [];
+  for (const p of pieces) {
+    scanNetwork(p.rel, p.text, 'html');
+    ids.push(...scanHtml(p.rel, p.text));
+  }
+  if (data != null) scanNetwork('src/data.js', data, 'js');
+  for (const b of blockCfgs) scanNetwork(b.rel, b.text, 'js');
+  if (seedJs != null) scanNetwork('src/data.seed.js', seedJs, 'js');
+  if (extra) scanNetwork('src/extra.css', extra, 'css');
+  const seen = new Map();
+  for (const x of ids) {
+    if (seen.has(x.id)) err(x.file, x.line, `duplicate id "${x.id}" (first at ${seen.get(x.id).file}:${seen.get(x.id).line})`);
+    else seen.set(x.id, x);
+  }
+  for (const e of effects) {
+    for (const op of e?.ops ?? []) {
+      if (op && typeof op.target === 'string' && pieces.length && !seen.has(op.target)) err('src/effects.json', 0, `effect target "${op.target}" is not an id in the markup (${e.question} ${e.answer})`);
+    }
+  }
+
+  // ---- blocks: head.json "blocks" + K.block.<name>( calls in the screens and data files (union), in a stable order
+  const availBlocks = isDir(BLOCKS) ? fs.readdirSync(BLOCKS).filter((n) => /^[a-z][a-z0-9]*\.js$/.test(n)).map((n) => n.slice(0, -3)).filter((n) => !NOT_BLOCKS.has(n)).sort() : [];
+  const wanted = new Map(); // name -> where it came from
+  for (const b of Array.isArray(head.blocks) ? head.blocks : []) if (typeof b === 'string' && !wanted.has(b)) wanted.set(b, { file: 'src/head.json', line: 0 });
+  const jsCode = (t) => blank(blank(t, /\/\*[\s\S]*?\*\//g), /(^|[^:\w'"`\\])\/\/[^\n]*/gm);
+  const callScans = pieces.map((p) => [p.rel, jsCode(blank(p.text, /<!--[\s\S]*?-->/g))]);
+  if (seedJs != null) callScans.push(['src/data.seed.js', jsCode(seedJs)]);
+  if (data != null) callScans.push(['src/data.js', jsCode(data)]);
+  for (const b of blockCfgs) callScans.push([b.rel, jsCode(b.text)]);
+  for (const [file, t] of callScans) {
+    for (const m of t.matchAll(/\bK\.block\.([A-Za-z_$][\w$]*)\s*\(/g)) {
+      if (NOT_BLOCKS.has(m[1])) continue;
+      if (!wanted.has(m[1])) wanted.set(m[1], { file, line: lineOf(t, m.index) });
+    }
+  }
+  // declarative placeholders: <div data-k-block="table" data-k-cfg="shipments"> in the markup (shell, screens, body, overlays); each needs a data-k-cfg and a config in UI_BLOCKS
+  const cfgText = [...blockCfgs.map((b) => b.text), data ?? '', seedJs ?? '', ...pieces.flatMap((p) => [...p.text.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map((m) => m[1]))].join('\n'); // configs live in *.blocks.js, data.js or an inline <script> of the shell/screen
+  for (const p of pieces) {
+    const t = blank(p.text, /<!--[\s\S]*?-->/g);
+    for (const m of t.matchAll(/<[a-z][^>]*?\bdata-k-block\s*=\s*(?:"([^"]*)"|'([^']*)')[^>]*>/gi)) {
+      const name = m[1] ?? m[2];
+      const key = (/\bdata-k-cfg\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(m[0]) || [])[1];
+      if (!wanted.has(name)) wanted.set(name, { file: p.rel, line: lineOf(t, m.index) });
+      if (!key) warn(p.rel, lineOf(t, m.index), `data-k-block="${name}" without data-k-cfg: the block is not mounted (add data-k-cfg="<key>" and window.UI_BLOCKS.<key>)`);
+      else if (!new RegExp('(?:UI_BLOCKS\\s*(?:\\.\\s*' + key.replace(/[^\w$]/g, '\\$&') + '\\b|\\[\\s*[\'"]' + key.replace(/[^\w$]/g, '\\$&') + '[\'"]\\s*\\])|[\'"]?\\b' + key.replace(/[^\w$]/g, '\\$&') + '[\'"]?\\s*:)').test(cfgText)) {
+        warn(p.rel, lineOf(t, m.index), `data-k-cfg="${key}": no UI_BLOCKS.${key} found in screens/*.blocks.js, data.js or an inline <script> (the block would show an inline error)`);
+      }
+    }
+  }
+  for (const b of [...wanted.keys()]) for (const d of BLOCK_DEPS[b] || []) if (!wanted.has(d)) wanted.set(d, wanted.get(b));
+  const useBlocks = [...wanted.keys()].sort();
+  // motion (kit/motion.css + motion.js, KN1): inlined only when the prototype asks for an animation (data-k-anim, data-k-stagger, data-k-countup, data-k-progress, data-k-ring, data-k-load, data-k-confetti, data-k-motion, k-skel/k-lift/k-glow/k-press, kitMotion) or head.json "motion": true; otherwise the output has no motion code at all
+  const MOTION_USE = /\bdata-k-(?:anim|stagger|countup|progress|ring|load|confetti|motion)\b|\bkitMotion\b|\bk-(?:skel|lift|glow|press)\b/;
+  const FX_USE = /\bdata-k-(?:morph|tilt|aurora|scramble|drag|particles|story|magnetic|shatter|trail|carousel|flip|spotlight|fireworks)\b|\bkitMotion\s*\.\s*(?:morph|shatter|fireworks|spotlight|trail|flip)\b/;   // the "wow" pack (kit/motion-fx.css + motion-fx.js), which needs the motion kit too
+  const scanTexts = () => [...pieces.map((p) => blank(p.text, /<!--[\s\S]*?-->/g)), ...callScans.map((c) => c[1])];
+  const useFx = head.motion === 'fx' || scanTexts().some((t) => FX_USE.test(t));
+  const useMotion = useFx || head.motion === true || [...pieces.map((p) => blank(p.text, /<!--[\s\S]*?-->/g)), ...callScans.map((c) => c[1])].some((t) => MOTION_USE.test(t));
+  for (const b of useBlocks) {
+    const w = wanted.get(b);
+    if (!availBlocks.includes(b)) err(w.file, w.line, `unknown block "${b}" (K.block.${b}); available blocks: ${availBlocks.join(', ') || '(none)'}`);
+  }
+
+  // ---- layout classes: an unknown k-* class (k-span-7 before it existed) styles nothing, and an unknown span collapses its grid cell to one column
+  const knownK = new Set();
+  const addK = (css) => { for (const m of css.matchAll(/\.(k-[a-z0-9][a-z0-9_-]*)/gi)) knownK.add(m[1]); };
+  addK(kitCss); addK(extra);
+  if (isFile(path.join(KIT, 'motion.css'))) addK(kitFile('motion.css'));
+  if (isFile(path.join(KIT, 'motion-fx.css'))) addK(kitFile('motion-fx.css'));
+  for (const m of kitJs.matchAll(/(?<![\w-])(k-[a-z0-9][a-z0-9-]*)/gi)) knownK.add(m[1]);                                  // classes kit.js sets or reads
+  const compDir = path.join(KIT, 'components');
+  for (const f of isDir(compDir) ? fs.readdirSync(compDir) : []) if (/\.html$/.test(f)) for (const m of kitFile(path.join('components', f)).matchAll(/\bclass\s*=\s*"([^"]*)"/g)) for (const c of m[1].split(/\s+/)) if (/^k-/.test(c)) knownK.add(c); // hook classes of the snippets (k-th-text)
+  for (const f of isDir(BLOCKS) ? fs.readdirSync(BLOCKS) : []) if (/\.css$/.test(f)) addK(kitFile(path.join('blocks', f)));
+  const spans = [...knownK].filter((c) => /^k-span-\d+$/.test(c)).map((c) => +c.slice(7)).sort((a, b) => a - b);
+  const warnedK = new Set();
+  for (const p of pieces) {
+    const t = blank(blank(blank(p.text, /<!--[\s\S]*?-->/g), /<script\b[\s\S]*?<\/script>/gi), /<style\b[\s\S]*?<\/style>/gi);
+    for (const m of t.matchAll(/\bclass\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
+      for (const c of (m[1] ?? m[2]).split(/\s+/)) {
+        if (!/^k-[a-z0-9]/i.test(c) || knownK.has(c) || warnedK.has(p.rel + c)) continue;
+        warnedK.add(p.rel + c);
+        warn(p.rel, lineOf(t, m.index), /^k-span-\d+$/.test(c)
+          ? `unknown grid class "${c}": the cell collapses to one narrow column. Available spans: ${spans.map((n) => 'k-span-' + n).join(', ')}`
+          : `unknown class "${c}": not defined in kit.css, the blocks CSS or src/extra.css, so it styles nothing${/^k-(?:span|col|cols|grid|row|stack|gap)\b/.test(c) ? ' (layout classes: see kit/LAYOUT-RULES.md)' : ''}`);
+      }
+    }
+  }
+
+  // ---- soft cross-checks against ui-map.json
+  const routesInSrc = new Set([...pieces.flatMap((p) => [...blank(p.text, /<!--[\s\S]*?-->/g).matchAll(/\bdata-route\s*=\s*"([^"]*)"/g)].map((m) => m[1]))]);
+  if (uiMap && Array.isArray(uiMap.screens) && pieces.length) {
+    for (const s of uiMap.screens) {
+      if (s.id !== 'shell' && s.route && !routesInSrc.has(s.route)) warn('ui-map.json', 0, `screen "${s.id}": no <section data-route="${s.route}"> in src`);
+    }
+    const mapRoutes = new Set(uiMap.screens.map((s) => s.route));
+    for (const r of routesInSrc) if (!mapRoutes.has(r)) warn('src', 0, `data-route="${r}" is not a screens[].route in ui-map.json`);
+    for (const el of uiMap.elements ?? []) if (el.id && !seen.has(el.id)) warn('ui-map.json', 0, `element "${el.id}" has no id in src (stale ui-map.json?)`);
+  }
+  if (pieces.length && !routesInSrc.size) warn('src', 0, 'no <section data-route="#/..."> found: the hash router has nothing to show');
+
+  // ---- report
+  for (const w of warnings) process.stderr.write(fmt('WARN', w) + '\n');
+  if (errors.length) {
+    for (const e of errors) process.stderr.write(fmt('ERROR', e) + '\n');
+    emit({ status: 'fail', version, message: `Assembly failed: ${errors.length} input error${errors.length === 1 ? '' : 's'}, first: ${errors[0].file} ${errors[0].msg}` });
+    process.stderr.write(`ui-build: FAIL (${errors.length} error${errors.length === 1 ? '' : 's'}, ${warnings.length} warning${warnings.length === 1 ? '' : 's'})\n`);
+    process.exit(1);
+  }
+  if (check) {
+    if (useBlocks.length) process.stdout.write(`  blocks: ${useBlocks.join(', ')}\n`);
+    process.stdout.write(`ui-build: inputs OK (${ids.length} ids, ${routesInSrc.size} routes, ${effects.length} effects, ${warnings.length} warnings)\n`);
+    process.exit(0);
+  }
+
+  // ---- assemble
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const title = head.title ?? uiMap?.app?.name ?? 'Prototype';
+  const lang = head.lang ?? uiMap?.app?.language ?? 'en';
+  const effectsJson = effects.length
+    ? '{"effects":[\n' + effects.map((e) => JSON.stringify(e).replace(/</g, '\\u003c')).join(',\n') + '\n]}'
+    : '{"effects":[]}';
+  // blocks: blocks.css + <name>.css after kit.css; core.js + <name>.js (+ kit/data files they need) in one script in front of the data script
+  const blockFiles = (ext) => useBlocks.map((b) => path.join('blocks', b + ext)).filter((f) => isFile(path.join(KIT, f)));
+  const blockData = [...new Set(useBlocks.flatMap((b) => BLOCK_DATA[b] || []))];
+  const useMedia = useBlocks.some((b) => MEDIA_BLOCKS.includes(b));                      // media.lib goes right after core (css: after blocks.css), before the blocks that call K.media
+  const blocksCss = useBlocks.length ? [path.join('blocks', 'blocks.css'), ...(useMedia ? [path.join('blocks', 'media.lib.css')] : []), ...blockFiles('.css')].map((f) => kitFile(f).trimEnd()) : [];
+  const blocksJs = useBlocks.length ? [...blockData.map((f) => path.join('data', f)), path.join('blocks', 'core.js'), ...(useMedia ? [path.join('blocks', 'media.lib.js')] : []), ...blockFiles('.js')].map((f) => kitFile(f).trimEnd()).join('\n') : '';
+  const usesBasemap = (t) => t != null && /\b(?:basemap\w*|distanceKm|BASEMAP_\w+)/.test(t);
+  const kitData = ['seed.js', 'charts.js'].concat(!blockData.includes('basemap.js') && data != null && (usesBasemap(data) || pieces.some((p) => [...p.text.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].some((m) => usesBasemap(m[1])))) ? ['basemap.js'] : []);   // basemap.js only when data.js or a <script> of a screen/body uses it (and the blocks did not already inline it)
+  const dataScript = data == null ? '' : kitData.map((f) => kitFile(path.join('data', f)).trimEnd()).join('\n') + '\n' + (seedJs != null ? seedJs.trimEnd() + '\n' : '') + data.trimEnd();
+  const out = [
+    '<!doctype html>',
+    `<html lang="${esc(lang)}"${head.accent && head.accent !== 'blue' ? ` data-accent="${head.accent}"` : ''}${head.accent && useBlocks.length ? ` data-k-accent="${head.accent}"` : ''}${head.await === true ? ' data-k-await' : ''}>`,
+    '<head>',
+    '<meta charset="utf-8">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1">',
+    `<meta name="aidlc-ui-version" content="${version}">`,
+    '<meta name="color-scheme" content="light dark">',
+    head.themeColor ? `<meta name="theme-color" content="${head.themeColor}">` : null,
+    `<title>${esc(title)}</title>`,
+    '<style>',
+    kitCss.trimEnd(),
+    ...blocksCss,
+    useMotion ? kitFile('motion.css').trimEnd() : null,
+    useFx ? kitFile('motion-fx.css').trimEnd() : null,
+    extra ? extra.trimEnd() : null,
+    '</style>',
+    '</head>',
+    '<body>',
+    body,
+    '<script type="application/json" id="aidlc-effects">',
+    effectsJson,
+    '</script>',
+    blocksJs ? `<script>\n${blocksJs}\n</script>` : null,
+    dataScript ? `<script>\n${dataScript}\n</script>` : null,
+    ...blockCfgs.map((b) => `<script>\n${b.text.trimEnd()}\n</script>`),
+    useMotion ? `<script>\n${kitFile('motion.js').trimEnd()}\n</script>` : null,
+    useFx ? `<script>\n${kitFile('motion-fx.js').trimEnd()}\n</script>` : null,
+    `<script>\n${kitJs.trimEnd()}\n</script>`,
+    '</body>',
+    '</html>',
+    '',
+  ].filter((l) => l !== null).join('\n');
+
+  // the kit itself must be clean, otherwise every prototype would fail the validator
+  const kitOnly = [];
+  const keep = errors.length;
+  scanNetwork('kit', kitCss, 'css');
+  scanNetwork('kit', kitJs, 'js');
+  for (const f of ['seed.js', 'charts.js', 'basemap.js']) scanNetwork('kit/data/' + f, kitFile(path.join('data', f)), 'js');
+  if (useMotion) { scanNetwork('kit/motion.css', kitFile('motion.css'), 'css'); scanNetwork('kit/motion.js', kitFile('motion.js'), 'js'); }
+  if (useFx) { scanNetwork('kit/motion-fx.css', kitFile('motion-fx.css'), 'css'); scanNetwork('kit/motion-fx.js', kitFile('motion-fx.js'), 'js'); }
+  if (useBlocks.length) {
+    scanNetwork('kit/blocks/blocks.css', kitFile('blocks/blocks.css'), 'css');
+    scanNetwork('kit/blocks/core.js', kitFile('blocks/core.js'), 'js');
+    scanNetwork('kit/blocks/media.lib.js', kitFile('blocks/media.lib.js'), 'js');
+    scanNetwork('kit/blocks/media.lib.css', kitFile('blocks/media.lib.css'), 'css');
+    for (const f of [...blockFiles('.css')]) scanNetwork('kit/' + f, kitFile(f), 'css');
+    for (const f of [...blockFiles('.js')]) scanNetwork('kit/' + f, kitFile(f), 'js');
+  }
+  if (errors.length > keep) {
+    for (const e of errors.slice(keep)) kitOnly.push(fmt('ERROR', e));
+    process.stderr.write(kitOnly.join('\n') + '\nui-build: the kit files contain network references (kit defect)\n');
+    process.exit(2);
+  }
+
+  const target = path.join(ui, 'prototype.html');
+  const tmp = `${target}.tmp-${process.pid}`;
+  fs.writeFileSync(tmp, out);
+  fs.renameSync(tmp, target);
+  for (const s of screenInfo) process.stdout.write(`  ${s.file.padEnd(28)} ${s.route.padEnd(24)} ${String(s.bytes).padStart(7)} bytes  ${s.anchors} anchors\n`);
+  emit({ status: 'done', n: Math.max(nScreens, 1), of: Math.max(nScreens, 1), version, message: `Assembled prototype.html: ${nScreens} screen${nScreens === 1 ? '' : 's'}, ${ids.filter((x) => /^a-/.test(x.id)).length} anchors, ${Math.round(Buffer.byteLength(out) / 1024)} KB` });
+  if (useBlocks.length) process.stdout.write(`  blocks: ${useBlocks.join(', ')}\n`);
+  process.stdout.write(`ui-build: wrote ${target} (${Buffer.byteLength(out)} bytes, version ${version}, ${ids.length} ids, ${routesInSrc.size} routes, ${effects.length} effects, ${warnings.length} warnings)\n`);
+}
+
+main(process.argv.slice(2));

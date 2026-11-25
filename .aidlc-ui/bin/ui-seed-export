@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+'use strict';
+// ui-seed-export <ui-dir> [--out seed.json]
+// Runs <ui-dir>/src/data.js (with the kit helpers kit/data/seed.js and charts.js in front, as ui-build does) in a sandbox
+// and writes every top-level key of window.APP_DATA (arrays and objects, as is) to seed.json (default: <ui-dir>/seed.json).
+// The backend must build its initial data from this file, so what was approved in the frozen UI is what runs.
+// Exit 0 ok, 1 data.js missing or cannot be loaded, 2 usage.
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+
+const argv = process.argv.slice(2);
+const oi = argv.indexOf('--out');
+const out = oi > -1 ? argv.splice(oi, 2)[1] : null;
+if (argv.length !== 1 || argv[0].startsWith('--') || (oi > -1 && !out)) {
+  console.error('usage: ui-seed-export <ui-dir> [--out seed.json]');
+  process.exit(2);
+}
+const uiDir = path.resolve(argv[0]);
+const dataFile = path.join(uiDir, 'src', 'data.js');
+const fail = (msg) => { console.error(`ui-seed-export: ${msg}`); process.exit(1); };
+
+if (!fs.existsSync(dataFile)) fail(`${dataFile} not found (the prototype has no data file)`);
+const kit = (f) => fs.readFileSync(path.join(__dirname, '..', 'kit', 'data', f), 'utf8');
+const source = [kit('seed.js'), kit('charts.js'), fs.readFileSync(dataFile, 'utf8')].join('\n');
+
+// The DOM is not needed to build the data: every selector finds nothing, so fill()/text()/charts do nothing.
+const el = () => null;
+const sandbox = { window: {}, document: { querySelector: el, querySelectorAll: () => [], getElementById: el, addEventListener() {} }, console: { log() {}, warn() {}, error() {} } };
+sandbox.window.document = sandbox.document;
+vm.createContext(sandbox);
+try {
+  vm.runInContext(source, sandbox, { filename: dataFile, timeout: 10000 });
+} catch (err) {
+  fail(`cannot load ${dataFile}: ${err && err.message}`);
+}
+const data = sandbox.window.APP_DATA;
+if (!data || typeof data !== 'object' || Array.isArray(data)) fail(`${dataFile} does not set window.APP_DATA to an object`);
+const keys = Object.keys(data).filter((k) => data[k] !== null && typeof data[k] === 'object');
+if (keys.length === 0) fail(`window.APP_DATA in ${dataFile} has no array or object entries`);
+
+const seed = {};
+for (const k of keys) seed[k] = data[k];
+const target = path.resolve(out || path.join(uiDir, 'seed.json'));
+fs.writeFileSync(target, JSON.stringify(seed, null, 2) + '\n');
+const counts = keys.map((k) => `${k}=${Array.isArray(seed[k]) ? seed[k].length : '{' + Object.keys(seed[k]).length + '}'}`).join(' ');
+console.log(`seed: ${target} (${counts})`);

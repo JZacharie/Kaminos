@@ -1,0 +1,249 @@
+#!/usr/bin/env node
+'use strict';
+// ui-version <ui-dir> --cause <agent-stage|answer|round|refine|restore> --stage <slug> [--ref <file#Qn> ...] [--bump|--no-bump] [--no-progress] [--allow-render-errors]
+// Snapshots <ui-dir>/prototype.html + ui-map.json into <ui-dir>/versions/v<N>/ with meta.json (ANCHORS 6.1).
+// No dependencies beyond Node core.
+
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+
+const CAUSES = ['agent-stage', 'answer', 'round', 'refine', 'restore'];
+const USAGE = `usage: ui-version <ui-dir> --cause <${CAUSES.join('|')}> --stage <slug> [--ref <file#Qn> ...] [--bump|--no-bump] [--no-progress] [--allow-render-errors]
+
+  <ui-dir>   living UI directory (<record>/ui) with prototype.html and ui-map.json
+  --cause    why this version exists (meta.json cause.kind)
+  --stage    stage slug that caused it, e.g. ui-prototype-v1, rough-mockups, canvas-round
+  --ref      question reference "<questions file stem>#Q<n>"; repeatable
+  --bump     N+1 is written into ui-map.json uiVersion and the aidlc-ui-version meta of prototype.html, then snapshotted
+  --no-progress  do not append a publish event to <ui-dir>/progress.jsonl
+  --allow-render-errors  with --cause agent-stage the screens are first rendered in headless Chromium (lib/render-check.js, same as ui-render-check):
+             a block that says \"cannot be shown\" or an uncaught page error REFUSES the publish (exit 1, the ERROR lines name screen, block and error).
+             This flag publishes anyway (use it only after the repair rounds are used up, and list the findings). Without Chromium the check is
+             skipped with a WARN and never blocks. AIDLC_RENDER_CHECK=0 switches the check off.
+  --no-bump  snapshot the current version N as it is. Default when <ui-dir>/versions does not exist yet
+             (first snapshot of a freshly built v1); otherwise --bump is the default.
+
+Writes versions/v<N>/{prototype.html,ui-map.json,meta.json} (never into an existing version) and prints "v<N>".
+A snapshot whose content equals the latest version (ignoring the version number) is skipped: exit 0, no new version,
+a note on stderr, and the latest "v<N>" on stdout.
+exit 0 = done, 1 = refused (message on stderr), 2 = usage error`;
+
+function usage(msg) {
+  if (msg) process.stderr.write(`ui-version: ${msg}\n`);
+  process.stderr.write(USAGE + '\n');
+  process.exit(2);
+}
+function fail(msg) {
+  process.stderr.write(`ui-version: ${msg}\n`);
+  process.exit(1);
+}
+
+// Cross-process publish lock <ui-dir>/.publish.lock (same protocol as canvas/src/publish-lock.mjs): mkdir is the atomic claim, `owner` holds
+// "<pid> <epochMs> <token>", a lock older than 60 s is stale (its holder died). Held from reading the live files to updating them.
+const LOCK_STALE_MS = 60000;
+const LOCK_WAIT_MS = 30000;
+function sleepMs(ms) { Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); }
+function lockTs(lock) {
+  try { const t = Number(fs.readFileSync(path.join(lock, 'owner'), 'utf8').split(/\s+/)[1]); if (Number.isFinite(t) && t > 0) return t; } catch (_) { /* owner not written yet */ }
+  try { return fs.statSync(lock).mtimeMs; } catch (_) { return null; }
+}
+function acquirePublishLock(ui) {
+  const lock = path.join(ui, '.publish.lock');
+  const token = crypto.randomBytes(6).toString('hex');
+  const t0 = Date.now();
+  for (;;) {
+    try { fs.mkdirSync(lock); break; } catch (e) {
+      if (e.code !== 'EEXIST') fail(`could not take ${lock}: ${e.message}`);
+      const seen = lockTs(lock);
+      if (seen !== null && Date.now() - seen >= LOCK_STALE_MS) {
+        const moved = `${lock}.stale-${process.pid}-${crypto.randomBytes(3).toString('hex')}`;
+        try {
+          fs.renameSync(lock, moved);
+          const t = lockTs(moved);
+          let putBack = false;
+          if (t !== null && Date.now() - t < LOCK_STALE_MS) { try { fs.renameSync(moved, lock); putBack = true; } catch (_) { /* a new lock exists */ } }
+          if (!putBack) fs.rmSync(moved, { recursive: true, force: true });
+        } catch (_) { /* somebody else broke or released it first */ }
+      }
+      if (Date.now() - t0 > LOCK_WAIT_MS) fail('another publish is taking too long (ui/.publish.lock)');
+      sleepMs(25);
+    }
+  }
+  try { fs.writeFileSync(path.join(lock, 'owner'), `${process.pid} ${Date.now()} ${token}\n`); } catch (_) { /* mtime stands in */ }
+  let released = false;
+  const release = () => {
+    if (released) return;
+    released = true;
+    try { if (fs.readFileSync(path.join(lock, 'owner'), 'utf8').includes(token)) fs.rmSync(lock, { recursive: true, force: true }); } catch (_) { /* gone */ }
+  };
+  process.on('exit', release);   // fail() and usage() call process.exit
+  return release;
+}
+
+function writeAtomic(file, data) {
+  const tmp = `${file}.tmp-${process.pid}`;
+  fs.writeFileSync(tmp, data);
+  fs.renameSync(tmp, file);
+}
+
+// digest of a prototype + map pair with the version number blanked, so v(N+1) of an unchanged build equals vN
+function contentDigest(proto, map) {
+  const p = proto.replace(/(<meta\b[^>]*\bname\s*=\s*["']aidlc-ui-version["'][^>]*\bcontent\s*=\s*["'])\d+/i, '$10');
+  const m = map.replace(/("uiVersion"\s*:\s*)\d+/, '$10');
+  return crypto.createHash('sha256').update(p).update('\0').update(m).digest('hex');
+}
+
+function latestVersion(versionsDir) {
+  const nums = (fs.existsSync(versionsDir) ? fs.readdirSync(versionsDir) : [])
+    .map((d) => /^v([1-9]\d*)$/.exec(d)).filter(Boolean).map((m) => Number(m[1]));
+  return nums.length ? Math.max(...nums) : null;
+}
+
+function parseArgs(argv) {
+  const o = { cause: null, stage: null, refs: [], bump: null, dir: null, progress: true, allowRender: false };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    const val = () => {
+      const v = argv[++i];
+      if (v === undefined || v.startsWith('--')) usage(`${a} needs a value`);
+      return v;
+    };
+    if (a === '--help' || a === '-h') { process.stdout.write(USAGE + '\n'); process.exit(0); }
+    else if (a === '--no-progress') o.progress = false;
+    else if (a === '--allow-render-errors') o.allowRender = true;
+    else if (a === '--cause') o.cause = val();
+    else if (a === '--stage') o.stage = val();
+    else if (a === '--ref') o.refs.push(val());
+    else if (a === '--bump' || a === '--no-bump') {
+      const want = a === '--bump';
+      if (o.bump !== null && o.bump !== want) usage('--bump and --no-bump are mutually exclusive');
+      o.bump = want;
+    } else if (a.startsWith('--')) usage(`unknown option ${a}`);
+    else if (o.dir === null) o.dir = a;
+    else usage('expected exactly one <ui-dir>');
+  }
+  if (o.dir === null) usage('missing <ui-dir>');
+  if (!CAUSES.includes(o.cause)) usage(`--cause must be one of ${CAUSES.join(', ')}`);
+  if (!o.stage || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(o.stage)) usage('--stage must be a kebab-case slug');
+  for (const r of o.refs) if (!/^[A-Za-z0-9._/-]+#Q[1-9][0-9]*$/.test(r)) usage(`--ref "${r}" must look like <file>#Q<n>`);
+  return o;
+}
+
+// KQ1: the first UI is not published while a block shows "cannot be shown" or a screen throws. Runs before the lock (it can take seconds).
+async function renderGate(o, ui) {
+  if (o.cause !== 'agent-stage' || process.env.AIDLC_RENDER_CHECK === '0') return;
+  if (!fs.statSync(path.join(ui, 'prototype.html'), { throwIfNoEntry: false })?.isFile()) return;   // publish() reports the missing file
+  let lib;
+  try { lib = require(path.join(__dirname, '..', 'lib', 'render-check.js')); } catch (_) { return; }
+  let res;
+  try { res = await lib.renderCheck(ui); } catch (e) { process.stderr.write(`ui-version: WARN render check could not run (${e && e.message ? e.message : e})\n`); return; }
+  const out = lib.lines(res);
+  if (res.status === 'fail' && !o.allowRender) {
+    process.stderr.write(out.join('\n') + '\n');
+    fail(`not published: ${res.findings.length} screen finding(s) above (screens rendered in Chromium, ${res.checked} of ${res.routes}). Fix them, run ui-build again, then ui-version again. After the repair rounds are used up, --allow-render-errors publishes anyway.`);
+  }
+  for (const l of out) process.stderr.write(`ui-version: ${l}\n`);
+}
+
+async function main() {
+  const o = parseArgs(process.argv.slice(2));
+  const ui = path.resolve(o.dir);
+  if (!fs.statSync(ui, { throwIfNoEntry: false })?.isDirectory()) usage(`not a directory: ${o.dir}`);
+  await renderGate(o, ui);
+  const releaseLock = acquirePublishLock(ui);
+  try { publish(o, ui); } finally { releaseLock(); }
+}
+
+function publish(o, ui) {
+  const mapPath = path.join(ui, 'ui-map.json');
+  const protoPath = path.join(ui, 'prototype.html');
+  for (const p of [mapPath, protoPath]) if (!fs.statSync(p, { throwIfNoEntry: false })?.isFile()) fail(`missing ${path.basename(p)} in ${ui}`);
+
+  const mapText = fs.readFileSync(mapPath, 'utf8');
+  const protoText = fs.readFileSync(protoPath, 'utf8');
+  let map;
+  try { map = JSON.parse(mapText); } catch (e) { fail(`ui-map.json is not valid JSON (${e.message})`); }
+  const cur = map.uiVersion;
+  if (!Number.isInteger(cur) || cur < 1) fail('ui-map.json uiVersion must be a positive integer');
+
+  const metaRe = /<meta\b[^>]*\bname\s*=\s*["']aidlc-ui-version["'][^>]*>/gi;
+  const metas = protoText.match(metaRe) || [];
+  if (metas.length !== 1) fail(`prototype.html must have exactly one <meta name="aidlc-ui-version"> (found ${metas.length})`);
+  const contentRe = /(\bcontent\s*=\s*["'])(\d+)(["'])/i;
+  const mc = contentRe.exec(metas[0]);
+  if (!mc) fail('aidlc-ui-version meta has no numeric content attribute');
+  if (Number(mc[2]) !== cur) fail(`prototype.html meta says ${mc[2]} but ui-map.json uiVersion is ${cur}; fix them first`);
+
+  const versionsDir = path.join(ui, 'versions');
+  const bump = o.bump === null ? fs.existsSync(versionsDir) : o.bump;
+  const n = bump ? cur + 1 : cur;
+  const finalDir = path.join(versionsDir, `v${n}`);
+  if (fs.existsSync(finalDir)) fail(`versions/v${n} already exists; versions are never rewritten`);
+
+  const last = latestVersion(versionsDir);
+  if (last !== null) {
+    const lp = path.join(versionsDir, `v${last}`);
+    try {
+      if (contentDigest(fs.readFileSync(path.join(lp, 'prototype.html'), 'utf8'), fs.readFileSync(path.join(lp, 'ui-map.json'), 'utf8')) === contentDigest(protoText, mapText)) {
+        process.stderr.write(`ui-version: build is identical to v${last}; no new version written\n`);
+        process.stdout.write(`v${last}\n`);
+        return;
+      }
+    } catch (_) { /* unreadable latest version: fall through and snapshot */ }
+  }
+
+  let newMap = mapText;
+  let newProto = protoText;
+  if (bump) {
+    const versionRe = /("uiVersion"\s*:\s*)(\d+)/g;
+    if ((mapText.match(versionRe) || []).length !== 1) fail('could not find exactly one "uiVersion" number in ui-map.json');
+    newMap = mapText.replace(versionRe, (m, a1) => `${a1}${n}`);
+    const check = JSON.parse(newMap);
+    const expected = { ...map, uiVersion: n };
+    if (JSON.stringify(check) !== JSON.stringify(expected)) fail('internal error: uiVersion rewrite changed other values');
+    const newMeta = metas[0].replace(contentRe, (m, a1, d, a3) => `${a1}${n}${a3}`);
+    newProto = protoText.replace(metas[0], () => newMeta);
+    if (newProto.replace(newMeta, () => metas[0]) !== protoText) fail('internal error: meta rewrite changed other text');
+  }
+
+  const meta = {
+    version: n,
+    parent: n > 1 ? n - 1 : null,
+    createdAt: process.env.AIDLC_UI_NOW || new Date().toISOString(),
+    cause: { kind: o.cause, stage: o.stage, refs: o.refs },
+  };
+
+  // 1. build the snapshot in a temp dir inside versions/, then rename it into place (atomic on one filesystem)
+  fs.mkdirSync(versionsDir, { recursive: true });
+  const tmpDir = path.join(versionsDir, `.tmp-v${n}-${process.pid}`);
+  fs.mkdirSync(tmpDir);
+  try {
+    fs.writeFileSync(path.join(tmpDir, 'prototype.html'), newProto);
+    fs.writeFileSync(path.join(tmpDir, 'ui-map.json'), newMap);
+    fs.writeFileSync(path.join(tmpDir, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');
+    fs.renameSync(tmpDir, finalDir);
+  } catch (e) {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+    fail(`could not write versions/v${n}: ${e.message}`);
+  }
+
+  // 2. only then update the live files
+  if (bump) {
+    try {
+      writeAtomic(mapPath, newMap);
+      writeAtomic(protoPath, newProto);
+    } catch (e) {
+      fail(`versions/v${n} was written but the live files could not be updated (${e.message}); copy them from versions/v${n}/`);
+    }
+  }
+  if (o.progress) {
+    try {
+      const { appendProgress } = require(path.join(__dirname, '..', 'lib', 'progress.js'));
+      appendProgress(ui, { phase: 'publish', status: 'done', version: n, message: `Published v${n} (${o.cause}, ${o.stage})` }, { quiet: true });
+    } catch (_) { /* progress is optional and never fails the tool */ }
+  }
+  process.stdout.write(`v${n}\n`);
+}
+
+main().catch((e) => { process.stderr.write(`ui-version: internal error: ${e && e.message ? e.message : e}\n`); process.exit(2); });

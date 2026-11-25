@@ -1,0 +1,33 @@
+/* @block siteplan 1.0 (MIT-0) */
+.k-sp{display:flex;flex-direction:column;gap:var(--k-3);min-width:0}
+.k-sp-svg{display:block;max-width:100%;overflow:visible;font-family:inherit}
+.k-sp-bg{fill:var(--k-surface-2);stroke:var(--k-line)}
+.k-sp-gd{fill:var(--k-line)}
+.k-sp-area rect{fill:color-mix(in srgb,var(--k-s,var(--k-text-3)) 5%,var(--k-surface));stroke:var(--k-s,color-mix(in srgb,var(--k-text-3) 55%,var(--k-surface-2)));stroke-width:1;stroke-dasharray:5 4}
+.k-sp-area text{paint-order:stroke;stroke:color-mix(in srgb,var(--k-s,var(--k-text-3)) 5%,var(--k-surface));stroke-width:4px;stroke-linejoin:round;fill:var(--k-text-3);font-size:var(--k-fs-xs);font-weight:var(--k-fw-semi);letter-spacing:.06em}
+.k-sp-path{fill:none;stroke:var(--k-s,color-mix(in srgb,var(--k-text-3) 60%,var(--k-surface-2)));stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.k-sp-path.k-s-neutral{stroke:color-mix(in srgb,var(--k-text-3) 60%,var(--k-surface-2))}
+.k-sp-dash{stroke-dasharray:6 5}
+.k-sp-lead{stroke:var(--k-text-3);stroke-width:1;fill:none}
+.k-sp-ld{fill:var(--k-text-3)}
+.k-sp-lq{stroke:var(--k-s,color-mix(in srgb,var(--k-text-3) 60%,var(--k-surface-2)));stroke-width:1.5}
+.k-sp-ld.k-sp-lq{fill:var(--k-s,color-mix(in srgb,var(--k-text-3) 60%,var(--k-surface-2)));stroke:var(--k-surface);stroke-width:1.5}
+.k-sp-chip rect{fill:var(--k-surface);stroke:var(--k-s,color-mix(in srgb,var(--k-text-3) 60%,var(--k-surface-2)));stroke-width:1.25}
+.k-sp-chip text{fill:var(--k-text-2);font-size:var(--k-fs-xs);font-weight:var(--k-fw-medium);font-variant-numeric:tabular-nums}
+.k-sp-badge rect{fill:color-mix(in srgb,var(--k-sp-c) 18%,var(--k-surface));stroke:var(--k-sp-c);stroke-width:1.5}
+.k-sp-ico path{fill:none;stroke:var(--k-text);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.k-sp-dot{fill:var(--k-s);stroke:var(--k-surface-2);stroke-width:2}
+.k-sp-lbl{fill:var(--k-text);font-size:var(--k-fs-sm);font-weight:var(--k-fw-semi);paint-order:stroke;stroke:var(--k-surface-2);stroke-width:5px;stroke-linejoin:round}
+.k-sp-lz{stroke:color-mix(in srgb,var(--k-s,var(--k-text-3)) 5%,var(--k-surface))}
+.k-sp-sub{fill:var(--k-text-2);font-size:var(--k-fs-xs);font-weight:var(--k-fw-regular,400)}
+.k-sp-int{cursor:pointer;outline:none}
+.k-sp-int:hover .k-sp-badge rect{stroke-width:2.5}
+.k-sp-int:focus-visible{outline:2px solid var(--k-accent);outline-offset:3px;border-radius:var(--k-r)}
+.k-sp-sel .k-sp-badge rect{stroke:var(--k-accent);stroke-width:3}
+.k-sp-legend{display:flex;flex-wrap:wrap;gap:var(--k-2) var(--k-4);margin:0;padding:0;list-style:none;font-size:var(--k-fs-sm);color:var(--k-text-2)}
+.k-sp-legend li{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.k-sp-note{margin:0;font-size:var(--k-fs-sm);color:var(--k-text-3)}
+.k-sp-dense .k-sp-path{stroke-width:1.25}
+.k-sp-hot .k-sp-path,.k-sp-hot .k-sp-chip{opacity:.25}
+.k-sp-hot .k-sp-on{opacity:1}
+:root[data-k-theme=control] .k-sp-path{stroke-width:1.5;stroke:var(--k-s,color-mix(in srgb,var(--k-text-3) 55%,var(--k-surface-2)))}

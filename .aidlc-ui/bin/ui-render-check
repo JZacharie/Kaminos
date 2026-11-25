@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+'use strict';
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+// ui-render-check <ui-dir> [--json] [--budget-s N]
+// Opens every screen of <ui-dir>/prototype.html in headless Chromium and fails when a block shows "cannot be shown" or the page throws.
+// Contract: addon/bin/README.md ("ui-render-check"). Logic: ../lib/render-check.js.
+
+const path = require('node:path');
+
+const USAGE = `usage: ui-render-check <ui-dir> [--json] [--budget-s N]
+
+  <ui-dir>      living UI directory (<record>/ui) with a built prototype.html
+  --json        print the result object as JSON instead of ERROR / WARN lines
+  --budget-s N  time budget in seconds (default 20); screens not reached in time give a WARN, not an error
+
+exit 0 = PASS, or SKIPPED (no playwright-core / Chromium: a WARN line says so, the run is never blocked)
+exit 1 = FAIL: one "ERROR render-block ..." or "ERROR render-error ..." line per finding on stdout
+exit 2 = usage error`;
+
+function usage(msg) {
+  if (msg) process.stderr.write(`ui-render-check: ${msg}\n`);
+  process.stderr.write(USAGE + '\n');
+  process.exit(2);
+}
+
+async function main(argv) {
+  let json = false, budgetMs = null, dir = null;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--help' || a === '-h') { process.stdout.write(USAGE + '\n'); return 0; }
+    if (a === '--json') json = true;
+    else if (a === '--budget-s') { const v = Number(argv[++i]); if (!(v > 0)) usage('--budget-s needs a number above 0'); budgetMs = v * 1000; }
+    else if (a.startsWith('--')) usage(`unknown option ${a}`);
+    else if (dir) usage(`unexpected argument ${a}`);
+    else dir = a;
+  }
+  if (!dir) usage('missing <ui-dir>');
+  const lib = require('../lib/render-check');
+  const res = await lib.renderCheck(path.resolve(dir), { budgetMs: budgetMs || undefined });
+  if (json) { process.stdout.write(JSON.stringify(res) + '\n'); return res.status === 'fail' ? 1 : 0; }
+  const out = lib.lines(res);
+  if (out.length) process.stdout.write(out.join('\n') + '\n');
+  const secs = (res.ms / 1000).toFixed(1);
+  if (res.status === 'fail') process.stdout.write(`RENDER FAIL (${res.findings.length} finding${res.findings.length === 1 ? '' : 's'}, ${res.checked} of ${res.routes} screens, ${secs} s)\n`);
+  else if (res.status === 'skipped') process.stdout.write(`RENDER SKIPPED (${secs} s)\n`);
+  else process.stdout.write(`RENDER PASS (${res.checked} of ${res.routes} screens, ${secs} s)\n`);
+  return res.status === 'fail' ? 1 : 0;
+}
+
+main(process.argv.slice(2)).then((c) => { process.exitCode = c; }, (e) => {
+  process.stderr.write(`ui-render-check: internal error: ${e && e.stack ? e.stack : e}\n`);
+  process.exitCode = 2;
+});

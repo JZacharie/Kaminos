@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "name": "ui",
+  "files": [
+    {
+      "path": ".kiro/aidlc-common/stages/inception/ui-freeze.md",
+      "sha256": "sha256:be189c40af954b5b7713bc6782b303f969b2df9c040cb949c837f9fcab74c021"
+    },
+    {
+      "path": ".kiro/scopes/ui-first.md",
+      "sha256": "sha256:712009adcbbaca09622c66a19555404d76ace84537f29b32b8850488124804f4"
+    },
+    {
+      "path": ".kiro/scopes/ui-workshop.md",
+      "sha256": "sha256:f3434a4a8b030a27a024d0d6d53ead286b4237e34e8fe8bfdb6189589786c6b7"
+    },
+    {
+      "path": ".kiro/sensors/aidlc-ui-v1-present.md",
+      "sha256": "sha256:fbd7b5a53a5e045bcacda59cb79afa8f74bbf36f9623e5158921ff732feb3a80"
+    },
+    {
+      "path": ".kiro/tools/aidlc-sensor-ui-v1-present.ts",
+      "sha256": "sha256:a5aae0fb8e9bc7778355ad7d66e4adf34440a6001db653cd0ae646fb5b4ac3fa"
+    }
+  ]
+}

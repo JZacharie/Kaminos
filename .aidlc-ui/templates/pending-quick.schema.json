@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/aidlc-ui-first/addon/templates/pending-quick.schema.json",
+  "title": "pending-quick.json (D-29)",
+  "description": "Chip answers given in Canvas before the AI-DLC record exists. Written by Canvas, read by the stage 1.1 agent.",
+  "type": "object",
+  "required": ["schemaVersion", "updatedAt", "answers"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "updatedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$" },
+    "answers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Q1": { "$ref": "#/$defs/answer" },
+        "Q2": { "$ref": "#/$defs/answer" },
+        "Q3": { "$ref": "#/$defs/answer" }
+      }
+    }
+  },
+  "$defs": {
+    "answer": {
+      "description": "Option letter A-D, or 'X — free text' (em dash).",
+      "type": "string",
+      "pattern": "^([A-D]|X — .{1,200})$"
+    }
+  }
+}

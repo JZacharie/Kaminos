@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "promptPrefix": "/aidlc --scope ui-workshop Answer in Canvas.",
+  "apps": [
+    {
+      "id": "spudtrack",
+      "title": "SpudTrack",
+      "pitch": "Follow pallets of potato chips by truck, ship and plane: delays, cold-chain alerts and recall-ready lot tracing.",
+      "shape": "Logistics: map, table and timelines",
+      "brief": "briefs/spudtrack.md",
+      "seed": "briefs/spudtrack.seed.json",
+      "prompt": "/aidlc --scope ui-workshop Answer in Canvas. Build the app described in briefs/spudtrack.md",
+      "preview": null
+    },
+    {
+      "id": "ev-fleet",
+      "title": "VoltRoute",
+      "pitch": "Plan tonight's charging for 18 electric delivery vans so every route starts with enough charge, cheaply and under the depot's power limit.",
+      "shape": "Planning: schedule timeline and energy cost",
+      "brief": "briefs/ev-fleet.md",
+      "seed": "briefs/ev-fleet.seed.json",
+      "prompt": "/aidlc --scope ui-workshop Answer in Canvas. Build the app described in briefs/ev-fleet.md",
+      "preview": null
+    },
+    {
+      "id": "stagehand",
+      "title": "Stagehand",
+      "pitch": "Run a festival's artist logistics and stage operations from one cockpit, with an AI agent that turns flight delays, missing gear and storms into options you approve.",
+      "shape": "Operations: illustrated map, running order and an incident-resolving agent",
+      "brief": "briefs/stagehand.md",
+      "seed": "briefs/stagehand.seed.json",
+      "prompt": "/aidlc --scope ui-workshop Answer in Canvas. Build the app described in briefs/stagehand.md",
+      "preview": null
+    }
+  ],
+  "custom": {
+    "id": "custom",
+    "title": "Your own idea",
+    "pitch": "Describe your app in your own words, as long and as detailed as you want. The AI writes a brief for it first, then builds the first UI from that brief.",
+    "maxChars": 20000,
+    "promptTemplate": "/aidlc --scope ui-workshop Answer in Canvas. Read briefs/idea.md: it is the person's own idea in their own words. Write the brief briefs/custom.md from it (same sections as the other briefs) and keep EVERY feature, screen and detail it lists, then build the app described in it."
+  }
+}

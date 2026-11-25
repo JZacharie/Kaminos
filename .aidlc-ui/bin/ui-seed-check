@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+'use strict';
+// ui-seed-check <seed.json> <backend.json>
+// Compares the collections of the frozen UI (seed.json from ui-seed-export) with the backend's initial data or an endpoint
+// response, both JSON objects of the form {"collection": [...items] | {...}}. Compares collection names and item counts
+// (arrays: length; objects: number of keys). Exit 0 same, 1 differences (one line each), 2 usage or unreadable file.
+const fs = require('node:fs');
+const path = require('node:path');
+
+const argv = process.argv.slice(2);
+if (argv.length !== 2 || argv.some((a) => a.startsWith('--'))) {
+  console.error('usage: ui-seed-check <seed.json> <backend-seed-or-endpoint.json>');
+  process.exit(2);
+}
+function load(file) {
+  try {
+    const v = JSON.parse(fs.readFileSync(path.resolve(file), 'utf8'));
+    if (!v || typeof v !== 'object' || Array.isArray(v)) throw new Error('expected a JSON object {"collection": [...]}');
+    return v;
+  } catch (err) {
+    console.error(`ui-seed-check: ${file}: ${err.message}`);
+    process.exit(2);
+  }
+}
+const size = (v) => (Array.isArray(v) ? v.length : v && typeof v === 'object' ? Object.keys(v).length : null);
+const [ui, backend] = [load(argv[0]), load(argv[1])];
+const diffs = [];
+for (const k of Object.keys(ui)) {
+  if (!(k in backend)) diffs.push(`MISSING in backend: "${k}" (UI has ${size(ui[k])})`);
+  else if (size(ui[k]) !== size(backend[k])) diffs.push(`COUNT "${k}": UI ${size(ui[k])}, backend ${size(backend[k])}`);
+}
+for (const k of Object.keys(backend)) if (!(k in ui)) diffs.push(`EXTRA in backend: "${k}" (${size(backend[k])}), not in the UI seed`);
+if (diffs.length) {
+  console.log(diffs.join('\n'));
+  console.log(`seed check FAIL: ${diffs.length} difference(s). What was approved in the UI is not what the backend runs; list any intended gap in ui/mock-only.md.`);
+  process.exit(1);
+}
+console.log(`seed check PASS: ${Object.keys(ui).length} collections, same names and item counts`);

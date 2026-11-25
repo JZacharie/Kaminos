@@ -1,0 +1,18 @@
+<!-- Shell: top bar, main navigation (collapses to a Menu button + sheet below 768 px) and theme toggle.
+     At most 7 links, 1-2 words each (max 14 characters); the bar is one line from 1024 px and never gets extra items (kit/LAYOUT-RULES.md rule 4).
+     Put it in src/shell.html. ui-build adds the skip link and <main id="k-main"> for you.
+     The <nav> is the anchored element (id="a-main-nav"); nothing anchored is nested inside it. -->
+<header class="k-topbar">
+  <a class="k-brand" href="#/dashboard"><span class="k-brand-mark" aria-hidden="true">F</span><span>Fleetly</span></a>
+  <button class="k-btn k-btn-sm k-menu-btn" type="button" data-k-menu aria-expanded="false" aria-controls="a-main-nav">Menu</button>
+  <nav class="k-nav" id="a-main-nav" aria-label="Main">
+    <a href="#/dashboard">Dashboard</a>
+    <a href="#/cards">Cards</a>
+    <a href="#/table">Table</a>
+    <a href="#/forms">Forms</a>
+    <a href="#/more">More</a>
+  </nav>
+  <div class="k-topbar-actions">
+    <button class="k-btn k-btn-sm k-btn-ghost" type="button" data-k-theme aria-pressed="false">Theme</button>
+  </div>
+</header>

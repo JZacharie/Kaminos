@@ -1,0 +1,42 @@
+/* @block player 1.0 (MIT-0) */
+.k-b-player{container-type:inline-size;width:100%}
+.k-player{--k-pl-b:2.75rem;display:grid;grid-template-columns:minmax(0,1fr);gap:var(--k-3);padding:var(--k-4);background:var(--k-surface);border:1px solid var(--k-line);border-radius:var(--k-r-lg);box-shadow:var(--k-e1)}
+.k-player-stage{position:relative;cursor:pointer}
+.k-player-ov{position:absolute;inset:0;margin:auto;display:grid;place-items:center;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--k-surface);color:var(--k-text);box-shadow:var(--k-e2);pointer-events:none}
+.k-player[data-playing=true] .k-player-ov{display:none}
+.k-player-info{display:flex;align-items:center;gap:var(--k-3);min-width:0}
+.k-player-cov{flex:none;width:3.5rem}
+.k-player-card .k-player-cov{width:5rem}
+.k-player-meta{flex:1 1 auto;min-width:0}
+.k-player-t{font-size:var(--k-fs-base);font-weight:var(--k-fw-semi);line-height:1.35;color:var(--k-text)}
+.k-player-sub{font-size:var(--k-fs-md);line-height:1.4;color:var(--k-text-2)}
+.k-player-seekrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--k-2)}
+.k-player-time{min-width:var(--k-pl-tw,4ch);font-size:var(--k-fs-sm);line-height:1;color:var(--k-text-2);font-variant-numeric:tabular-nums}
+.k-player-tl{text-align:right}
+.k-player-tr{display:flex;align-items:center;justify-content:center;gap:var(--k-1)}
+.k-player-ex{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:var(--k-2)}
+.k-player-b{position:relative;flex:none;display:inline-grid;place-items:center;width:var(--k-pl-b);height:var(--k-pl-b);margin:0;padding:0;border:0;border-radius:var(--k-r-pill);background:transparent;color:var(--k-text-2);font:inherit;cursor:pointer;transition:background-color .15s}
+.k-player-b:not(.k-player-play):hover{background:var(--k-surface-2);color:var(--k-text)}
+.k-b .k-player-b:focus-visible{border-radius:var(--k-r-pill)}
+.k-player-b[aria-pressed=true]:not(.k-player-play){color:var(--k-accent)}
+.k-player-b[aria-pressed=true]:not(.k-player-play,.k-player-like)::after{content:"";position:absolute;left:50%;bottom:.3125rem;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor}
+.k-player-like[aria-pressed=true] path{fill:currentColor}
+.k-player-1{position:absolute;top:.4375rem;right:.5rem;font-size:var(--k-fs-xs);font-weight:var(--k-fw-bold);line-height:1}
+.k-player-play{width:calc(var(--k-pl-b) + .25rem);height:calc(var(--k-pl-b) + .25rem);background:var(--k-accent);color:var(--k-on-accent)}
+.k-player-sp{width:auto;min-width:var(--k-pl-b);padding:0 var(--k-2);font-size:var(--k-fs-sm);font-weight:var(--k-fw-semi)}
+.k-player-q{display:inline-flex;align-items:center;height:1.5rem;padding:0 var(--k-2);border:1px solid var(--k-line);border-radius:var(--k-r-pill);font-size:var(--k-fs-sm);color:var(--k-text-2)}
+.k-player-range{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;height:var(--k-pl-b);margin:0;padding:0;background:transparent;cursor:pointer;--k-pl-p:0%}
+.k-player-range:disabled{cursor:default;opacity:.55}
+.k-player-range::-webkit-slider-runnable-track{height:.25rem;border-radius:var(--k-r-pill);background:linear-gradient(to right,var(--k-accent) var(--k-pl-p),var(--k-line-strong) var(--k-pl-p))}
+.k-player-range::-moz-range-track{height:.25rem;border-radius:var(--k-r-pill);background:linear-gradient(to right,var(--k-accent) var(--k-pl-p),var(--k-line-strong) var(--k-pl-p))}
+.k-player-range::-webkit-slider-thumb{-webkit-appearance:none;width:.875rem;height:.875rem;margin-top:-.3125rem;border:2px solid var(--k-surface);border-radius:50%;background:var(--k-accent);box-shadow:0 0 0 1px var(--k-accent)}
+.k-player-range::-moz-range-thumb{width:.625rem;height:.625rem;border:2px solid var(--k-surface);border-radius:50%;background:var(--k-accent);box-shadow:0 0 0 1px var(--k-accent)}
+.k-player-vol{width:6.5rem}
+@container (max-width:519px){.k-player-vol{display:none}}
+@container (min-width:720px){
+  .k-player-bar{--k-pl-b:2.25rem;grid-template-columns:minmax(0,1fr) minmax(0,1.7fr) minmax(0,1fr);grid-template-areas:"info tr ex" "info seek ex";align-items:center;gap:var(--k-1) var(--k-6)}
+  .k-player-bar.k-player-noex{grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);grid-template-areas:"info tr" "info seek"}
+  .k-player-bar .k-player-ex{grid-area:ex;justify-content:flex-end}
+  .k-player-bar .k-player-info{grid-area:info}.k-player-bar .k-player-tr{grid-area:tr}.k-player-bar .k-player-seekrow{grid-area:seek}
+}
+@media (prefers-reduced-motion:reduce){.k-player-b{transition:none}}

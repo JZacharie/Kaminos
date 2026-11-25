@@ -1,0 +1,16 @@
+{
+  "name": "ui",
+  "version": "0.1.0",
+  "description": "UI-first add-on for AI-DLC v2.11.2. Adds the ui-first scope (the workshop stages plus the Ideation stages 1.1, 1.3, 1.4, 1.6 and 1.7), makes Rough Mockups also write a clickable prototype.html and a ui-map.json, and adds a ui-freeze gate between Inception and Construction.",
+  "author": { "name": "aidlc-ui-first" },
+  "dependencies": ["core"],
+  "aidlc": {
+    "contributes": {
+      "stages": "stages/",
+      "overlays": "contributions/",
+      "scopes": "scopes/",
+      "sensors": "sensors/",
+      "tools": "tools/"
+    }
+  }
+}

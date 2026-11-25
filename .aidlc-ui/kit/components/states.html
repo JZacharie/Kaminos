@@ -1,0 +1,16 @@
+<!-- A card or panel with nothing to show: <p class="k-empty-sm">No sensor readings yet.</p> (a few lines, not the tall k-empty).
+     Empty state and skeleton (loading placeholders). The empty state belongs next to a table or list:
+     <div class="k-empty" data-k-empty="#table-id" hidden> is shown by kit.js when a filter leaves no rows. -->
+<div class="k-grid">
+  <div class="k-span-6 k-empty">
+    <h3>No vehicles in this depot</h3>
+    <p>Add the first vehicle or choose another depot in the filter above.</p>
+    <p><button class="k-btn k-btn-primary" type="button" data-k-toast="Vehicle form opened">Add vehicle</button></p>
+  </div>
+  <div class="k-span-6 k-card" role="status" aria-busy="true">
+    <span class="k-sr">Loading vehicle details</span>
+    <span class="k-skeleton" style="width:60%;height:1.25rem"></span>
+    <span class="k-skeleton" style="height:.875rem"></span>
+    <span class="k-skeleton" style="width:80%;height:.875rem"></span>
+  </div>
+</div>

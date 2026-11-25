@@ -1,0 +1,21 @@
+<!-- Tabs: [data-k-tabs] container, role=tablist, one role=tab per panel (aria-controls = panel id, panels are role=tabpanel).
+     Arrow keys move between tabs. The tab whose aria-selected="true" is shown first. Give panels aria-labelledby = tab id. -->
+<div data-k-tabs>
+  <div class="k-tabs" role="tablist" aria-label="Vehicle details">
+    <button class="k-tab" role="tab" type="button" id="tab-overview" aria-controls="panel-overview" aria-selected="true">Overview</button>
+    <button class="k-tab" role="tab" type="button" id="tab-service" aria-controls="panel-service" aria-selected="false">Service history</button>
+    <button class="k-tab" role="tab" type="button" id="tab-docs" aria-controls="panel-docs" aria-selected="false">Documents</button>
+  </div>
+  <div role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" tabindex="0">
+    <p>ZG-4471 is a 2023 Volvo FH 460 assigned to the Zaragoza depot. It covered 1,240 km last week with an average of 27.4 L per 100 km.</p>
+  </div>
+  <div role="tabpanel" id="panel-service" aria-labelledby="tab-service" tabindex="0" hidden>
+    <ul class="k-list">
+      <li><span>Brake pads replaced</span><span class="k-muted">2 Nov 2026</span></li>
+      <li><span>Oil and filter change</span><span class="k-muted">14 Aug 2026</span></li>
+    </ul>
+  </div>
+  <div role="tabpanel" id="panel-docs" aria-labelledby="tab-docs" tabindex="0" hidden>
+    <p>Registration, insurance certificate and the latest roadworthiness inspection are stored in the depot folder.</p>
+  </div>
+</div>

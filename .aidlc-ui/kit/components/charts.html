@@ -1,0 +1,29 @@
+<!-- Charts are inline SVG. Do not hand-write coordinates: put an empty <figure class="k-chart" id="..."></figure> in the markup and call a
+     helper from src/data.js (data/charts.js, inlined for you by ui-build):
+       chartBar('#c1',    { title, labels, series: [{ name, values }], stacked?, unit? })
+       chartLine('#c2',   { title, labels, series: [{ name, values }], min?, max?, unit?, threshold?: { value, label } })
+       chartDonut('#c3',  { title, items: [{ label, value }], center?, centerLabel? })
+       sparkline('#c4',   { title, values })
+     Each call writes <svg role="img" aria-labelledby> with <title> and <desc> (generated from the numbers) and an HTML legend.
+     Charts are drawn at the width of their card and again when it resizes (12 px text; set no width or font-size on the SVG). chartLine and chartBar also take
+       unit: 'km/h', min: 0, threshold: { value: 65, label: 'Max 65 % RH' }, bands: [{ from: 0, to: 40, label: 'Off-peak', tone: 'ok' }] (y range), xbands: [{ from: 2, to: 5, label: 'Peak', tone: 'warn' }] (x label indexes).
+     Colours come from tokens --c1..--c5 (class k-s1..k-s5), never from hex values. The card that holds the chart is the anchored element. -->
+<div class="k-grid">
+  <article class="k-card k-span-6" id="a-demo-chart-bar">
+    <div class="k-card-head"><h2 class="k-card-title">Kilometres per week</h2></div>
+    <figure class="k-chart" id="demo-bar"></figure>
+  </article>
+  <article class="k-card k-span-6">
+    <div class="k-card-head"><h2 class="k-card-title">Fuel consumption</h2></div>
+    <figure class="k-chart" id="demo-line"></figure>
+  </article>
+  <article class="k-card k-span-6">
+    <div class="k-card-head"><h2 class="k-card-title">Vehicles by status</h2></div>
+    <figure class="k-chart" id="demo-donut"></figure>
+  </article>
+  <article class="k-card k-span-6">
+    <div class="k-card-head"><h2 class="k-card-title">Deliveries per day</h2></div>
+    <p class="k-kpi-value">132</p>
+    <figure class="k-chart" id="demo-spark"></figure>
+  </article>
+</div>

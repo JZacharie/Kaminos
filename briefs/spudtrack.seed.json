@@ -1,0 +1,1799 @@
+{
+  "schema": 1,
+  "app": "spudtrack",
+  "now": "2026-11-04T10:30:00+01:00",
+  "briefSha": "d9baea62c053",
+  "collections": {
+    "shipments": [
+      {
+        "id": "SP-2401",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Madrid DC",
+        "stops": [
+          "Zaragoza",
+          "Madrid DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Madrid DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Madrid"
+          }
+        ],
+        "carrier": "Transportes Ebro",
+        "cargo": "26 Classic 150g",
+        "kind": "finished",
+        "lot": "L-26-0871",
+        "bestBefore": "2027-07-30",
+        "eta": "Today 14:00",
+        "etaIso": "2026-11-04T14:00",
+        "status": "On time",
+        "statusText": "On time",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 0,
+          "share": 0.7
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2402",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Barcelona DC",
+        "stops": [
+          "Zaragoza",
+          "Barcelona DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Barcelona DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Barcelona"
+          }
+        ],
+        "carrier": "Transportes Ebro",
+        "cargo": "24 Classic, 2 Ham 45g",
+        "kind": "finished",
+        "lot": "L-26-0872",
+        "bestBefore": "2027-07-30",
+        "eta": "Today 12:45",
+        "etaIso": "2026-11-04T12:45",
+        "status": "On time",
+        "statusText": "On time",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 0,
+          "share": 0.4
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2403",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Lyon DC",
+        "stops": [
+          "Zaragoza",
+          "Lyon DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Lyon DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Lyon"
+          }
+        ],
+        "carrier": "Gefco Iberia",
+        "cargo": "22 Paprika 150g",
+        "kind": "finished",
+        "lot": "L-26-0866",
+        "bestBefore": "2027-07-22",
+        "eta": "Tomorrow 09:00",
+        "etaIso": "2026-11-05T09:00",
+        "status": "Delayed",
+        "statusText": "Delayed (border queue 3 h, Le Perthus)",
+        "delay": null,
+        "cause": "border queue 3 h, Le Perthus",
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "at",
+          "place": "Le Perthus"
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2404",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Lisbon DC",
+        "stops": [
+          "Zaragoza",
+          "Lisbon DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Lisbon DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Lisbon"
+          }
+        ],
+        "carrier": "Rodoviária Tejo",
+        "cargo": "20 Sour Cream & Onion",
+        "kind": "finished",
+        "lot": "L-26-0868",
+        "bestBefore": "2027-07-24",
+        "eta": "Today 21:00",
+        "etaIso": "2026-11-04T21:00",
+        "status": "On time",
+        "statusText": "On time",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 0,
+          "share": 0.45
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2405",
+        "mode": "Truck, ship, truck",
+        "modes": [
+          "truck",
+          "ship",
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Valencia, Felixstowe, Daventry DC",
+        "stops": [
+          "Zaragoza",
+          "Valencia",
+          "Felixstowe",
+          "Daventry DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Valencia",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Valencia port"
+          },
+          {
+            "from": "Valencia",
+            "to": "Felixstowe",
+            "mode": "ship",
+            "fromPlace": "Valencia port",
+            "toPlace": "Felixstowe"
+          },
+          {
+            "from": "Felixstowe",
+            "to": "Daventry DC",
+            "mode": "truck",
+            "fromPlace": "Felixstowe",
+            "toPlace": "Daventry"
+          }
+        ],
+        "carrier": "Maersk / DFDS",
+        "cargo": "20 Classic in 40 ft",
+        "kind": "finished",
+        "lot": "L-26-0859",
+        "bestBefore": "2027-07-15",
+        "eta": "12 Nov",
+        "etaIso": "2026-11-12",
+        "status": "At port",
+        "statusText": "At port (Valencia), waiting for berth (66 % RH)",
+        "delay": null,
+        "cause": "waiting for berth",
+        "note": "66 % RH",
+        "stopsLine": false,
+        "position": {
+          "kind": "at",
+          "place": "Valencia port"
+        },
+        "lastFixMin": 45
+      },
+      {
+        "id": "SP-2406",
+        "mode": "Truck, ship",
+        "modes": [
+          "truck",
+          "ship"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Valencia, Jebel Ali",
+        "stops": [
+          "Zaragoza",
+          "Valencia",
+          "Jebel Ali"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Valencia",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Valencia port"
+          },
+          {
+            "from": "Valencia",
+            "to": "Jebel Ali",
+            "mode": "ship",
+            "fromPlace": "Valencia port",
+            "toPlace": "Jebel Ali"
+          }
+        ],
+        "carrier": "MSC",
+        "cargo": "22 Ham in 40 ft reefer",
+        "kind": "finished",
+        "lot": "L-26-0861",
+        "bestBefore": "2027-07-16",
+        "eta": "20 Nov",
+        "etaIso": "2026-11-20",
+        "status": "On time",
+        "statusText": "On time (day 3 of 19 at sea)",
+        "delay": null,
+        "cause": null,
+        "note": "day 3 of 19 at sea",
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 1,
+          "share": 0.16
+        },
+        "lastFixMin": 45
+      },
+      {
+        "id": "SP-2407",
+        "mode": "Truck, ship",
+        "modes": [
+          "truck",
+          "ship"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Barcelona, New York",
+        "stops": [
+          "Zaragoza",
+          "Barcelona",
+          "New York"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Barcelona",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Barcelona"
+          },
+          {
+            "from": "Barcelona",
+            "to": "New York",
+            "mode": "ship",
+            "fromPlace": "Barcelona",
+            "toPlace": "New York"
+          }
+        ],
+        "carrier": "Hapag-Lloyd",
+        "cargo": "20 Family Box in 40 ft",
+        "kind": "finished",
+        "lot": "L-26-0855",
+        "bestBefore": "2027-07-10",
+        "eta": "21 Nov",
+        "etaIso": "2026-11-21",
+        "status": "Delayed",
+        "statusText": "Delayed 4 days (missed transhipment at Algeciras, 71 % RH)",
+        "delay": "4 days",
+        "cause": "missed transhipment at Algeciras, 71 % RH",
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "at",
+          "place": "Algeciras"
+        },
+        "lastFixMin": 45
+      },
+      {
+        "id": "SP-2408",
+        "mode": "Air",
+        "modes": [
+          "truck",
+          "air"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Madrid airport, Dubai",
+        "stops": [
+          "Zaragoza",
+          "Madrid airport",
+          "Dubai"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Madrid airport",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Madrid airport"
+          },
+          {
+            "from": "Madrid airport",
+            "to": "Dubai",
+            "mode": "air",
+            "fromPlace": "Madrid airport",
+            "toPlace": "Dubai"
+          }
+        ],
+        "carrier": "Emirates SkyCargo",
+        "cargo": "3 Ham (launch samples)",
+        "kind": "finished",
+        "lot": "L-26-0875",
+        "bestBefore": "2027-08-02",
+        "eta": "Today 23:40",
+        "etaIso": "2026-11-04T23:40",
+        "status": "On time",
+        "statusText": "On time",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 0,
+          "share": 0.6
+        },
+        "lastFixMin": 12
+      },
+      {
+        "id": "SP-2409",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Milan DC",
+        "stops": [
+          "Zaragoza",
+          "Milan DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Milan DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Milan"
+          }
+        ],
+        "carrier": "Gefco Iberia",
+        "cargo": "24 Classic 150g",
+        "kind": "finished",
+        "lot": "L-26-0870",
+        "bestBefore": "2027-07-29",
+        "eta": "Today 18:00",
+        "etaIso": "2026-11-04T18:00",
+        "status": "Delayed",
+        "statusText": "Delayed 2 h (driver rest)",
+        "delay": "2 h",
+        "cause": "driver rest",
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 0,
+          "share": 0.85
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2410",
+        "mode": "Truck, ship, truck",
+        "modes": [
+          "truck",
+          "ship",
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Valencia, Southampton, Manchester",
+        "stops": [
+          "Zaragoza",
+          "Valencia",
+          "Southampton",
+          "Manchester"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Valencia",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Valencia port"
+          },
+          {
+            "from": "Valencia",
+            "to": "Southampton",
+            "mode": "ship",
+            "fromPlace": "Valencia port",
+            "toPlace": "Southampton"
+          },
+          {
+            "from": "Southampton",
+            "to": "Manchester",
+            "mode": "truck",
+            "fromPlace": "Southampton",
+            "toPlace": "Manchester"
+          }
+        ],
+        "carrier": "CMA CGM",
+        "cargo": "22 Paprika in 40 ft",
+        "kind": "finished",
+        "lot": "L-26-0850",
+        "bestBefore": "2027-07-05",
+        "eta": "9 Nov",
+        "etaIso": "2026-11-09",
+        "status": "In customs",
+        "statusText": "In customs (declaration query)",
+        "delay": null,
+        "cause": "declaration query",
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "at",
+          "place": "Southampton"
+        },
+        "lastFixMin": 45
+      },
+      {
+        "id": "SP-2411",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Paris DC",
+        "stops": [
+          "Zaragoza",
+          "Paris DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Paris DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Paris"
+          }
+        ],
+        "carrier": "Gefco Iberia",
+        "cargo": "26 Classic 150g",
+        "kind": "finished",
+        "lot": "L-26-0864",
+        "bestBefore": "2027-07-20",
+        "eta": "Yesterday 15:20",
+        "etaIso": "2026-11-03T15:20",
+        "status": "Delivered",
+        "statusText": "Delivered",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "delivered",
+          "place": "Paris"
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2412",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Seville DC",
+        "stops": [
+          "Zaragoza",
+          "Seville DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Seville DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Seville"
+          }
+        ],
+        "carrier": "Transportes Ebro",
+        "cargo": "18 Family Box",
+        "kind": "finished",
+        "lot": "L-26-0865",
+        "bestBefore": "2027-07-21",
+        "eta": "Yesterday 11:05",
+        "etaIso": "2026-11-03T11:05",
+        "status": "Delivered",
+        "statusText": "Delivered",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "delivered",
+          "place": "Seville"
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2413",
+        "mode": "Truck, inbound",
+        "modes": [
+          "truck"
+        ],
+        "direction": "in",
+        "route": "Pas-de-Calais, factory",
+        "stops": [
+          "Pas-de-Calais",
+          "factory"
+        ],
+        "legs": [
+          {
+            "from": "Pas-de-Calais",
+            "to": "factory",
+            "mode": "truck",
+            "fromPlace": "Arras (Pas-de-Calais)",
+            "toPlace": "Zaragoza"
+          }
+        ],
+        "carrier": "Transports Delcourt",
+        "cargo": "24 t potatoes (Agria)",
+        "kind": "potatoes",
+        "lot": "H-26-310",
+        "bestBefore": null,
+        "eta": "Today 13:00",
+        "etaIso": "2026-11-04T13:00",
+        "status": "On time",
+        "statusText": "On time",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 0,
+          "share": 0.7
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2414",
+        "mode": "Truck, inbound",
+        "modes": [
+          "truck"
+        ],
+        "direction": "in",
+        "route": "Flevoland, factory",
+        "stops": [
+          "Flevoland",
+          "factory"
+        ],
+        "legs": [
+          {
+            "from": "Flevoland",
+            "to": "factory",
+            "mode": "truck",
+            "fromPlace": "Lelystad (Flevoland)",
+            "toPlace": "Zaragoza"
+          }
+        ],
+        "carrier": "Van der Meer",
+        "cargo": "25 t potatoes (Lady Rosetta)",
+        "kind": "potatoes",
+        "lot": "H-26-318",
+        "bestBefore": null,
+        "eta": "Tomorrow 06:00",
+        "etaIso": "2026-11-05T06:00",
+        "status": "Delayed",
+        "statusText": "Delayed 7 h (farmers' blockade at Biriatou); stops the line",
+        "delay": "7 h",
+        "cause": "farmers' blockade at Biriatou",
+        "note": null,
+        "stopsLine": true,
+        "position": {
+          "kind": "at",
+          "place": "Biriatou"
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2415",
+        "mode": "Truck, inbound",
+        "modes": [
+          "truck"
+        ],
+        "direction": "in",
+        "route": "Pas-de-Calais, factory",
+        "stops": [
+          "Pas-de-Calais",
+          "factory"
+        ],
+        "legs": [
+          {
+            "from": "Pas-de-Calais",
+            "to": "factory",
+            "mode": "truck",
+            "fromPlace": "Arras (Pas-de-Calais)",
+            "toPlace": "Zaragoza"
+          }
+        ],
+        "carrier": "Transports Delcourt",
+        "cargo": "24 t potatoes (Agria)",
+        "kind": "potatoes",
+        "lot": "H-26-311",
+        "bestBefore": null,
+        "eta": "Friday 07:00",
+        "etaIso": "2026-11-06T07:00",
+        "status": "On time",
+        "statusText": "On time",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "loading",
+          "place": "Arras (Pas-de-Calais)"
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2416",
+        "mode": "Tanker, inbound",
+        "modes": [
+          "truck"
+        ],
+        "direction": "in",
+        "route": "Rotterdam, factory",
+        "stops": [
+          "Rotterdam",
+          "factory"
+        ],
+        "legs": [
+          {
+            "from": "Rotterdam",
+            "to": "factory",
+            "mode": "truck",
+            "fromPlace": "Rotterdam",
+            "toPlace": "Zaragoza"
+          }
+        ],
+        "carrier": "Vopak Road",
+        "cargo": "22 t sunflower oil",
+        "kind": "oil",
+        "lot": "O-26-77",
+        "bestBefore": null,
+        "eta": "6 Nov",
+        "etaIso": "2026-11-06",
+        "status": "On time",
+        "statusText": "On time",
+        "delay": null,
+        "cause": null,
+        "note": null,
+        "stopsLine": false,
+        "position": {
+          "kind": "leg",
+          "leg": 0,
+          "share": 0.3
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2417",
+        "mode": "Truck, inbound",
+        "modes": [
+          "truck"
+        ],
+        "direction": "in",
+        "route": "Mantova, factory",
+        "stops": [
+          "Mantova",
+          "factory"
+        ],
+        "legs": [
+          {
+            "from": "Mantova",
+            "to": "factory",
+            "mode": "truck",
+            "fromPlace": "Mantova",
+            "toPlace": "Zaragoza"
+          }
+        ],
+        "carrier": "Trasporti Gonzaga",
+        "cargo": "6 pallets packaging film",
+        "kind": "film",
+        "lot": "F-26-402",
+        "bestBefore": null,
+        "eta": "Today 15:30",
+        "etaIso": "2026-11-04T15:30",
+        "status": "In customs",
+        "statusText": "In customs (seal check, Le Perthus); stops the line",
+        "delay": null,
+        "cause": "seal check, Le Perthus",
+        "note": null,
+        "stopsLine": true,
+        "position": {
+          "kind": "at",
+          "place": "Le Perthus"
+        },
+        "lastFixMin": 3
+      },
+      {
+        "id": "SP-2418",
+        "mode": "Truck",
+        "modes": [
+          "truck"
+        ],
+        "direction": "out",
+        "route": "Zaragoza, Bilbao DC",
+        "stops": [
+          "Zaragoza",
+          "Bilbao DC"
+        ],
+        "legs": [
+          {
+            "from": "Zaragoza",
+            "to": "Bilbao DC",
+            "mode": "truck",
+            "fromPlace": "Zaragoza",
+            "toPlace": "Bilbao"
+          }
+        ],
+        "carrier": "Rodoviária Tejo",
+        "cargo": "20 Ham 45g",
+        "kind": "finished",
+        "lot": "L-26-0874",
+        "bestBefore": "2027-08-01",
+        "eta": "Today 20:00",
+        "etaIso": "2026-11-04T20:00",
+        "status": "On time",
+        "statusText": "On time (24.6 C)",
+        "delay": null,
+        "cause": null,
+        "note": "24.6 C",
+        "stopsLine": false,
+        "position": {
+          "kind": "loading",
+          "place": "Zaragoza"
+        },
+        "lastFixMin": 3
+      }
+    ],
+    "alerts": [
+      {
+        "id": "AL-01",
+        "severity": "High",
+        "shipment": "SP-2414",
+        "cause": "line stops tomorrow 06:00 without potatoes",
+        "time": "09:55",
+        "timeIso": "2026-11-04T09:55",
+        "state": "Open"
+      },
+      {
+        "id": "AL-02",
+        "severity": "High",
+        "shipment": "SP-2417",
+        "cause": "no film after Friday, line stops",
+        "time": "10:10",
+        "timeIso": "2026-11-04T10:10",
+        "state": "Open"
+      },
+      {
+        "id": "AL-03",
+        "severity": "High",
+        "shipment": "SP-2407",
+        "cause": "71 % RH for 7 h",
+        "time": "08:40",
+        "timeIso": "2026-11-04T08:40",
+        "state": "Open"
+      },
+      {
+        "id": "AL-04",
+        "severity": "Medium",
+        "shipment": "SP-2405",
+        "cause": "66 % RH for 5 h",
+        "time": "10:05",
+        "timeIso": "2026-11-04T10:05",
+        "state": "Open"
+      },
+      {
+        "id": "AL-05",
+        "severity": "Medium",
+        "shipment": "SP-2403",
+        "cause": "border queue 3 h",
+        "time": "07:20",
+        "timeIso": "2026-11-04T07:20",
+        "state": "Open"
+      },
+      {
+        "id": "AL-06",
+        "severity": "Medium",
+        "shipment": "SP-2410",
+        "cause": "customs query",
+        "time": "09:10",
+        "timeIso": "2026-11-04T09:10",
+        "state": "Open"
+      },
+      {
+        "id": "AL-07",
+        "severity": "Low",
+        "shipment": "SP-2409",
+        "cause": "driver rest, 2 h late",
+        "time": "10:15",
+        "timeIso": "2026-11-04T10:15",
+        "state": "Open"
+      },
+      {
+        "id": "AL-08",
+        "severity": "Medium",
+        "shipment": "SP-2411",
+        "cause": "27.4 C for 1 h",
+        "time": "yesterday 14:30",
+        "timeIso": "2026-11-03T14:30",
+        "state": "Closed"
+      },
+      {
+        "id": "AL-09",
+        "severity": "Low",
+        "shipment": "SP-2412",
+        "cause": "pallet scan missing",
+        "time": "yesterday 09:00",
+        "timeIso": "2026-11-03T09:00",
+        "state": "Closed"
+      }
+    ],
+    "onTimeByDay": [
+      {
+        "id": "D-22",
+        "date": "2026-10-22",
+        "pct": 94
+      },
+      {
+        "id": "D-23",
+        "date": "2026-10-23",
+        "pct": 92
+      },
+      {
+        "id": "D-24",
+        "date": "2026-10-24",
+        "pct": 95
+      },
+      {
+        "id": "D-25",
+        "date": "2026-10-25",
+        "pct": 91
+      },
+      {
+        "id": "D-26",
+        "date": "2026-10-26",
+        "pct": 88
+      },
+      {
+        "id": "D-27",
+        "date": "2026-10-27",
+        "pct": 90
+      },
+      {
+        "id": "D-28",
+        "date": "2026-10-28",
+        "pct": 93
+      },
+      {
+        "id": "D-29",
+        "date": "2026-10-29",
+        "pct": 89
+      },
+      {
+        "id": "D-30",
+        "date": "2026-10-30",
+        "pct": 86
+      },
+      {
+        "id": "D-31",
+        "date": "2026-10-31",
+        "pct": 92
+      },
+      {
+        "id": "D-01",
+        "date": "2026-11-01",
+        "pct": 90
+      },
+      {
+        "id": "D-02",
+        "date": "2026-11-02",
+        "pct": 87
+      },
+      {
+        "id": "D-03",
+        "date": "2026-11-03",
+        "pct": 84
+      },
+      {
+        "id": "D-04",
+        "date": "2026-11-04",
+        "pct": 88
+      }
+    ],
+    "delayCauses": [
+      {
+        "id": "border-queue",
+        "cause": "border queue",
+        "count": 6
+      },
+      {
+        "id": "port-congestion",
+        "cause": "port congestion",
+        "count": 5
+      },
+      {
+        "id": "customs",
+        "cause": "customs",
+        "count": 4
+      },
+      {
+        "id": "driver-rest",
+        "cause": "driver rest",
+        "count": 3
+      },
+      {
+        "id": "strike-or-blockade",
+        "cause": "strike or blockade",
+        "count": 3
+      },
+      {
+        "id": "missed-transhipment",
+        "cause": "missed transhipment",
+        "count": 2
+      }
+    ],
+    "sensorSeries": [
+      {
+        "id": "SP-2401",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 1,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2402",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 2,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2403",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 3,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2404",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 4,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2405",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 5,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [
+          {
+            "metric": "rh",
+            "value": 66,
+            "hours": 5
+          }
+        ],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2406",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 6,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2407",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 7,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [
+          {
+            "metric": "rh",
+            "value": 71,
+            "hours": 7
+          }
+        ],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2408",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 8,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2409",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 9,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2410",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 10,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2411",
+        "endsAt": "2026-11-03T15:20",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 11,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [
+          {
+            "metric": "temp",
+            "value": 27.4,
+            "hours": 1
+          }
+        ],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2412",
+        "endsAt": "2026-11-03T11:05",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 12,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "band": "finished"
+      },
+      {
+        "id": "SP-2413",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 13,
+        "temp": {
+          "base": 9,
+          "amp": 0.4
+        },
+        "rh": {
+          "base": 88,
+          "amp": 1.5
+        },
+        "excursions": [],
+        "band": "potatoes"
+      },
+      {
+        "id": "SP-2414",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 14,
+        "temp": {
+          "base": 9,
+          "amp": 0.4
+        },
+        "rh": {
+          "base": 88,
+          "amp": 1.5
+        },
+        "excursions": [],
+        "band": "potatoes"
+      },
+      {
+        "id": "SP-2415",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 15,
+        "temp": {
+          "base": 9,
+          "amp": 0.4
+        },
+        "rh": {
+          "base": 88,
+          "amp": 1.5
+        },
+        "excursions": [],
+        "band": "potatoes"
+      },
+      {
+        "id": "SP-2416",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 16,
+        "temp": {
+          "base": 18,
+          "amp": 2
+        },
+        "rh": null,
+        "excursions": [],
+        "band": "oil"
+      },
+      {
+        "id": "SP-2417",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 17,
+        "temp": {
+          "base": 19,
+          "amp": 2
+        },
+        "rh": null,
+        "excursions": [],
+        "band": "film"
+      },
+      {
+        "id": "SP-2418",
+        "endsAt": "2026-11-04T10:30",
+        "points": 24,
+        "stepHours": 1,
+        "phase": 18,
+        "temp": {
+          "base": 21.5,
+          "amp": 2.5
+        },
+        "rh": {
+          "base": 55,
+          "amp": 6
+        },
+        "excursions": [],
+        "lastValue": {
+          "temp": 24.6
+        },
+        "band": "finished"
+      }
+    ]
+  },
+  "constants": {
+    "company": "Golden Spud Foods Ltd.",
+    "factory": "Zaragoza",
+    "palletsPerDay": 40,
+    "maxStackPallets": 2,
+    "minShelfLifeMonths": 4,
+    "shelfLifeMonths": 9,
+    "limits": {
+      "rhMaxPct": 65,
+      "rhHours": 6,
+      "tempMaxC": 28,
+      "tempHours": 4
+    },
+    "readings": {
+      "finished": {
+        "tempC": [
+          17,
+          26
+        ],
+        "rhPct": [
+          45,
+          71
+        ]
+      },
+      "potatoes": {
+        "tempC": 9,
+        "rhPct": 88
+      }
+    },
+    "lastFixMin": {
+      "truck": 3,
+      "ship": 45,
+      "air": 12
+    },
+    "places": {
+      "Zaragoza": {
+        "lat": 41.66,
+        "lon": -0.88,
+        "onBasemap": true
+      },
+      "Madrid": {
+        "lat": 40.42,
+        "lon": -3.7,
+        "onBasemap": true
+      },
+      "Barcelona": {
+        "lat": 41.38,
+        "lon": 2.17,
+        "onBasemap": true
+      },
+      "Lyon": {
+        "lat": 45.76,
+        "lon": 4.83,
+        "onBasemap": true
+      },
+      "Lisbon": {
+        "lat": 38.72,
+        "lon": -9.14,
+        "onBasemap": true
+      },
+      "Milan": {
+        "lat": 45.46,
+        "lon": 9.19,
+        "onBasemap": true
+      },
+      "Paris": {
+        "lat": 48.86,
+        "lon": 2.35,
+        "onBasemap": true
+      },
+      "Seville": {
+        "lat": 37.39,
+        "lon": -5.98,
+        "onBasemap": true
+      },
+      "Bilbao": {
+        "lat": 43.26,
+        "lon": -2.94,
+        "onBasemap": true
+      },
+      "Valencia port": {
+        "lat": 39.44,
+        "lon": -0.32,
+        "onBasemap": true
+      },
+      "Algeciras": {
+        "lat": 36.13,
+        "lon": -5.44,
+        "onBasemap": true
+      },
+      "Felixstowe": {
+        "lat": 51.95,
+        "lon": 1.35,
+        "onBasemap": true
+      },
+      "Daventry": {
+        "lat": 52.26,
+        "lon": -1.16,
+        "onBasemap": true
+      },
+      "Southampton": {
+        "lat": 50.9,
+        "lon": -1.4,
+        "onBasemap": true
+      },
+      "Manchester": {
+        "lat": 53.48,
+        "lon": -2.24,
+        "onBasemap": true
+      },
+      "Madrid airport": {
+        "lat": 40.49,
+        "lon": -3.57,
+        "onBasemap": true
+      },
+      "Arras (Pas-de-Calais)": {
+        "lat": 50.29,
+        "lon": 2.78,
+        "onBasemap": true
+      },
+      "Lelystad (Flevoland)": {
+        "lat": 52.52,
+        "lon": 5.47,
+        "onBasemap": true
+      },
+      "Rotterdam": {
+        "lat": 51.95,
+        "lon": 4.14,
+        "onBasemap": true
+      },
+      "Mantova": {
+        "lat": 45.16,
+        "lon": 10.79,
+        "onBasemap": true
+      },
+      "Le Perthus": {
+        "lat": 42.46,
+        "lon": 2.86,
+        "onBasemap": true
+      },
+      "Biriatou": {
+        "lat": 43.33,
+        "lon": -1.74,
+        "onBasemap": true
+      },
+      "New York": {
+        "lat": 40.68,
+        "lon": -74.04,
+        "onBasemap": false
+      },
+      "Jebel Ali": {
+        "lat": 25.01,
+        "lon": 55.06,
+        "onBasemap": false
+      },
+      "Dubai": {
+        "lat": 25.25,
+        "lon": 55.36,
+        "onBasemap": false
+      }
+    },
+    "sensorModel": "points i = 0..23, hour = endsAt - (23 - i) h; value = base + amp * sin(2 * pi * (i + phase) / 24), rounded to 0.1; then each excursion sets the last `hours` points of `metric` to `value`; lastValue sets point 23. rh null = no humidity sensor.",
+    "needsCall": [
+      "SP-2414",
+      "SP-2417",
+      "SP-2407",
+      "SP-2405",
+      "SP-2403",
+      "SP-2410"
+    ]
+  },
+  "totals": {
+    "shipments": {
+      "value": 18,
+      "of": "rows of shipments",
+      "from": {
+        "collection": "shipments",
+        "count": true
+      }
+    },
+    "inTransit": {
+      "value": 16,
+      "of": "shipments not Delivered",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": {
+            "ne": "Delivered"
+          }
+        },
+        "count": true
+      }
+    },
+    "delayed": {
+      "value": 4,
+      "of": "shipments with status Delayed",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": "Delayed"
+        },
+        "count": true
+      }
+    },
+    "onTime": {
+      "value": 9,
+      "of": "status On time",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": "On time"
+        },
+        "count": true
+      }
+    },
+    "atPort": {
+      "value": 1,
+      "of": "status At port",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": "At port"
+        },
+        "count": true
+      }
+    },
+    "inCustoms": {
+      "value": 2,
+      "of": "status In customs",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": "In customs"
+        },
+        "count": true
+      }
+    },
+    "delivered": {
+      "value": 2,
+      "of": "status Delivered",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": "Delivered"
+        },
+        "count": true
+      }
+    },
+    "delayedIds": {
+      "value": [
+        "SP-2403",
+        "SP-2407",
+        "SP-2409",
+        "SP-2414"
+      ],
+      "of": "ids of the Delayed rows",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": "Delayed"
+        },
+        "list": "id"
+      }
+    },
+    "stopsLine": {
+      "value": [
+        "SP-2414",
+        "SP-2417"
+      ],
+      "of": "shipments that stop the factory line",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "stopsLine": true
+        },
+        "list": "id"
+      }
+    },
+    "openAlerts": {
+      "value": 7,
+      "of": "alerts with state Open",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open"
+        },
+        "count": true
+      }
+    },
+    "openHigh": {
+      "value": 3,
+      "of": "open High alerts",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open",
+          "severity": "High"
+        },
+        "count": true
+      }
+    },
+    "openMedium": {
+      "value": 3,
+      "of": "open Medium alerts",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open",
+          "severity": "Medium"
+        },
+        "count": true
+      }
+    },
+    "openLow": {
+      "value": 1,
+      "of": "open Low alerts",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open",
+          "severity": "Low"
+        },
+        "count": true
+      }
+    },
+    "closedAlerts": {
+      "value": 2,
+      "of": "alerts with state Closed",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Closed"
+        },
+        "count": true
+      }
+    },
+    "alerts": {
+      "value": 9,
+      "of": "all alerts (open and closed)",
+      "from": {
+        "collection": "alerts",
+        "count": true
+      }
+    },
+    "needsCall": {
+      "value": [
+        "SP-2414",
+        "SP-2417",
+        "SP-2407",
+        "SP-2405",
+        "SP-2403",
+        "SP-2410"
+      ],
+      "of": "shipments of the open High and Medium alerts, in alert order",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open",
+          "severity": {
+            "in": [
+              "High",
+              "Medium"
+            ]
+          }
+        },
+        "list": "shipment"
+      }
+    },
+    "onTimePctWeek": {
+      "value": 88,
+      "of": "mean of the last 7 days of onTimeByDay, rounded",
+      "from": {
+        "collection": "onTimeByDay",
+        "mean": "pct",
+        "last": 7
+      }
+    },
+    "delaysLast14Days": {
+      "value": 23,
+      "of": "sum of delayCauses.count",
+      "from": {
+        "collection": "delayCauses",
+        "sum": "count"
+      }
+    }
+  },
+  "agree": [
+    {
+      "id": "kpi-in-transit",
+      "description": "KPI In transit equals the shipments that are not Delivered",
+      "totals": "inTransit",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": {
+            "ne": "Delivered"
+          }
+        },
+        "count": true
+      },
+      "label": "In transit"
+    },
+    {
+      "id": "kpi-delayed",
+      "description": "KPI Delayed equals the number of Delayed rows",
+      "totals": "delayed",
+      "from": {
+        "collection": "shipments",
+        "where": {
+          "status": "Delayed"
+        },
+        "count": true
+      },
+      "label": "Delayed"
+    },
+    {
+      "id": "kpi-open-alerts",
+      "description": "KPI Open alerts equals the open rows on #/alerts",
+      "totals": "openAlerts",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open"
+        },
+        "count": true
+      },
+      "label": "Open alerts"
+    },
+    {
+      "id": "alerts-closed",
+      "description": "The Alerts screen shows exactly 2 closed alerts",
+      "totals": "closedAlerts",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Closed"
+        },
+        "count": true
+      },
+      "label": "Closed"
+    },
+    {
+      "id": "needs-call",
+      "description": "\"Needs a call today\" lists these shipments in this order",
+      "totals": "needsCall",
+      "from": {
+        "collection": "alerts",
+        "where": {
+          "state": "Open",
+          "severity": {
+            "in": [
+              "High",
+              "Medium"
+            ]
+          }
+        },
+        "list": "shipment"
+      },
+      "label": "Needs a call today"
+    },
+    {
+      "id": "kpi-on-time",
+      "description": "KPI On-time % this week is the mean of the last 7 days of the chart",
+      "totals": "onTimePctWeek",
+      "from": {
+        "collection": "onTimeByDay",
+        "mean": "pct",
+        "last": 7
+      },
+      "label": "On-time"
+    },
+    {
+      "id": "delay-causes",
+      "description": "Delays by cause add up to 23",
+      "totals": "delaysLast14Days",
+      "from": {
+        "collection": "delayCauses",
+        "sum": "count"
+      },
+      "label": "Delays by cause"
+    }
+  ],
+  "seedOnly": [
+    "collections.sensorSeries (generator parameters)",
+    "shipments.legs[].fromPlace/toPlace (aliases of the route stops)",
+    "constants.places for New York, Jebel Ali and Dubai",
+    "onTimeByDay ids"
+  ]
+}

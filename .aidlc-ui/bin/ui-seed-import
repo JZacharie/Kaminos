@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+'use strict';
+// ui-seed-import <ui-dir|ui-src-dir> [--seed <briefs/app.seed.json>] [--quiet]
+// Embeds the canonical seed of a workshop app: writes <src>/data.seed.js (window.CANON, window.canon.rows/total/constants; ui-build inlines it in front of
+// data.js) and the pristine copy <src>/seed.json (what the quality gate compares the page with). The seed is found through `brief.json` "seed", else --seed.
+// No seed (a custom idea): prints a note and exits 0, nothing is written. Exit 1 = the seed file is invalid, 2 = usage. Contract: addon/kit/SEED-RULES.md.
+const fs = require('node:fs');
+const path = require('node:path');
+const { importSeed } = require(path.join(__dirname, '..', 'lib', 'seed.js'));
+
+function usage(msg) {
+  if (msg) console.error(`ui-seed-import: ${msg}`);
+  console.error('usage: ui-seed-import <ui-dir|ui-src-dir> [--seed <file>] [--quiet]');
+  process.exit(2);
+}
+const argv = process.argv.slice(2);
+if (!argv.length || argv[0].startsWith('--')) usage('missing <ui-dir>');
+let dir = path.resolve(argv[0]);
+let seed = null;
+let quiet = false;
+for (let i = 1; i < argv.length; i++) {
+  if (argv[i] === '--seed' && argv[i + 1]) seed = path.resolve(argv[++i]);
+  else if (argv[i] === '--quiet') quiet = true;
+  else usage(`unknown option "${argv[i]}"`);
+}
+if (!fs.existsSync(path.join(dir, 'brief.json')) && fs.existsSync(path.join(dir, 'src'))) dir = path.join(dir, 'src');
+if (!fs.existsSync(dir)) usage(`${dir} does not exist`);
+const r = importSeed(dir, { seedPath: seed });
+if (r.status === 'invalid') {
+  for (const m of r.messages) console.error(`SEED-INVALID ${m}`);
+  console.error(`ui-seed-import: ${r.file} is not a valid seed`);
+  process.exit(1);
+}
+if (r.status === 'none') { if (!quiet) console.log(`ui-seed-import: ${r.messages[0]}`); process.exit(0); }
+console.log(`ui-seed-import: ${path.relative(process.cwd(), r.file) || r.file} (${r.sha}) -> ${path.join(dir, 'data.seed.js')}; collections ${Object.entries(r.collections).map(([k, n]) => `${k}=${n}`).join(' ')}`);

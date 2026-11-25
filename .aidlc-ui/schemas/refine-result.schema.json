@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/aidlc-ui-first/addon/schemas/refine-result.schema.json",
+  "title": "AI-DLC UI-first refinement result (bridge agent output)",
+  "description": "The ONE JSON object the refinement agent prints as the last line of its answer (D-19). Owned by the planner. addon/knowledge/ui-changes-classifier.md describes the classes; canvas/src/bridge/ parses this object and nothing else. One request = one class; a request that mixes classes is not applied and is returned split (cannotApply = mixed-request).",
+  "type": "object",
+  "required": [
+    "classification",
+    "title",
+    "change",
+    "touchedIds",
+    "module",
+    "newQuestion",
+    "newOptions",
+    "newFr",
+    "scopeOut",
+    "cannotApply",
+    "splitInto"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "classification": {
+      "type": "string",
+      "enum": [
+        "aesthetic",
+        "add-feature",
+        "remove-feature"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "change": {
+      "description": "One sentence: what was changed, or for a catalog module request what the user must do in the palette.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "touchedIds": {
+      "description": "Anchor ids whose subtree changed (existing or new). [] when nothing was edited.",
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "pattern": "^a-[a-z0-9]+(-[a-z0-9]+)*$",
+        "maxLength": 64
+      }
+    },
+    "module": {
+      "description": "Catalog module id when the request is about adding, removing or changing a catalog module (login, table, chatbot, ...); else null. The agent never mounts a module: Canvas offers the palette.",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "maxLength": 48
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "newQuestion": {
+      "description": "add-feature without a catalog module: the question for the product owner, one sentence. Else null.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "newOptions": {
+      "description": "2 to 4 plain options (no letters) when newQuestion is set; else [].",
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "newFr": {
+      "description": "Draft functional requirement, one sentence, when newQuestion is set; else null.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "scopeOut": {
+      "description": "remove-feature: module id (catalog) or a kebab-case generated module id that goes to scope out. Else null.",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "maxLength": 48
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cannotApply": {
+      "description": "null when applied. outside-selection = needs elements outside the selection; mixed-request = the request mixes classes (see splitInto); unsupported = cannot be shown in the prototype.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "outside-selection",
+            "mixed-request",
+            "unsupported"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "splitInto": {
+      "description": "Only with cannotApply = mixed-request: 2 or 3 single-class requests in the user's language, which Canvas offers as separate buttons. Else [].",
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "cannotApply": {
+            "const": "mixed-request"
+          }
+        },
+        "required": [
+          "cannotApply"
+        ]
+      },
+      "then": {
+        "properties": {
+          "splitInto": {
+            "type": "array",
+            "minItems": 2
+          },
+          "touchedIds": {
+            "type": "array",
+            "maxItems": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "splitInto": {
+            "type": "array",
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "newQuestion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "newQuestion"
+        ]
+      },
+      "then": {
+        "properties": {
+          "classification": {
+            "const": "add-feature"
+          },
+          "newOptions": {
+            "type": "array",
+            "minItems": 2
+          },
+          "newFr": {
+            "type": "string"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "newOptions": {
+            "type": "array",
+            "maxItems": 0
+          },
+          "newFr": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "scopeOut": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scopeOut"
+        ]
+      },
+      "then": {
+        "properties": {
+          "classification": {
+            "const": "remove-feature"
+          }
+        }
+      }
+    }
+  ]
+}

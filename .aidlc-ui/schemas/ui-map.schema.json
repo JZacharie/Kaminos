@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/aidlc-ui-first/addon/schemas/ui-map.schema.json",
+  "title": "AI-DLC UI-first ui-map",
+  "description": "Map between prototype.html, the AI-DLC questions anchored to its elements, the requirements they produce and the module scope. Written by stage 1.6 (rough-mockups) of scope ui-first and updated by the Canvas app. Cross-file rules (anchor ids exist in prototype.html and in *-questions.md) are checked by addon/bin/validate, see addon/ANCHORS.md.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "uiVersion",
+    "app",
+    "screens",
+    "elements",
+    "modules"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-": {}
+  },
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this schema the file follows. 1.1 adds modules[].mounted (D-21); 1.2 adds assumptions[] (D-30); older files stay valid.",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2"
+      ]
+    },
+    "uiVersion": {
+      "description": "Prototype version: 1 after stage 1.6, +1 for every accepted answer or refinement. Equals the aidlc-ui-version meta tag of prototype.html.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "app": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "intent": {
+          "description": "AI-DLC intent folder name, e.g. 261103-spudtrack.",
+          "type": "string",
+          "pattern": "^[0-9]{6}-[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "language": {
+          "description": "BCP 47 language of the UI text, e.g. es or en-GB.",
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$"
+        }
+      }
+    },
+    "screens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/screen"
+      }
+    },
+    "elements": {
+      "description": "Every anchored element of prototype.html. One entry per anchor id.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/element"
+      }
+    },
+    "modules": {
+      "description": "Functional modules shown on the scope board (stage 1.4). Catalog modules come from modules/<id>/module.json.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/module"
+      }
+    },
+    "flows": {
+      "description": "Navigation flows between screens (mirrors user-flow.md).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/flow"
+      }
+    },
+    "assumptions": {
+      "description": "Assumptions v1 made, shown as an editable list in Canvas (D-30). Each one is a question in a questions file carrying an [Assumed]: line; correcting it is an answer.",
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "text",
+          "question",
+          "assumed"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^as-[a-z0-9]+(-[a-z0-9]+)*$",
+            "maxLength": 48
+          },
+          "text": {
+            "description": "Short visible text, e.g. 'Desktop first'.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "question": {
+            "$ref": "#/$defs/questionRef"
+          },
+          "assumed": {
+            "description": "Option letter v1 was built on.",
+            "type": "string",
+            "pattern": "^[A-D]$"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "screenId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 48
+    },
+    "anchorId": {
+      "description": "Anchor id: a- prefix + kebab-case. Same string as the id attribute in prototype.html and the [Anchor]: line in *-questions.md.",
+      "type": "string",
+      "pattern": "^a-[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 64
+    },
+    "questionRef": {
+      "description": "<questions file stem>#Q<number>, e.g. rough-mockups-questions#Q3 or requirements-analysis-questions#Q12.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*-questions#Q[1-9][0-9]*$"
+    },
+    "requirementId": {
+      "type": "string",
+      "pattern": "^(FR|NFR)-[0-9]{2,4}$"
+    },
+    "moduleId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 48
+    },
+    "screen": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "route"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/screenId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "route": {
+          "description": "Hash route that shows the screen inside prototype.html. The pseudo-screen 'shell' (elements visible on every screen) uses the route of the default screen.",
+          "type": "string",
+          "pattern": "^#/[A-Za-z0-9/_-]*$"
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "required": [
+        "id",
+        "screen",
+        "label",
+        "questionIds",
+        "frIds",
+        "module"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/anchorId"
+        },
+        "screen": {
+          "$ref": "#/$defs/screenId"
+        },
+        "label": {
+          "description": "Short human name of the element, shown in the popover and in traceability lines.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "region",
+            "nav",
+            "kpi",
+            "chart",
+            "table",
+            "column",
+            "form",
+            "field",
+            "button",
+            "list",
+            "map",
+            "card",
+            "badge",
+            "text",
+            "other"
+          ]
+        },
+        "questionIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/questionRef"
+          }
+        },
+        "frIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/requirementId"
+          }
+        },
+        "questions": {
+          "description": "Set to false for an anchored element that is not meant to have a question (a feed, a legend, a docs panel): addon/bin/validate then skips its UNUSED-ANCHOR warning. Absent or true: unchanged.",
+          "type": "boolean"
+        },
+        "uxIds": {
+          "description": "Experience decision ids UX{x}.{y}.{n} assigned to this element by stage 2.5 refined-mockups (upstream PR awslabs/aidlc-workflows#2889). Empty or absent before 2.5.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^UX[0-9]+\\.[0-9]+\\.[0-9]+$"
+          }
+        },
+        "module": {
+          "description": "Module the element belongs to, or null for app-specific elements.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/moduleId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "module": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "scope",
+        "source"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/moduleId"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "mvp",
+            "later",
+            "out"
+          ]
+        },
+        "source": {
+          "description": "catalog = prefabricated module from modules/<id>/ (has contract and recipe); generated = invented for this app during 1.4/1.6.",
+          "type": "string",
+          "enum": [
+            "catalog",
+            "generated"
+          ]
+        },
+        "mounted": {
+          "description": "Catalog modules only (D-21). false = listed on the scope board (recommended or scoped), not placed in prototype.html: no element may carry this module. true = Canvas mounted the module's UI: at least one element carries it. Absent means false. Only the Canvas palette sets it to true.",
+          "type": "boolean"
+        },
+        "catalogVersion": {
+          "description": "module.json version when source is catalog.",
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "questionIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/questionRef"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "source": {
+            "const": "catalog"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "catalogVersion": true
+        },
+        "required": [
+          "catalogVersion"
+        ]
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": [
+        "id",
+        "steps"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/screenId"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/screenId"
+          }
+        }
+      }
+    }
+  }
+}

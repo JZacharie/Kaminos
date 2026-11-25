@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+'use strict';
+// quality-gate <ui-dir> [options]   (run with --help for the options)
+// Thin CommonJS launcher (like the other addon/bin scripts); the gate itself is ESM in ../lib/quality/main.mjs.
+// Contract: addon/bin/README.md. Dependencies: ../quality/node_modules (npm ci in addon/quality).
+const path = require('node:path');
+const { pathToFileURL } = require('node:url');
+
+import(pathToFileURL(path.join(__dirname, '..', 'lib', 'quality', 'main.mjs')).href)
+  .then((m) => m.cli(process.argv.slice(2)))
+  .catch((e) => {
+    console.error(`quality-gate: cannot start: ${e && e.message ? e.message : e}`);
+    process.exitCode = 2;
+  });

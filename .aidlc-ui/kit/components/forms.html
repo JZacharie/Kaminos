@@ -1,0 +1,43 @@
+<!-- Form, fields, filters, buttons. Every control has a visible <label for>; errors use .k-error + aria-describedby.
+     form[data-k-validate] shows browser validation messages in .k-error and toasts data-k-success when valid.
+     The form is the anchored element; fields inside it may carry their own anchors (column/field exception). -->
+<form class="k-card k-form" id="a-demo-form" data-k-validate data-k-success="Driver saved">
+  <fieldset class="k-fieldset">
+    <legend>Driver details</legend>
+    <div class="k-field">
+      <label for="demo-name">Full name</label>
+      <input class="k-input" id="demo-name" type="text" autocomplete="name" required aria-describedby="demo-name-err">
+      <span class="k-error" id="demo-name-err" role="alert"></span>
+    </div>
+    <div class="k-field">
+      <label for="demo-licence">Licence class</label>
+      <select class="k-select" id="demo-licence">
+        <option>C</option><option>C+E</option><option>D</option>
+      </select>
+      <span class="k-help">C+E is required for articulated trucks.</span>
+    </div>
+    <div class="k-field">
+      <label for="demo-notes">Notes</label>
+      <textarea class="k-textarea" id="demo-notes" rows="3"></textarea>
+    </div>
+    <div class="k-field">
+      <label for="demo-disabled">Employee number (read only)</label>
+      <input class="k-input" id="demo-disabled" type="text" value="E-20417" disabled>
+    </div>
+  </fieldset>
+  <fieldset class="k-fieldset">
+    <legend>Alerts</legend>
+    <label class="k-check"><input type="checkbox" checked><span>Email me when a licence expires</span></label>
+    <label class="k-check"><input class="k-switch" type="checkbox" role="switch"><span>Send a daily digest at 07:00</span></label>
+    <label class="k-check"><input type="radio" name="demo-radio" checked><span>Notify the depot manager</span></label>
+    <label class="k-check"><input type="radio" name="demo-radio"><span>Notify the driver only</span></label>
+  </fieldset>
+  <div class="k-row">
+    <button class="k-btn k-btn-primary" type="submit">Save driver</button>
+    <button class="k-btn" type="reset">Reset</button>
+    <button class="k-btn k-btn-danger" type="button" data-k-toast="Driver removed" data-k-toast-kind="warn">Remove</button>
+    <button class="k-btn" type="button" disabled>Disabled</button>
+    <button class="k-btn k-btn-ghost" type="button">Ghost</button>
+    <button class="k-btn k-btn-sm" type="button">Small</button>
+  </div>
+</form>

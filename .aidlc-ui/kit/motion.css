@@ -1,0 +1,95 @@
+/* AI-DLC UI kit motion 1.0 (MIT-0). Companion of motion.js: opt-in animations, kit tokens only, light and dark, no network.
+   Everything that moves sits behind html[data-k-m], which motion.js sets only while the user allows motion (no prefers-reduced-motion: reduce, no <html data-k-reduce>).
+   Without it every element is in its final state. Only transform and opacity animate (the progress ring and the tab indicator are the two small exceptions: stroke-dashoffset, width). */
+:root{--k-ease:cubic-bezier(.22,1,.36,1)}
+
+/* entrance on scroll (data-k-anim, data-k-stagger): hidden until motion.js plays it */
+.k-m-pend{opacity:0}
+.k-m-num{font-variant-numeric:tabular-nums}
+
+/* text: typewriter and word reveal (the full text stays in a .k-sr copy for assistive tech) */
+.k-m-w{display:inline-block;white-space:nowrap}
+.k-m-pend-txt .k-m-c,.k-m-typing .k-m-c:not(.k-m-on){opacity:0}
+.k-m-caret{display:inline-block;width:.1em;height:1em;margin-left:.08em;vertical-align:-.12em;background:currentColor;animation:k-m-blink 1s steps(1) infinite}
+@keyframes k-m-blink{50%{opacity:0}}
+
+/* progress bar: <div data-k-progress="72" aria-label="...">; ring: <div data-k-ring="72" aria-label="..."> ; data-k-tone ok|warn|bad|info */
+.k-m-bar,.k-m-ring{--k-m-c:var(--accent)}
+[data-k-tone=ok]{--k-m-c:var(--ok)}[data-k-tone=warn]{--k-m-c:var(--warn)}[data-k-tone=bad]{--k-m-c:var(--bad)}[data-k-tone=info]{--k-m-c:var(--info)}
+.k-m-bar{position:relative;height:.5rem;overflow:hidden;border-radius:999px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.k-m-bar::before{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--k-m-c);transform:scaleX(var(--k-p,1));transform-origin:0 50%}
+html[data-k-m] .k-m-bar::before{transition:transform 1s var(--k-ease) var(--k-delay,0s)}
+.k-m-ring{position:relative;display:inline-grid;place-items:center;width:var(--k-m-size,5.5rem);aspect-ratio:1}
+.k-m-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.k-m-ring-bg,.k-m-ring-fg{fill:none;stroke-width:4}
+.k-m-ring-bg{stroke:var(--line)}
+.k-m-ring-fg{stroke:var(--k-m-c);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:calc(100 - var(--k-p,1)*100)}
+html[data-k-m] .k-m-ring-fg{transition:stroke-dashoffset 1.1s var(--k-ease) var(--k-delay,0s)}
+.k-m-ring-val{position:relative;font-size:var(--fs-3);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* skeleton: shimmer shapes, swapped for the content by data-k-load (the shimmer is a loading signal and stops with kitMotion.pause()) */
+.k-skel{position:relative;display:block;overflow:hidden;border-radius:var(--r1);background:var(--surface-2)}
+.k-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--surface) 70%,transparent),transparent);transform:translateX(-100%)}
+html[data-k-m]:not([data-k-paused]) .k-skel::after{animation:k-m-shim 1.5s ease-in-out infinite}
+@keyframes k-m-shim{to{transform:translateX(100%)}}
+.k-skel-line{height:.875rem;margin-block:.5rem}.k-skel-circle{width:2.5rem;height:2.5rem;border-radius:50%}.k-skel-block{height:6rem}
+.k-skel-w40{width:40%}.k-skel-w60{width:60%}.k-skel-w80{width:80%}
+
+/* hover: k-lift (rises, shadow fades in), k-glow (accent spotlight follows the pointer), k-press (presses in) */
+.k-lift,.k-glow{position:relative;isolation:isolate}
+.k-lift::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none}
+.k-glow::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:radial-gradient(16rem circle at var(--k-mx,50%) var(--k-my,0%),color-mix(in srgb,var(--accent) 20%,transparent),transparent 70%);opacity:0;pointer-events:none}
+html[data-k-m] .k-lift{transition:transform .28s var(--k-ease)}
+html[data-k-m] .k-lift::after,html[data-k-m] .k-glow::before{transition:opacity .28s}
+html[data-k-m] .k-lift:is(:hover,:focus-within){transform:translateY(-4px)}
+html[data-k-m] .k-lift:is(:hover,:focus-within)::after,html[data-k-m] .k-glow:is(:hover,:focus-within)::before{opacity:1}
+html[data-k-m] .k-glow:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+html[data-k-m] .k-press,html[data-k-m][data-k-fx~=press] .k-btn{transition:background-color .15s,box-shadow .15s,transform .14s var(--k-ease)}
+html[data-k-m] .k-press:active,html[data-k-m][data-k-fx~=press] .k-btn:active{transform:scale(.97)}
+.k-m-rip-host{position:relative;overflow:hidden}
+.k-m-rip{position:absolute;border-radius:50%;background:currentColor;opacity:0;transform:translate(-50%,-50%) scale(0);pointer-events:none}
+
+/* toast and dialog enter and exit (data-k-motion="toast dialog" or "all") */
+html[data-k-m][data-k-fx~=toast] .k-toast{animation:k-m-toast-in .36s var(--k-ease) both,k-m-toast-out .24s ease-in calc(var(--k-life,4000ms) - .24s) forwards}
+@keyframes k-m-toast-in{from{opacity:0;transform:translateY(14px) scale(.96)}}
+@keyframes k-m-toast-out{to{opacity:0;transform:translateY(8px) scale(.98)}}
+html[data-k-m][data-k-fx~=dialog] .k-dialog{opacity:0;transform:translateY(14px) scale(.97);transition:opacity .22s,transform .3s var(--k-ease),overlay .3s allow-discrete,display .3s allow-discrete}
+html[data-k-m][data-k-fx~=dialog] .k-dialog[open]{opacity:1;transform:none}
+html[data-k-m][data-k-fx~=dialog] .k-dialog::backdrop{opacity:0;transition:opacity .25s,overlay .3s allow-discrete,display .3s allow-discrete}
+html[data-k-m][data-k-fx~=dialog] .k-dialog[open]::backdrop{opacity:1}
+@starting-style{
+html[data-k-m][data-k-fx~=dialog] .k-dialog[open]{opacity:0;transform:translateY(14px) scale(.97)}
+html[data-k-m][data-k-fx~=dialog] .k-dialog[open]::backdrop{opacity:0}}
+
+/* marquee: loops until paused (its Pause button, hover, focus, kitMotion.pause()) */
+.k-m-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.k-m-track{display:flex;width:max-content}
+.k-m-set{display:flex;flex:none;align-items:center;gap:var(--s4);padding-right:var(--s4)}
+html[data-k-m] .k-m-track{animation:k-m-marq var(--k-dur,20s) linear infinite}
+@keyframes k-m-marq{to{transform:translateX(-50%)}}
+html[data-k-m] .k-m-marquee:is(:hover,:focus-within) .k-m-track,html[data-k-m] .k-m-marquee[data-paused] .k-m-track,html[data-k-paused] .k-m-track{animation-play-state:paused}
+.k-m-pause{align-self:flex-start;margin-top:var(--s1)}
+
+/* sliding indicator behind the selected tab, segment or nav link (data-k-anim="indicator") */
+.k-m-ind-on{position:relative}
+.k-m-ind{position:absolute;left:0;top:0;width:var(--k-iw,0);height:var(--k-ih,0);transform:translate(var(--k-ix,0),var(--k-iy,0));border-radius:max(2px,calc(var(--r1) - 3px));background:color-mix(in srgb,var(--accent) 14%,var(--surface));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 50%,var(--line)),0 1px 2px var(--shadow-c);opacity:0;pointer-events:none}
+.k-m-ind-ready>.k-m-ind{opacity:1}
+.k-m-ind-ready>:not(.k-m-ind){position:relative;z-index:1}
+html[data-k-m] .k-m-ind{transition:transform .4s var(--k-ease),width .4s var(--k-ease),height .4s var(--k-ease),opacity .2s}
+.k-m-ind-ready .k-seg-opt[aria-checked=true],.k-m-ind-ready a[aria-current=page]{background:none}
+.k-m-ind-ready .k-seg-opt[aria-checked=true]:not(:focus-visible){box-shadow:none}
+.k-tabs.k-m-ind-on>.k-m-ind,[role=tablist].k-m-ind-on>.k-m-ind{height:3px;transform:translate(var(--k-ix,0),calc(var(--k-iy,0px) + var(--k-ih,0px) - 3px));border-radius:3px 3px 0 0;background:var(--accent);box-shadow:none}
+.k-m-ind-ready [role=tab][aria-selected=true]{border-bottom-color:transparent}
+
+/* success check (data-k-anim="check") and confetti (kitMotion.confetti(), data-k-confetti) */
+.k-m-check{display:inline-grid;width:var(--k-m-size,3.5rem);aspect-ratio:1;color:var(--ok)}
+.k-m-check-svg{width:100%;height:100%;overflow:visible}
+.k-m-check-halo{fill:var(--ok-bg);transform-box:fill-box;transform-origin:center}
+.k-m-check-ring,.k-m-check-tick{fill:none;stroke:var(--ok);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1}
+.k-m-check-ring{stroke-width:3;transform:rotate(-90deg);transform-box:fill-box;transform-origin:center}
+.k-m-check-tick{stroke-width:4}
+.k-m-confetti{position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none}
+.k-m-piece{position:absolute;width:.5rem;height:.9rem;margin:-.45rem 0 0 -.25rem;border-radius:1px;background:var(--c,var(--accent))}
+.k-m-round{width:.6rem;height:.6rem;margin:-.3rem 0 0 -.3rem;border-radius:50%}
+
+@media print{.k-m-pend{opacity:1!important}.k-m-pend-txt .k-m-c,.k-m-typing .k-m-c:not(.k-m-on){opacity:1!important}.k-m-confetti,.k-m-pause{display:none!important}}

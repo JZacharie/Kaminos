@@ -1,0 +1,820 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/aidlc-ui-first/addon/templates/ui-brief.schema.json",
+  "title": "AI-DLC UI-first design brief (brief.json)",
+  "description": "Written by the ui-designer agent to <record>/ui/src/brief.json (design mode, D-37) and read, independently and in parallel, by ui-data-builder (writes src/data.js), by every ui-screen-builder (writes its screen) and by addon/bin/ui-brief. It fixes the screens, the anchors, the data contract (dataEntities and dataDerived), the assumptions and the questions of version 1. Cross-field rules (anchors of questions and effects exist, ids and routes are unique, effects length equals options length, the data contract is consistent, anchors in the sources equal the anchors of the brief, src/data.js follows the contract) are enforced by addon/bin/ui-brief --check, not by this schema.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "app",
+    "style",
+    "screens",
+    "shell",
+    "dataEntities",
+    "dataDerived",
+    "assumptions",
+    "questions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "app": {
+      "type": "object",
+      "required": [
+        "name",
+        "language",
+        "domain",
+        "summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "language": {
+          "description": "BCP 47 language of the UI text, e.g. en or es.",
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$"
+        },
+        "domain": {
+          "description": "Business domain in a few words, e.g. 'food logistics (shipment tracking)'.",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "summary": {
+          "description": "One or two sentences: what the app is for and who opens it first thing in the morning.",
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 400
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "required": [
+        "accent",
+        "density",
+        "theme"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "accent": {
+          "type": "string",
+          "enum": [
+            "potato-gold",
+            "teal",
+            "indigo"
+          ]
+        },
+        "density": {
+          "type": "string",
+          "enum": [
+            "comfortable",
+            "compact"
+          ]
+        },
+        "theme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark",
+            "auto"
+          ]
+        }
+      }
+    },
+    "screens": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 8,
+      "items": {
+        "$ref": "#/$defs/screen"
+      }
+    },
+    "shell": {
+      "description": "Anchors of the pseudo-screen 'shell' (top bar, navigation), written to src/shell.html.",
+      "type": "object",
+      "required": [
+        "anchors"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "anchors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "$ref": "#/$defs/anchor"
+          }
+        }
+      }
+    },
+    "dataEntities": {
+      "description": "The data contract of window.APP_DATA (one key per entity). ui-data-builder writes src/data.js and every ui-screen-builder codes against this list at the same time, so it must be complete: every field a screen shows, filters or sorts on.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "$ref": "#/$defs/dataEntity"
+      }
+    },
+    "dataDerived": {
+      "$ref": "#/$defs/dataDerived"
+    },
+    "assumptions": {
+      "description": "Decisions version 1 already took. Each one becomes a [Kind]: assumption question the person can correct.",
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 8,
+      "items": {
+        "$ref": "#/$defs/assumption"
+      }
+    },
+    "questions": {
+      "description": "Round-1 questions: choices that change what the customer SEES. No fixed cap: one per open decision that changes what the screen shows; 12 is only a technical ceiling. Every option needs an op besides badge (checked by ui-brief, EFFECTS-BADGE-ONLY) and two options never share their ops (EFFECTS-IDENTICAL).",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "$ref": "#/$defs/question"
+      }
+    },
+    "map": {
+      "description": "Optional. Present when any screen shows a map or a site plan. Fixes where things are, so the data builder derives every distance from coordinates instead of typing it and the screens never draw geography by hand.",
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "description": "basemap = kit Europe basemap with real coordinates; site-plan = schematic inline SVG of the site (labelled schematic); both = basemap for origins plus a site plan.",
+          "type": "string",
+          "enum": [
+            "basemap",
+            "site-plan",
+            "both"
+          ]
+        },
+        "site": {
+          "description": "The place the map is about. For a fictional site on a real coast or city use the coordinates of a real spot nearby (near).",
+          "type": "object",
+          "required": [
+            "name",
+            "lat",
+            "lon"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            },
+            "lat": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "lon": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "near": {
+              "description": "The real place the coordinates are taken from (not shown on screen if the site is fictional).",
+              "type": "string",
+              "maxLength": 80
+            }
+          }
+        },
+        "originsEntity": {
+          "description": "Name of a dataEntity whose rows hold lat and lon (airports, depots, stations). The data builder derives every distance to the site from them with distanceKm.",
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$",
+          "maxLength": 40
+        },
+        "places": {
+          "description": "Site-plan places (stages, gates, hotel, charge bays): dataEntity name whose rows hold name and x,y (0-100) or distanceM from the site centre.",
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$",
+          "maxLength": 40
+        }
+      }
+    },
+    "seed": {
+      "description": "Optional. Path (relative to the project root) of the canonical seed shipped next to the brief, e.g. briefs/stagehand.seed.json. When present, data.js builds every canonical collection from window.canon (ui-seed-import) and the gate compares the page with the seed.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._/-]+\\.seed\\.json$",
+      "maxLength": 120
+    }
+  },
+  "$defs": {
+    "screenId": {
+      "description": "Also the file name part of src/screens/NN-<id>.html. 'shell' is reserved.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 48
+    },
+    "anchorId": {
+      "type": "string",
+      "pattern": "^a-[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 64
+    },
+    "optionText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "role": {
+      "description": "Role tag of the question heading, e.g. 'Product owner'. Default 'Product owner'.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "pattern": "^[^\\[\\]\\n]+$"
+    },
+    "options": {
+      "description": "Option texts for the letters A, B, C, D in order. The letter X ('Other') is added by ui-brief.",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "items": {
+        "$ref": "#/$defs/optionText"
+      }
+    },
+    "classTokens": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "op": {
+      "description": "One answer-effect op of addon/ANCHORS.md section 2b. Required fields per op (text: target+value, hide/show: target, class: target+add or remove, badge: target+text) are checked by ui-brief --check.",
+      "type": "object",
+      "required": [
+        "op",
+        "target"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "text",
+            "hide",
+            "show",
+            "class",
+            "badge"
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/anchorId"
+        },
+        "selector": {
+          "description": "CSS selector evaluated inside the target only.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "add": {
+          "$ref": "#/$defs/classTokens"
+        },
+        "remove": {
+          "$ref": "#/$defs/classTokens"
+        }
+      }
+    },
+    "optionEffects": {
+      "description": "Ops applied when this option is chosen. At least one op, visible on the question's anchor or on another anchored element of the same screen.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/op"
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "kind",
+        "screen"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/anchorId"
+        },
+        "label": {
+          "description": "Short human name shown in the Canvas popover.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "region",
+            "nav",
+            "kpi",
+            "chart",
+            "table",
+            "column",
+            "form",
+            "field",
+            "button",
+            "list",
+            "map",
+            "card",
+            "badge",
+            "text",
+            "other"
+          ]
+        },
+        "screen": {
+          "description": "Id of the screen that lists the anchor, or 'shell' for shell.anchors.",
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "maxLength": 48
+        }
+      }
+    },
+    "screen": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "route",
+        "purpose",
+        "primaryAction",
+        "anchors"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/screenId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "route": {
+          "description": "Hash route, unique. A detail screen uses a concrete sample id, e.g. #/shipment/SP-2405.",
+          "type": "string",
+          "pattern": "^#/[A-Za-z0-9/_-]*$",
+          "maxLength": 80
+        },
+        "purpose": {
+          "description": "The one thing a person should see first on this screen.",
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 300
+        },
+        "primaryAction": {
+          "description": "The one primary action of the screen (button label or interaction).",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "anchors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/anchor"
+          }
+        }
+      }
+    },
+    "dataEntity": {
+      "type": "object",
+      "required": [
+        "name",
+        "rows",
+        "key",
+        "fields"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Key of window.APP_DATA holding the array of rows (camelCase plural, e.g. shipments)."
+        },
+        "rows": {
+          "description": "Number of rows. The main entity has at least 24 (the quality gate needs 12 per table; a table or list that shows only a small canonical collection carries data-k-canon). The mock records spelled out in app-brief.md come first and count. A collection of the canonical seed has exactly the seed's row count.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        },
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Field that identifies a row (unique, stable across screens)."
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 24,
+          "items": {
+            "$ref": "#/$defs/dataField"
+          }
+        },
+        "relations": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/dataRelation"
+          }
+        },
+        "thresholds": {
+          "description": "Status vocabulary rules and limits that derive a status, a badge or a KPI from the rows.",
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/dataThreshold"
+          }
+        }
+      }
+    },
+    "assumption": {
+      "type": "object",
+      "required": [
+        "id",
+        "text",
+        "anchor",
+        "question",
+        "options",
+        "assumed"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^as-[a-z0-9]+(-[a-z0-9]+)*$",
+          "maxLength": 48
+        },
+        "text": {
+          "description": "Short visible text in the Canvas list, e.g. 'Opens on the dashboard'.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "anchor": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/anchorId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "question": {
+          "description": "The question as asked: which decision was taken.",
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 200
+        },
+        "role": {
+          "$ref": "#/$defs/role"
+        },
+        "whyWeAsk": {
+          "description": "Optional. Default: a sentence naming the assumed option.",
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400
+        },
+        "options": {
+          "$ref": "#/$defs/options"
+        },
+        "assumed": {
+          "description": "Option letter version 1 was built on.",
+          "type": "string",
+          "pattern": "^[A-D]$"
+        },
+        "effects": {
+          "description": "Optional, one ops array per option. Default for an anchored assumption: a badge with the option text on the anchor.",
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/optionEffects"
+          }
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": [
+        "anchor",
+        "text",
+        "whyWeAsk",
+        "options",
+        "effects"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "anchor": {
+          "$ref": "#/$defs/anchorId"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 200
+        },
+        "role": {
+          "$ref": "#/$defs/role"
+        },
+        "whyWeAsk": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400
+        },
+        "options": {
+          "$ref": "#/$defs/options"
+        },
+        "effects": {
+          "description": "One ops array per option letter A.. in order; its length equals options.",
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/optionEffects"
+          }
+        }
+      }
+    },
+    "dataField": {
+      "description": "One field of every row. Row values by type: id and string are strings; integer and number are numbers; boolean is a boolean; date and datetime are JavaScript Date objects (built with dateBack() of the kit); enum is one of the listed strings.",
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "example"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Property name of the row object (camelCase, a JavaScript identifier)."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "id",
+            "string",
+            "integer",
+            "number",
+            "boolean",
+            "date",
+            "datetime",
+            "enum"
+          ]
+        },
+        "enum": {
+          "description": "Required when type is enum: the allowed values, exactly as shown on screen (the status vocabulary).",
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 12,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          }
+        },
+        "unit": {
+          "description": "Unit shown next to the value, e.g. \"pallets\", \"h\", \"EUR\".",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24
+        },
+        "example": {
+          "description": "One realistic value, e.g. \"SP-2405\" or 36.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        }
+      }
+    },
+    "dataRelation": {
+      "type": "object",
+      "required": [
+        "field",
+        "entity"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Field of this entity that holds the key of the other entity."
+        },
+        "entity": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Name of the entity it points to (its key field)."
+        }
+      }
+    },
+    "dataThreshold": {
+      "type": "object",
+      "required": [
+        "name",
+        "rule"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "rule": {
+          "description": "The rule screens and the dataset compute from, e.g. \"delayHours > 2 sets status Delayed\".",
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 200
+        }
+      }
+    },
+    "dataDerived": {
+      "description": "What the dataset computes besides the entities: the fixed \"today\", the KPI figures and the chart series. Screens read window.APP_DATA.kpis.<name> and window.APP_DATA.series.<name>.",
+      "type": "object",
+      "required": [
+        "today",
+        "kpis",
+        "series"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "today": {
+          "description": "The fixed \"today\" of the dataset (UTC, 09:00). Never the real clock.",
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "kpis": {
+          "description": "APP_DATA.kpis.<name> is a number computed from the rows (percentages as 0-100). Screens format it.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "definition",
+              "value"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z][A-Za-z0-9]*$",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "definition": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 160
+              },
+              "value": {
+                "description": "The figure the dataset must produce under the assumed rules; the same number the effects of the questions quote.",
+                "type": "number"
+              },
+              "variants": {
+                "description": "Optional: the figure under the other options of a question, \"option -> number\".",
+                "type": "array",
+                "maxItems": 6,
+                "items": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 80
+                }
+              }
+            }
+          }
+        },
+        "series": {
+          "description": "APP_DATA.series.<name> is an array of plain objects computed from the rows.",
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "shape"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z][A-Za-z0-9]*$",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "shape": {
+                "description": "Item shape and length, e.g. \"8 items {week, pallets}\".",
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 120
+              },
+              "definition": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 160
+              }
+            }
+          }
+        },
+        "agree": {
+          "description": "Figures that appear in more than one place (header, label, table cell, KPI, tooltip, map label). Each one is computed ONCE by the data builder (APP_DATA.kpis.<kpi>) and only read by the screens, so the places can never disagree.",
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "required": [
+              "kpi",
+              "rule"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kpi": {
+                "description": "Key of a dataDerived.kpis entry that holds the figure.",
+                "type": "string",
+                "pattern": "^[a-z][A-Za-z0-9]*$",
+                "maxLength": 40
+              },
+              "shownOn": {
+                "description": "Anchors (a-...) or screen ids that show it.",
+                "type": "array",
+                "maxItems": 8,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                }
+              },
+              "rule": {
+                "description": "What it measures, with its unit, and how it is computed (for example \"km by road from the nearest airport to the site, from map.site and the airports rows\").",
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 160
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

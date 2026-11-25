@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "app": {
+    "name": "SpudTrack",
+    "language": "en",
+    "domain": "food logistics (shipment tracking for a potato-chip maker)",
+    "summary": "SpudTrack shows the logistics team of Golden Spud Foods (fictional) which shipments from the Burgos factory are late, at risk of losing shelf life or stuck in customs, before a retailer calls."
+  },
+  "style": { "accent": "potato-gold", "density": "comfortable", "theme": "auto" },
+  "screens": [
+    {
+      "id": "dashboard",
+      "title": "Operations dashboard",
+      "route": "#/dashboard",
+      "purpose": "Show in ten seconds how many shipments are late and which alerts need action today.",
+      "primaryAction": "Open the delayed shipments",
+      "anchors": [
+        { "id": "a-kpi-transit", "label": "Shipments in transit KPI", "kind": "kpi", "screen": "dashboard" },
+        { "id": "a-kpi-delayed", "label": "Delayed shipments KPI", "kind": "kpi", "screen": "dashboard" },
+        { "id": "a-kpi-slot4", "label": "Fourth KPI slot", "kind": "kpi", "screen": "dashboard" },
+        { "id": "a-chart-volume", "label": "Weekly volume chart", "kind": "chart", "screen": "dashboard" },
+        { "id": "a-alert-feed", "label": "Latest alerts feed", "kind": "list", "screen": "dashboard" }
+      ]
+    },
+    {
+      "id": "shipments",
+      "title": "Shipments",
+      "route": "#/shipments",
+      "purpose": "Find any shipment by mode, status, carrier or lot and see which ones are late first.",
+      "primaryAction": "New shipment",
+      "anchors": [
+        { "id": "a-shipments-filters", "label": "Shipment filter bar", "kind": "form", "screen": "shipments" },
+        { "id": "a-shipments-table", "label": "Shipments table", "kind": "table", "screen": "shipments" },
+        { "id": "a-col-unit", "label": "Quantity unit column", "kind": "column", "screen": "shipments" },
+        { "id": "a-col-bbd", "label": "Best-before column", "kind": "column", "screen": "shipments" }
+      ]
+    },
+    {
+      "id": "shipment-detail",
+      "title": "Shipment SP-2405",
+      "route": "#/shipment/SP-2405",
+      "purpose": "Follow one shipment leg by leg and see whether the cargo is still safe to sell.",
+      "primaryAction": "Notify the retailer about the new ETA",
+      "anchors": [
+        { "id": "a-timeline", "label": "Multimodal leg timeline", "kind": "card", "screen": "shipment-detail" },
+        { "id": "a-sensor-chart", "label": "Trailer sensor chart", "kind": "chart", "screen": "shipment-detail" },
+        { "id": "a-doc-panel", "label": "Transport documents panel", "kind": "card", "screen": "shipment-detail" }
+      ]
+    },
+    {
+      "id": "alerts",
+      "title": "Alerts",
+      "route": "#/alerts",
+      "purpose": "List every open alert, most severe first, so the planner can act on the critical ones.",
+      "primaryAction": "Acknowledge the selected alerts",
+      "anchors": [{ "id": "a-alert-list", "label": "Alert list", "kind": "table", "screen": "alerts" }]
+    },
+    {
+      "id": "settings",
+      "title": "Settings",
+      "route": "#/settings",
+      "purpose": "Choose which alerts reach whom, and in which language the app speaks.",
+      "primaryAction": "Save notification settings",
+      "anchors": [
+        { "id": "a-notify-form", "label": "Notification channels form", "kind": "form", "screen": "settings" },
+        { "id": "a-language-field", "label": "Language selector", "kind": "field", "screen": "settings" }
+      ]
+    }
+  ],
+  "shell": {
+    "anchors": [
+      { "id": "a-main-nav", "label": "Main navigation", "kind": "nav", "screen": "shell" },
+      { "id": "a-theme-toggle", "label": "Light and dark theme toggle", "kind": "button", "screen": "shell" }
+    ]
+  },
+  "dataEntities": [
+    {
+      "name": "shipments",
+      "rows": 30,
+      "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "SP-2405" },
+        { "name": "mode", "type": "enum", "enum": ["Truck", "Ship", "Air"], "example": "Ship" },
+        { "name": "origin", "type": "string", "example": "Burgos" },
+        { "name": "destination", "type": "string", "example": "Felixstowe" },
+        { "name": "carrier", "type": "string", "example": "Atlantic Reefer Lines" },
+        { "name": "product", "type": "string", "example": "Classic 150g, lot L-2411" },
+        { "name": "pallets", "type": "integer", "unit": "pallets", "example": 22 },
+        { "name": "eta", "type": "datetime", "example": "2026-11-05T14:00:00Z" },
+        { "name": "delayHours", "type": "integer", "unit": "h", "example": 36 },
+        { "name": "status", "type": "enum", "enum": ["On time", "Delayed", "In customs", "Delivered"], "example": "Delayed" },
+        { "name": "bestBefore", "type": "date", "example": "2027-02-14" }
+      ],
+      "thresholds": [
+        { "name": "delayed", "rule": "delayHours > 2 sets status Delayed (assumed option A of the delay question)" },
+        { "name": "shelf-life", "rule": "days from ETA to bestBefore under 60 % of the product shelf life is at risk" }
+      ]
+    },
+    {
+      "name": "alerts",
+      "rows": 18,
+      "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "AL-311" },
+        { "name": "shipmentId", "type": "string", "example": "SP-2405" },
+        { "name": "severity", "type": "enum", "enum": ["Critical", "Warning", "Info"], "example": "Critical" },
+        { "name": "kind", "type": "enum", "enum": ["temperature", "humidity", "delay", "customs"], "example": "delay" },
+        { "name": "raisedAt", "type": "datetime", "example": "2026-11-04T06:40:00Z" },
+        { "name": "acknowledged", "type": "boolean", "example": false }
+      ],
+      "relations": [{ "field": "shipmentId", "entity": "shipments" }]
+    },
+    {
+      "name": "sensorReadings",
+      "rows": 48,
+      "key": "id",
+      "fields": [
+        { "name": "id", "type": "id", "example": "RD-0101" },
+        { "name": "shipmentId", "type": "string", "example": "SP-2405" },
+        { "name": "hour", "type": "integer", "unit": "h ago", "example": 6 },
+        { "name": "temperatureC", "type": "number", "unit": "C", "example": 3.4 },
+        { "name": "humidityPct", "type": "integer", "unit": "%", "example": 62 }
+      ],
+      "relations": [{ "field": "shipmentId", "entity": "shipments" }]
+    }
+  ],
+  "dataDerived": {
+    "today": "2026-11-04",
+    "kpis": [
+      { "name": "inTransit", "definition": "shipments with status other than Delivered", "value": 21 },
+      {
+        "name": "delayed",
+        "definition": "shipments with delayHours above the assumed limit",
+        "value": 9,
+        "variants": ["> 12 h -> 3", "> 24 h -> 2", "per-customer SLA -> 4"]
+      },
+      { "name": "onTimePct", "definition": "delivered with delayHours <= 2 over all delivered, last 8 weeks", "value": 78 },
+      { "name": "palletsAtRisk", "definition": "pallets with under 60 % of shelf life left at arrival", "value": 38 }
+    ],
+    "series": [
+      { "name": "weeklyVolume", "shape": "8 items {week, pallets}", "definition": "pallets shipped per ISO week, oldest first" },
+      { "name": "alertsBySeverity", "shape": "3 items {severity, count}", "definition": "open alerts per severity" }
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "as-landing-dashboard",
+      "text": "Opens on the dashboard",
+      "anchor": null,
+      "question": "Which screen opens first?",
+      "role": "Product owner",
+      "whyWeAsk": "Version 1 opens on the dashboard (#/dashboard); the choice sets the landing route and where the logo leads.",
+      "options": ["Dashboard with KPIs and recent alerts", "Shipments list", "Alerts, most severe first", "Home screen that depends on the role"],
+      "assumed": "A"
+    },
+    {
+      "id": "as-time-destination",
+      "text": "Times in destination local time",
+      "anchor": "a-timeline",
+      "question": "In which time zone do we show times?",
+      "role": "Architect",
+      "whyWeAsk": "Version 1 shows every ETA and event in the local time of the destination; routes cross Spain, the UK, Dubai and the US.",
+      "options": ["Local time of the destination", "UTC", "Time zone of the viewer", "Destination time and UTC side by side"],
+      "assumed": "A",
+      "effects": [
+        [{ "op": "badge", "target": "a-timeline", "text": "Destination time" }],
+        [{ "op": "badge", "target": "a-timeline", "text": "UTC" }],
+        [{ "op": "badge", "target": "a-timeline", "text": "Viewer's time zone" }],
+        [{ "op": "badge", "target": "a-timeline", "text": "Destination + UTC" }]
+      ]
+    },
+    {
+      "id": "as-feed-latest-6",
+      "text": "Alert feed shows the latest 6",
+      "anchor": "a-alert-feed",
+      "question": "How many alerts does the dashboard feed show?",
+      "role": "Logistics lead",
+      "options": ["The latest 6 alerts", "The latest 4 alerts", "Critical alerts only", "The latest 2 alerts"],
+      "assumed": "A"
+    },
+    {
+      "id": "as-theme-light",
+      "text": "Light theme with a dark toggle",
+      "anchor": "a-theme-toggle",
+      "question": "Which colour theme does the app start in?",
+      "role": "Designer",
+      "options": ["Follow the system setting, with a toggle", "Always dark", "Always light", "Light, with a dark toggle"],
+      "assumed": "A"
+    },
+    {
+      "id": "as-sensor-24h",
+      "text": "Sensor chart covers the last 24 h",
+      "anchor": "a-sensor-chart",
+      "question": "How much sensor history does the shipment chart show?",
+      "role": "Quality manager",
+      "options": ["The last 24 hours", "The last 72 hours", "The whole journey", "The last 6 hours"],
+      "assumed": "A"
+    },
+    {
+      "id": "as-table-25-rows",
+      "text": "25 rows per page in the table",
+      "anchor": "a-shipments-table",
+      "question": "How many shipments does one page of the table show?",
+      "role": "Designer",
+      "options": ["25 rows per page", "10 rows per page", "50 rows per page", "All rows on one page"],
+      "assumed": "A"
+    }
+  ],
+  "questions": [
+    {
+      "anchor": "a-kpi-delayed",
+      "text": "What counts as a delayed shipment?",
+      "role": "Product owner",
+      "whyWeAsk": "The Delayed shipments KPI and the red status badges are computed from this rule.",
+      "options": [
+        "More than 2 hours after the planned ETA",
+        "More than 12 hours after the planned ETA",
+        "More than 24 hours after the planned ETA",
+        "The retailer's SLA, per customer"
+      ],
+      "effects": [
+        [
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-value", "value": "9" },
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-note", "value": "late by more than 2 h" },
+          { "op": "badge", "target": "a-kpi-delayed", "text": "> 2 h" }
+        ],
+        [
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-value", "value": "3" },
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-note", "value": "late by more than 12 h" },
+          { "op": "badge", "target": "a-kpi-delayed", "text": "> 12 h" }
+        ],
+        [
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-value", "value": "2" },
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-note", "value": "late by more than 24 h" },
+          { "op": "badge", "target": "a-kpi-delayed", "text": "> 24 h" }
+        ],
+        [
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-value", "value": "4" },
+          { "op": "text", "target": "a-kpi-delayed", "selector": ".k-kpi-note", "value": "beyond each retailer SLA" },
+          { "op": "badge", "target": "a-kpi-delayed", "text": "Per-customer SLA" }
+        ]
+      ]
+    },
+    {
+      "anchor": "a-kpi-slot4",
+      "text": "Which indicator deserves the fourth slot on the dashboard?",
+      "role": "Designer",
+      "whyWeAsk": "Only one more indicator fits next to the three fixed ones.",
+      "options": ["% of on-time deliveries", "Pallets at risk of freshness loss", "Average logistics cost per pallet", "CO2e per tonne transported"],
+      "effects": [
+        [
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-label", "value": "On-time deliveries" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-value", "value": "78%" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-note", "value": "delivered, last 8 weeks" }
+        ],
+        [
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-label", "value": "Pallets at risk" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-value", "value": "38" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-note", "value": "under 60 % shelf life" }
+        ],
+        [
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-label", "value": "Cost per pallet" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-value", "value": "€41" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-note", "value": "average, last 8 weeks" }
+        ],
+        [
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-label", "value": "CO2e per tonne" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-value", "value": "0.31 t" },
+          { "op": "text", "target": "a-kpi-slot4", "selector": ".k-kpi-note", "value": "average, last 8 weeks" }
+        ]
+      ]
+    },
+    {
+      "anchor": "a-col-bbd",
+      "text": "How do we handle the short best-before date of crisps?",
+      "role": "Quality manager",
+      "whyWeAsk": "Shipments to Dubai or the US arrive with far less shelf life than a truck to Lyon; the column can warn or block dispatch.",
+      "options": [
+        "Days of shelf life with a traffic light",
+        "Traffic light, plus an alert below 60 % of shelf life",
+        "Block dispatch below 50 % of shelf life",
+        "Only show the best-before date"
+      ],
+      "effects": [
+        [
+          { "op": "text", "target": "a-col-bbd", "selector": ".k-th-text", "value": "Shelf life: traffic light" },
+          { "op": "badge", "target": "a-col-bbd", "text": "Traffic light" }
+        ],
+        [
+          { "op": "text", "target": "a-col-bbd", "selector": ".k-th-text", "value": "Shelf life: alert < 60 %" },
+          { "op": "badge", "target": "a-col-bbd", "text": "Alert below 60 %" }
+        ],
+        [
+          { "op": "text", "target": "a-col-bbd", "selector": ".k-th-text", "value": "Shelf life: blocks < 50 %" },
+          { "op": "badge", "target": "a-col-bbd", "text": "Blocks below 50 %" }
+        ],
+        [
+          { "op": "text", "target": "a-col-bbd", "selector": ".k-th-text", "value": "Best before" },
+          { "op": "badge", "target": "a-col-bbd", "text": "Date only" }
+        ]
+      ]
+    },
+    {
+      "anchor": "a-col-unit",
+      "text": "Which unit do we track?",
+      "role": "Logistics lead",
+      "whyWeAsk": "The quantity column, the filters and the detail panel all count in this unit.",
+      "options": ["Containers", "Pallets", "Boxes", "Production lots"],
+      "effects": [
+        [
+          { "op": "text", "target": "a-col-unit", "selector": ".k-th-text", "value": "Containers" },
+          { "op": "badge", "target": "a-col-unit", "text": "Unit: container" }
+        ],
+        [
+          { "op": "text", "target": "a-col-unit", "selector": ".k-th-text", "value": "Pallets" },
+          { "op": "badge", "target": "a-col-unit", "text": "Unit: pallet" }
+        ],
+        [
+          { "op": "text", "target": "a-col-unit", "selector": ".k-th-text", "value": "Boxes" },
+          { "op": "badge", "target": "a-col-unit", "text": "Unit: box" }
+        ],
+        [
+          { "op": "text", "target": "a-col-unit", "selector": ".k-th-text", "value": "Lots" },
+          { "op": "badge", "target": "a-col-unit", "text": "Unit: lot" }
+        ]
+      ]
+    }
+  ]
+}

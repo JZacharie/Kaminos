@@ -1,0 +1,16 @@
+{
+  "name": "aidlc-ui-first-addon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-DLC UI-first add-on: record validator (addon/bin/validate) and tooling.",
+  "license": "MIT-0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "test": "node --test tests/validate/*.test.js"
+  },
+  "dependencies": {
+    "ajv": "8.18.0"
+  }
+}
