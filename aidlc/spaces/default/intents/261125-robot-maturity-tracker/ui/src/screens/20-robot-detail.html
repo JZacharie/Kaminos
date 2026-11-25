@@ -27,7 +27,7 @@
       <div class="bp-grid">
         <svg id="bp-svg" class="bp-svg" viewBox="0 0 300 560" role="img" aria-labelledby="bp-title"></svg>
         <div>
-          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante.</p>
+          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante. Les fichiers STL manquants se déposent dans <a href="#/robots">Plan des robots</a>.</p>
           <ul class="bp-legend" id="bp-legend"></ul>
           <ul class="bp-key">
             <li><i class="bp-sw bp-ok"></i>Validée</li><li><i class="bp-sw bp-info"></i>En impression</li>
@@ -90,7 +90,7 @@
       svg.setAttribute('aria-label', 'Plan de face de ' + r.name + ' (' + r.id + ') : ' + mine.length + ' pièces imprimées');
       document.getElementById('bp-title').textContent = 'Plan de l\'endosquelette ' + r.name + ' (' + r.id + ')';
       document.getElementById('bp-legend').innerHTML = mine.map(function (p) {
-        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + '</li>';
+        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + ' <span class="k-badge k-badge-' + (window.PartStl && window.PartStl.has(p.id) ? 'ok' : 'warn') + '">' + (window.PartStl && window.PartStl.has(p.id) ? 'STL chargé' : 'STL manquant') + '</span></li>';
       }).join('') || '<li>Aucune pièce imprimée pour ce robot.</li>';
     }
     function paint() {
@@ -113,6 +113,7 @@
     }
     paint();
     addEventListener('kit:route', paint);
+    addEventListener('stl:change', paint);
   });
   </script>
 </section>

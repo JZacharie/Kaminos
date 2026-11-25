@@ -80,6 +80,16 @@
         <div class="k-stack">
           <h3 id="rp-3d-title">Pièce en 3D</h3>
           <svg id="rp-3d" class="p3d-canvas rp-3d" viewBox="0 0 480 330" role="img" aria-label="Modèle 3D de la pièce"></svg>
+          <div class="rp-stl-missing" id="rp-stl-missing" hidden>
+            <strong>STL manquant</strong>
+            <span id="rp-stl-missing-msg">Aucun fichier STL pour cette pièce.</span>
+          </div>
+          <div class="rp-stl-bar">
+            <label class="k-btn k-btn-sm k-btn-primary" for="rp-stl-input" id="rp-stl-label">Importer le STL</label>
+            <input type="file" id="rp-stl-input" accept=".stl,model/stl" class="rp-stl-input">
+            <button class="k-btn k-btn-sm" type="button" id="rp-stl-remove" hidden>Retirer le STL</button>
+          </div>
+          <p class="k-muted" id="rp-stl-status" role="status"></p>
           <div class="p3d-sliders">
             <div class="k-field">
               <label for="rp-yaw">Rotation horizontale</label>
@@ -336,16 +346,42 @@
           });
         }
       });
+      return finishMesh(faces);
+    }
+    function finishMesh(faces) {
       var lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
       faces.forEach(function (f) { f.pts.forEach(function (pt) { for (var k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], pt[k]); hi[k] = Math.max(hi[k], pt[k]); } }); });
       var ctr = [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2], rad = 0;
       faces.forEach(function (f) { f.pts.forEach(function (pt) { rad = Math.max(rad, Math.hypot(pt[0] - ctr[0], pt[1] - ctr[1], pt[2] - ctr[2])); }); });
       return { faces: faces, center: ctr, radius: rad || 1 };
     }
+    // uploaded STL (z up) to faces (y up); the normal comes from the winding order
+    function stlMesh(entry) {
+      if (entry.mesh) return entry.mesh;
+      var v = entry.verts, faces = [], i;
+      for (i = 0; i < v.length; i += 9) {
+        var a = [v[i], v[i + 2], -v[i + 1]], b = [v[i + 3], v[i + 5], -v[i + 4]], c = [v[i + 6], v[i + 8], -v[i + 7]];
+        var u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], w = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+        var n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]], l = Math.hypot(n[0], n[1], n[2]) || 1;
+        faces.push({ pts: [a, b, c], n: [n[0] / l, n[1] / l, n[2] / l] });
+      }
+      return (entry.mesh = finishMesh(faces));
+    }
+    function renderStlState() {
+      var pr = printOf(st.part), entry = pr && window.PartStl.get(pr.id), miss = byId('rp-stl-missing');
+      if (!pr) return;
+      miss.hidden = !!entry;
+      byId('rp-3d').style.display = entry ? '' : 'none';
+      byId('rp-stl-missing-msg').textContent = 'Aucun fichier STL pour ' + pr.id + ' ' + pr.part + '. Importez-le pour l\'afficher en 3D.';
+      byId('rp-stl-label').textContent = entry ? 'Remplacer le STL' : 'Importer le STL';
+      byId('rp-stl-remove').hidden = !entry;
+      byId('rp-stl-status').textContent = entry ? 'Fichier chargé : ' + entry.name + ' (' + nf.format(entry.triangles) + ' triangles, ' + nf.format(entry.size / 1024) + ' Ko). Conservé le temps de la session.' : '';
+    }
     function render3d() {
-      var svg = byId('rp-3d'), part = partOf(st.part), pr = printOf(st.part);
-      if (!part || !pr) { svg.innerHTML = ''; return; }
-      var m = meshes[part.printId] || (meshes[part.printId] = buildMesh(part.model));
+      var svg = byId('rp-3d'), pr = printOf(st.part), entry = pr && window.PartStl.get(pr.id);
+      renderStlState();
+      if (!pr || !entry) { svg.innerHTML = ''; return; }
+      var m = stlMesh(entry);
       var ya = st.yaw * Math.PI / 180, pa = st.pitch * Math.PI / 180;
       var cy = Math.cos(ya), sy = Math.sin(ya), cp = Math.cos(pa), sp = Math.sin(pa);
       function rot(v) {
@@ -411,7 +447,8 @@
         '<dt>Matière</dt><dd>' + esc(pr.material) + '</dd>' +
         '<dt>Priorité</dt><dd>' + esc(pr.priority) + '</dd>' +
         '<dt>Statut</dt><dd><span class="k-badge k-badge-' + (TONE[pr.status] || 'info') + '">' + esc(pr.status) + '</span></dd>' +
-        '<dt>Estimation</dt><dd>' + esc(nf.format(pr.grams) + ' g, ' + nf.format(pr.hours) + ' h') + '</dd>';
+        '<dt>Estimation</dt><dd>' + esc(nf.format(pr.grams) + ' g, ' + nf.format(pr.hours) + ' h') + '</dd>' +
+        '<dt>Fichier STL</dt><dd><span class="k-badge k-badge-' + (window.PartStl.has(pr.id) ? 'ok' : 'warn') + '">' + (window.PartStl.has(pr.id) ? 'Chargé' : 'STL manquant') + '</span></dd>';
     }
     function markSelected() {
       Array.prototype.forEach.call(byId('rp-plan').querySelectorAll('.rp-part'), function (g) {
@@ -477,6 +514,19 @@
         render3d();
       });
       on(document, 'pointerup', function () { drag = null; });
+      on(document, 'change', function (e) {
+        var t = e.target;
+        if (!t || t.id !== 'rp-stl-input' || !st.part) return;
+        var f = t.files && t.files[0], status = byId('rp-stl-status');
+        t.value = '';
+        window.PartStl.load(st.part, f).then(function () { status.classList.remove('rb-err'); }).catch(function (err) {
+          status.textContent = err.message; status.classList.add('rb-err');
+        });
+      });
+      on(document, 'click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('#rp-stl-remove') && st.part) window.PartStl.remove(st.part);
+      });
+      on(window, 'stl:change', function () { if (byId('rp-plan')) { renderDetail(); render3d(); } });
       on(window, 'kit:route', function () { if (byId('rp-plan')) { renderPlan(); renderDetail(); render3d(); } });
     })();
     if (plans.length) selectRobot(st.robot);

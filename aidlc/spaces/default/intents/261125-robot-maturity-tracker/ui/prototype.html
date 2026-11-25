@@ -1026,6 +1026,11 @@ html[data-k-m] .k-m-ind{transition:transform .4s var(--k-ease),width .4s var(--k
 .bp-sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid var(--border)}
 .bp-sw.bp-none{background:none;border-style:dashed}
 @media(max-width:900px){.bp-grid{grid-template-columns:minmax(0,1fr)}}
+.rp-stl-missing{display:grid;gap:var(--s2);place-content:center;text-align:center;min-height:200px;padding:var(--s4);border:2px dashed var(--warn);border-radius:var(--r2);background:var(--warn-bg);color:var(--warn-t)}
+.rp-stl-missing[hidden]{display:none}
+.rp-stl-bar{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
+.rp-stl-input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.rp-stl-input:focus-visible+*,.rp-stl-bar:focus-within label{outline:2px solid var(--text);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -1128,6 +1133,16 @@ UI_BLOCKS.shell = {
         <div class="k-stack">
           <h3 id="rp-3d-title">Pièce en 3D</h3>
           <svg id="rp-3d" class="p3d-canvas rp-3d" viewBox="0 0 480 330" role="img" aria-label="Modèle 3D de la pièce"></svg>
+          <div class="rp-stl-missing" id="rp-stl-missing" hidden>
+            <strong>STL manquant</strong>
+            <span id="rp-stl-missing-msg">Aucun fichier STL pour cette pièce.</span>
+          </div>
+          <div class="rp-stl-bar">
+            <label class="k-btn k-btn-sm k-btn-primary" for="rp-stl-input" id="rp-stl-label">Importer le STL</label>
+            <input type="file" id="rp-stl-input" accept=".stl,model/stl" class="rp-stl-input">
+            <button class="k-btn k-btn-sm" type="button" id="rp-stl-remove" hidden>Retirer le STL</button>
+          </div>
+          <p class="k-muted" id="rp-stl-status" role="status"></p>
           <div class="p3d-sliders">
             <div class="k-field">
               <label for="rp-yaw">Rotation horizontale</label>
@@ -1384,16 +1399,42 @@ UI_BLOCKS.shell = {
           });
         }
       });
+      return finishMesh(faces);
+    }
+    function finishMesh(faces) {
       var lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
       faces.forEach(function (f) { f.pts.forEach(function (pt) { for (var k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], pt[k]); hi[k] = Math.max(hi[k], pt[k]); } }); });
       var ctr = [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2], rad = 0;
       faces.forEach(function (f) { f.pts.forEach(function (pt) { rad = Math.max(rad, Math.hypot(pt[0] - ctr[0], pt[1] - ctr[1], pt[2] - ctr[2])); }); });
       return { faces: faces, center: ctr, radius: rad || 1 };
     }
+    // uploaded STL (z up) to faces (y up); the normal comes from the winding order
+    function stlMesh(entry) {
+      if (entry.mesh) return entry.mesh;
+      var v = entry.verts, faces = [], i;
+      for (i = 0; i < v.length; i += 9) {
+        var a = [v[i], v[i + 2], -v[i + 1]], b = [v[i + 3], v[i + 5], -v[i + 4]], c = [v[i + 6], v[i + 8], -v[i + 7]];
+        var u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], w = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+        var n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]], l = Math.hypot(n[0], n[1], n[2]) || 1;
+        faces.push({ pts: [a, b, c], n: [n[0] / l, n[1] / l, n[2] / l] });
+      }
+      return (entry.mesh = finishMesh(faces));
+    }
+    function renderStlState() {
+      var pr = printOf(st.part), entry = pr && window.PartStl.get(pr.id), miss = byId('rp-stl-missing');
+      if (!pr) return;
+      miss.hidden = !!entry;
+      byId('rp-3d').style.display = entry ? '' : 'none';
+      byId('rp-stl-missing-msg').textContent = 'Aucun fichier STL pour ' + pr.id + ' ' + pr.part + '. Importez-le pour l\'afficher en 3D.';
+      byId('rp-stl-label').textContent = entry ? 'Remplacer le STL' : 'Importer le STL';
+      byId('rp-stl-remove').hidden = !entry;
+      byId('rp-stl-status').textContent = entry ? 'Fichier chargé : ' + entry.name + ' (' + nf.format(entry.triangles) + ' triangles, ' + nf.format(entry.size / 1024) + ' Ko). Conservé le temps de la session.' : '';
+    }
     function render3d() {
-      var svg = byId('rp-3d'), part = partOf(st.part), pr = printOf(st.part);
-      if (!part || !pr) { svg.innerHTML = ''; return; }
-      var m = meshes[part.printId] || (meshes[part.printId] = buildMesh(part.model));
+      var svg = byId('rp-3d'), pr = printOf(st.part), entry = pr && window.PartStl.get(pr.id);
+      renderStlState();
+      if (!pr || !entry) { svg.innerHTML = ''; return; }
+      var m = stlMesh(entry);
       var ya = st.yaw * Math.PI / 180, pa = st.pitch * Math.PI / 180;
       var cy = Math.cos(ya), sy = Math.sin(ya), cp = Math.cos(pa), sp = Math.sin(pa);
       function rot(v) {
@@ -1459,7 +1500,8 @@ UI_BLOCKS.shell = {
         '<dt>Matière</dt><dd>' + esc(pr.material) + '</dd>' +
         '<dt>Priorité</dt><dd>' + esc(pr.priority) + '</dd>' +
         '<dt>Statut</dt><dd><span class="k-badge k-badge-' + (TONE[pr.status] || 'info') + '">' + esc(pr.status) + '</span></dd>' +
-        '<dt>Estimation</dt><dd>' + esc(nf.format(pr.grams) + ' g, ' + nf.format(pr.hours) + ' h') + '</dd>';
+        '<dt>Estimation</dt><dd>' + esc(nf.format(pr.grams) + ' g, ' + nf.format(pr.hours) + ' h') + '</dd>' +
+        '<dt>Fichier STL</dt><dd><span class="k-badge k-badge-' + (window.PartStl.has(pr.id) ? 'ok' : 'warn') + '">' + (window.PartStl.has(pr.id) ? 'Chargé' : 'STL manquant') + '</span></dd>';
     }
     function markSelected() {
       Array.prototype.forEach.call(byId('rp-plan').querySelectorAll('.rp-part'), function (g) {
@@ -1525,6 +1567,19 @@ UI_BLOCKS.shell = {
         render3d();
       });
       on(document, 'pointerup', function () { drag = null; });
+      on(document, 'change', function (e) {
+        var t = e.target;
+        if (!t || t.id !== 'rp-stl-input' || !st.part) return;
+        var f = t.files && t.files[0], status = byId('rp-stl-status');
+        t.value = '';
+        window.PartStl.load(st.part, f).then(function () { status.classList.remove('rb-err'); }).catch(function (err) {
+          status.textContent = err.message; status.classList.add('rb-err');
+        });
+      });
+      on(document, 'click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('#rp-stl-remove') && st.part) window.PartStl.remove(st.part);
+      });
+      on(window, 'stl:change', function () { if (byId('rp-plan')) { renderDetail(); render3d(); } });
       on(window, 'kit:route', function () { if (byId('rp-plan')) { renderPlan(); renderDetail(); render3d(); } });
     })();
     if (plans.length) selectRobot(st.robot);
@@ -1560,7 +1615,7 @@ UI_BLOCKS.shell = {
       <div class="bp-grid">
         <svg id="bp-svg" class="bp-svg" viewBox="0 0 300 560" role="img" aria-labelledby="bp-title"></svg>
         <div>
-          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante.</p>
+          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante. Les fichiers STL manquants se déposent dans <a href="#/robots">Plan des robots</a>.</p>
           <ul class="bp-legend" id="bp-legend"></ul>
           <ul class="bp-key">
             <li><i class="bp-sw bp-ok"></i>Validée</li><li><i class="bp-sw bp-info"></i>En impression</li>
@@ -1623,7 +1678,7 @@ UI_BLOCKS.shell = {
       svg.setAttribute('aria-label', 'Plan de face de ' + r.name + ' (' + r.id + ') : ' + mine.length + ' pièces imprimées');
       document.getElementById('bp-title').textContent = 'Plan de l\'endosquelette ' + r.name + ' (' + r.id + ')';
       document.getElementById('bp-legend').innerHTML = mine.map(function (p) {
-        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + '</li>';
+        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + ' <span class="k-badge k-badge-' + (window.PartStl && window.PartStl.has(p.id) ? 'ok' : 'warn') + '">' + (window.PartStl && window.PartStl.has(p.id) ? 'STL chargé' : 'STL manquant') + '</span></li>';
       }).join('') || '<li>Aucune pièce imprimée pour ce robot.</li>';
     }
     function paint() {
@@ -1646,6 +1701,7 @@ UI_BLOCKS.shell = {
     }
     paint();
     addEventListener('kit:route', paint);
+    addEventListener('stl:change', paint);
   });
   </script>
 </section>
@@ -4645,6 +4701,48 @@ window.BoardCalc = (function () {
   }
   return { fr: fr, AV: AV, BU: BU, resource: resource, robot: robot };
 })();
+
+  // ---- STL files of the printed parts: none is bundled, each part shows "STL manquant" until a file is uploaded (kept in memory for the session)
+  var STL_MAX_BYTES = 20 * 1024 * 1024, STL_MAX_TRIANGLES = 40000;
+  function stlParse(buf) {
+    var out = [], i, dv = new DataView(buf), n = buf.byteLength >= 84 ? dv.getUint32(80, true) : 0;
+    if (n > 0 && buf.byteLength === 84 + 50 * n) {
+      for (i = 0; i < n; i++) for (var k = 0; k < 9; k++) out.push(dv.getFloat32(84 + 50 * i + 12 + 4 * k, true));
+    } else {
+      var txt = new TextDecoder().decode(buf), re = /vertex\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)/g, m;
+      if (!/^\s*solid/i.test(txt) || txt.indexOf('facet') < 0) throw new Error('Fichier STL illisible (ni binaire, ni texte).');
+      while ((m = re.exec(txt))) out.push(Number(m[1]), Number(m[2]), Number(m[3]));
+    }
+    if (out.length < 9 || out.length % 9 !== 0 || out.some(function (v) { return !isFinite(v); })) throw new Error('Fichier STL vide ou corrompu.');
+    return out;
+  }
+  var stlFiles = {};
+  window.PartStl = {
+    max: STL_MAX_TRIANGLES,
+    has: function (id) { return !!stlFiles[id]; },
+    get: function (id) { return stlFiles[id] || null; },
+    remove: function (id) { delete stlFiles[id]; window.dispatchEvent(new CustomEvent('stl:change', { detail: id })); },
+    // returns a promise resolved with the stored entry, rejected with a readable French message
+    load: function (id, file) {
+      return new Promise(function (resolve, reject) {
+        if (!file) return reject(new Error('Aucun fichier choisi.'));
+        if (!/\.stl$/i.test(file.name)) return reject(new Error('Le fichier doit avoir l\'extension .stl.'));
+        if (file.size > STL_MAX_BYTES) return reject(new Error('Fichier trop lourd (max 20 Mo).'));
+        var fr = new FileReader();
+        fr.onerror = function () { reject(new Error('Lecture du fichier impossible.')); };
+        fr.onload = function () {
+          try {
+            var v = stlParse(fr.result);
+            if (v.length / 9 > STL_MAX_TRIANGLES) throw new Error('Maillage trop détaillé (' + v.length / 9 + ' triangles, max ' + STL_MAX_TRIANGLES + ').');
+            stlFiles[id] = { name: file.name, size: file.size, triangles: v.length / 9, verts: v, mesh: null };
+            window.dispatchEvent(new CustomEvent('stl:change', { detail: id }));
+            resolve(stlFiles[id]);
+          } catch (e) { reject(e); }
+        };
+        fr.readAsArrayBuffer(file);
+      });
+    }
+  };
 
   window.APP_DATA = {
     robotPlans: robotPlans,

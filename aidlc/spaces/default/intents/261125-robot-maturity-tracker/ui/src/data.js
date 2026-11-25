@@ -337,6 +337,48 @@ window.BoardCalc = (function () {
   return { fr: fr, AV: AV, BU: BU, resource: resource, robot: robot };
 })();
 
+  // ---- STL files of the printed parts: none is bundled, each part shows "STL manquant" until a file is uploaded (kept in memory for the session)
+  var STL_MAX_BYTES = 20 * 1024 * 1024, STL_MAX_TRIANGLES = 40000;
+  function stlParse(buf) {
+    var out = [], i, dv = new DataView(buf), n = buf.byteLength >= 84 ? dv.getUint32(80, true) : 0;
+    if (n > 0 && buf.byteLength === 84 + 50 * n) {
+      for (i = 0; i < n; i++) for (var k = 0; k < 9; k++) out.push(dv.getFloat32(84 + 50 * i + 12 + 4 * k, true));
+    } else {
+      var txt = new TextDecoder().decode(buf), re = /vertex\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)/g, m;
+      if (!/^\s*solid/i.test(txt) || txt.indexOf('facet') < 0) throw new Error('Fichier STL illisible (ni binaire, ni texte).');
+      while ((m = re.exec(txt))) out.push(Number(m[1]), Number(m[2]), Number(m[3]));
+    }
+    if (out.length < 9 || out.length % 9 !== 0 || out.some(function (v) { return !isFinite(v); })) throw new Error('Fichier STL vide ou corrompu.');
+    return out;
+  }
+  var stlFiles = {};
+  window.PartStl = {
+    max: STL_MAX_TRIANGLES,
+    has: function (id) { return !!stlFiles[id]; },
+    get: function (id) { return stlFiles[id] || null; },
+    remove: function (id) { delete stlFiles[id]; window.dispatchEvent(new CustomEvent('stl:change', { detail: id })); },
+    // returns a promise resolved with the stored entry, rejected with a readable French message
+    load: function (id, file) {
+      return new Promise(function (resolve, reject) {
+        if (!file) return reject(new Error('Aucun fichier choisi.'));
+        if (!/\.stl$/i.test(file.name)) return reject(new Error('Le fichier doit avoir l\'extension .stl.'));
+        if (file.size > STL_MAX_BYTES) return reject(new Error('Fichier trop lourd (max 20 Mo).'));
+        var fr = new FileReader();
+        fr.onerror = function () { reject(new Error('Lecture du fichier impossible.')); };
+        fr.onload = function () {
+          try {
+            var v = stlParse(fr.result);
+            if (v.length / 9 > STL_MAX_TRIANGLES) throw new Error('Maillage trop détaillé (' + v.length / 9 + ' triangles, max ' + STL_MAX_TRIANGLES + ').');
+            stlFiles[id] = { name: file.name, size: file.size, triangles: v.length / 9, verts: v, mesh: null };
+            window.dispatchEvent(new CustomEvent('stl:change', { detail: id }));
+            resolve(stlFiles[id]);
+          } catch (e) { reject(e); }
+        };
+        fr.readAsArrayBuffer(file);
+      });
+    }
+  };
+
   window.APP_DATA = {
     robotPlans: robotPlans,
     robots: robots,
