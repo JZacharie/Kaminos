@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1",
-  "uiVersion": 34,
+  "uiVersion": 35,
   "app": {
     "name": "RoboForge",
     "intent": "261125-robot-maturity-tracker",
@@ -14,7 +14,7 @@
     },
     {
       "id": "robot-detail",
-      "title": "Fiche robot R-03 Hexa",
+      "title": "Fiche robot R-03 T-X",
       "route": "#/robot/R-03"
     },
     {

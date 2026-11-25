@@ -19,6 +19,52 @@
       <div class="k-grid k-grid-stretch" id="robots-cards-list"></div>
       <div class="k-empty-sm" id="robots-empty" hidden>Aucun robot à ce palier. Choisissez un autre palier ou réinitialisez le filtre.</div>
     </div>
+    <div class="k-span-12" id="rb-kpi" data-k-block="kpi" data-k-cfg="robots-board-kpi"></div>
+    <div class="k-span-12" id="rb-resources" data-k-block="table" data-k-cfg="robots-resources"></div>
+    <div class="k-span-12 k-card k-stack" id="rb-units-card">
+      <div class="k-card-head"><h2 class="k-card-title">Exemplaires par modèle de robot</h2></div>
+      <p class="k-muted">Gérez plusieurs robots du même type : ajoutez ou retirez des exemplaires d'un modèle, puis fixez le budget et la capacité d'utilisation de chaque exemplaire. Un exemplaire est indisponible tant qu'une réparation critique est ouverte sur son modèle.</p>
+      <div class="k-table-wrap">
+        <table class="k-table" id="rb-units">
+          <caption>Exemplaires, budget et capacité d'utilisation par modèle</caption>
+          <thead>
+            <tr>
+              <th scope="col">Modèle</th>
+              <th scope="col">Exemplaires</th>
+              <th scope="col">Disponibles</th>
+              <th scope="col">Budget par exemplaire (€)</th>
+              <th scope="col">Budget total</th>
+              <th scope="col">Capacité par exemplaire (h/sem.)</th>
+              <th scope="col">Charge prévue</th>
+              <th scope="col">Utilisation de la capacité</th>
+            </tr>
+          </thead>
+          <tbody id="rb-units-body"></tbody>
+          <tfoot id="rb-units-foot"></tfoot>
+        </table>
+      </div>
+      <p class="k-muted" id="rb-units-status" role="status"></p>
+    </div>
+    <div class="k-span-12 k-card k-stack" id="rb-define-card">
+      <div class="k-card-head"><h2 class="k-card-title">Définir le budget et la capacité d'une ressource</h2></div>
+      <p class="k-muted">Choisissez une ressource, puis fixez son budget et la quantité maximale que l'atelier peut utiliser. Le tableau « Ressources disponibles » se met à jour.</p>
+      <div class="k-filters">
+        <div class="k-field">
+          <label for="rb-res-select">Ressource</label>
+          <select class="k-select" id="rb-res-select"></select>
+        </div>
+        <div class="k-field">
+          <label for="rb-res-budget">Budget (€)</label>
+          <input class="k-input" type="number" id="rb-res-budget" min="0" step="5">
+        </div>
+        <div class="k-field">
+          <label for="rb-res-cap" id="rb-res-cap-label">Capacité d'utilisation</label>
+          <input class="k-input" type="number" id="rb-res-cap" min="0" step="any">
+        </div>
+        <button class="k-btn k-btn-primary" type="button" id="rb-res-apply">Appliquer</button>
+      </div>
+      <p class="k-muted" id="rb-res-msg" role="status"></p>
+    </div>
     <div class="k-span-12 k-card k-stack" id="rp-card">
       <div class="k-card-head"><h2 class="k-card-title">Plan des robots</h2></div>
       <p class="k-muted">Choisissez un robot, cliquez sur une pièce du plan pour l'identifier, puis tournez-la en 3D à droite.</p>
@@ -109,7 +155,132 @@
     var open = document.getElementById('robots-open-first');
     open.setAttribute('href', '#/robot/' + focus.id);
     open.setAttribute('aria-label', 'Ouvrir la fiche d\'un robot, par exemple ' + focus.id + ' ' + focus.name);
-    document.getElementById('robots-context').textContent = 'Atelier Cyclope, Lyon · mis à jour mer. 25/11 à 10:00 · ' + D.kpis.robotsCount + ' robots';
+    window.RobotContext = function () {
+      var n = D.robots.reduce(function (s, r) { return s + r.units; }, 0);
+      document.getElementById('robots-context').textContent = 'Atelier Cyclope, Lyon · mis à jour mer. 25/11 à 10:00 · ' + D.kpis.robotsCount + ' modèles de robots, ' + plural(n, 'exemplaire');
+    };
+    window.RobotContext();
+  });
+  </script>
+  <script>
+  (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
+    var B = window.BoardCalc;
+    function byId(id) { return document.getElementById(id); }
+    function say(id, msg) { var p = byId(id); if (p) p.textContent = msg; }
+    function plural(n, w) { return n + ' ' + w + (n > 1 ? 's' : ''); }
+    function robotOf(id) { return D.robots.filter(function (r) { return r.id === id; })[0]; }
+    function resOf(id) { return D.resources.filter(function (r) { return r.id === id; })[0]; }
+
+    function refreshBlocks() {
+      [['rb-kpi', 'robots-board-kpi'], ['rb-resources', 'robots-resources']].forEach(function (p) {
+        var el = byId(p[0]);
+        if (el && el._kBlock && window.UI_BLOCKS[p[1]]) el._kBlock.update(window.UI_BLOCKS[p[1]]());
+      });
+      if (window.RobotContext) window.RobotContext();
+    }
+
+    // ---- exemplaires par modèle
+    var USE = { ok: 'Confortable', warn: 'Élevée', bad: 'Saturée' };
+    function unitRow(r) {
+      var c = B.robot(r), nm = r.name;
+      var h = '<tr data-rb-robot="' + esc(r.id) + '">';
+      h += '<th scope="row" class="rb-name"><a href="#/robot/' + esc(r.id) + '">' + esc(r.id + ' ' + nm) + '</a><span class="k-muted">' + esc(r.type) + '</span></th>';
+      h += '<td><div class="rb-step"><button type="button" class="k-btn k-btn-sm" data-rb-step="-1" aria-label="Retirer un exemplaire de ' + esc(nm) + '"' + (r.units <= 1 ? ' disabled' : '') + '>−</button>';
+      h += '<strong class="rb-units">' + r.units + '</strong>';
+      h += '<button type="button" class="k-btn k-btn-sm" data-rb-step="1" aria-label="Ajouter un exemplaire de ' + esc(nm) + '"' + (r.units >= 9 ? ' disabled' : '') + '>+</button></div></td>';
+      h += '<td class="k-num">' + c.free + ' / ' + r.units + (c.paused ? ' <span class="k-badge k-badge-bad">' + c.paused + ' en pause</span>' : '') + '</td>';
+      h += '<td class="k-num"><input class="k-input rb-in" type="number" min="0" step="10" value="' + r.unitBudgetEur + '" data-rb-field="unitBudgetEur" aria-label="Budget par exemplaire de ' + esc(nm) + ', en euros"></td>';
+      h += '<td class="k-num">' + B.fr(c.budgetTotal, 0) + ' €</td>';
+      h += '<td class="k-num"><input class="k-input rb-in" type="number" min="0" max="80" step="1" value="' + r.hoursPerUnit + '" data-rb-field="hoursPerUnit" aria-label="Capacité par exemplaire de ' + esc(nm) + ', en heures par semaine"></td>';
+      h += '<td class="k-num">' + B.fr(r.hoursPlanned) + ' h/sem.</td>';
+      h += '<td>' + (c.usage == null
+        ? '<span class="k-badge k-badge-bad">Aucune capacité disponible</span>'
+        : '<span class="k-badge k-badge-' + c.tone + '">' + c.usage + ' % de ' + B.fr(c.cap) + ' h · ' + USE[c.tone] + '</span>') + '</td></tr>';
+      return h;
+    }
+    function renderUnits() {
+      var body = byId('rb-units-body');
+      if (!body) return;
+      body.innerHTML = D.robots.map(unitRow).join('');
+      var u = 0, f = 0, b = 0, hp = 0, cap = 0;
+      D.robots.forEach(function (r) { var c = B.robot(r); u += r.units; f += c.free; b += c.budgetTotal; hp += r.hoursPlanned; cap += c.cap; });
+      byId('rb-units-foot').innerHTML = '<tr><th scope="row">Total</th><td class="k-num">' + u + '</td><td class="k-num">' + f + ' / ' + u + '</td><td></td><td class="k-num">' + B.fr(b, 0) + ' €</td><td></td><td class="k-num">' + B.fr(hp) + ' h/sem.</td><td>' + (cap ? Math.round(100 * hp / cap) + ' % de ' + B.fr(cap) + ' h' : '') + '</td></tr>';
+    }
+    function refocus(id, sel) {
+      var el = byId('rb-units-body').querySelector('[data-rb-robot="' + id + '"] ' + sel);
+      if (el && !el.disabled) el.focus();
+      else { var alt = byId('rb-units-body').querySelector('[data-rb-robot="' + id + '"] button:not([disabled])'); if (alt) alt.focus(); }
+    }
+    function step(row, d, btn) {
+      var r = robotOf(row.getAttribute('data-rb-robot'));
+      if (!r) return;
+      var n = Math.max(1, Math.min(9, r.units + d));
+      if (n === r.units) return;
+      r.units = n;
+      renderUnits(); refreshBlocks();
+      refocus(r.id, '[data-rb-step="' + btn.getAttribute('data-rb-step') + '"]');
+      say('rb-units-status', n + ' exemplaire' + (n > 1 ? 's' : '') + ' de ' + r.name + ' (' + r.type + '). Budget total du modèle : ' + B.fr(B.robot(r).budgetTotal, 0) + ' €.');
+    }
+    function setField(row, input) {
+      var r = robotOf(row.getAttribute('data-rb-robot')), key = input.getAttribute('data-rb-field'), v = parseFloat(String(input.value).replace(',', '.'));
+      if (!r) return;
+      if (!isFinite(v) || v < 0) { input.value = r[key]; say('rb-units-status', 'Saisissez un nombre positif ou nul.'); return; }
+      r[key] = key === 'hoursPerUnit' ? Math.min(80, Math.round(v)) : Math.round(v);
+      renderUnits(); refreshBlocks();
+      refocus(r.id, '[data-rb-field="' + key + '"]');
+      say('rb-units-status', key === 'unitBudgetEur' ? 'Budget de ' + r.name + ' : ' + B.fr(r[key], 0) + ' € par exemplaire.' : 'Capacité de ' + r.name + ' : ' + r[key] + ' h par semaine et par exemplaire.');
+    }
+
+    // ---- budget et capacité d'une ressource
+    function fillResForm() {
+      var r = resOf(byId('rb-res-select').value);
+      if (!r) return;
+      byId('rb-res-budget').value = r.budgetEur == null ? '' : r.budgetEur;
+      byId('rb-res-budget').disabled = r.budgetEur == null;
+      byId('rb-res-cap').value = r.capacity;
+      byId('rb-res-cap-label').textContent = 'Capacité d\'utilisation (' + r.capUnit + ')';
+    }
+    function applyRes() {
+      var r = resOf(byId('rb-res-select').value), msg = byId('rb-res-msg');
+      if (!r) return;
+      var cap = parseFloat(String(byId('rb-res-cap').value).replace(',', '.'));
+      var bud = r.budgetEur == null ? null : parseFloat(String(byId('rb-res-budget').value).replace(',', '.'));
+      msg.classList.remove('rb-err');
+      if (!isFinite(cap) || cap < 0 || (bud != null && (!isFinite(bud) || bud < 0))) {
+        msg.classList.add('rb-err');
+        msg.textContent = 'Saisissez un budget et une capacité positifs ou nuls.';
+        return;
+      }
+      r.capacity = cap;
+      if (bud != null) r.budgetEur = bud;
+      refreshBlocks();
+      msg.textContent = r.name + ' : capacité ' + B.fr(cap) + ' ' + r.capUnit + (bud != null ? ', budget ' + B.fr(bud, 2) + ' €' : '') + '. Le tableau est à jour.';
+    }
+    var sel = byId('rb-res-select');
+    sel.innerHTML = D.resources.map(function (r) { return '<option value="' + esc(r.id) + '">' + esc(r.name) + ' (' + esc(r.kind.toLowerCase()) + ')</option>'; }).join('');
+    fillResForm();
+    renderUnits();
+
+    if (window.__rbOff) window.__rbOff();
+    (function () {
+      var subs = [];
+      function on(target, type, fn) { target.addEventListener(type, fn); subs.push([target, type, fn]); }
+      window.__rbOff = function () { subs.forEach(function (s) { s[0].removeEventListener(s[1], s[2]); }); subs = []; };
+      on(document, 'click', function (e) {
+        var t = e.target && e.target.closest ? e.target : null;
+        if (!t) return;
+        var b = t.closest('[data-rb-step]');
+        if (b && b.closest('#rb-units-body')) step(b.closest('tr'), Number(b.getAttribute('data-rb-step')), b);
+        else if (t.closest('#rb-res-apply')) applyRes();
+      });
+      on(document, 'change', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        if (t.id === 'rb-res-select') fillResForm();
+        else if (t.hasAttribute('data-rb-field') && t.closest('#rb-units-body')) setField(t.closest('tr'), t);
+      });
+      on(window, 'kit:route', function () { if (byId('rb-units-body')) renderUnits(); });
+    })();
   });
   </script>
   <script>

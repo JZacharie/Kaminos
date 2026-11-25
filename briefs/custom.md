@@ -29,12 +29,12 @@ Risks: wrong material breaks a part again; TPU too soft; PETG deforms near motor
 "Now" is **mercredi 25 novembre 2026, 10:00**. Dates dd/mm, 24 h, metric, EUR with comma.
 
 Robots (id, name, type, subsystem scores Châssis/Mobilité/Énergie/Capteurs/Contrôle, score, palier):
-- R-01 Atlas, bipède, 82/72/78/70/76, score 76, P4
-- R-02 Scout, rover, 70/66/60/58/56, score 62, P3
-- R-03 Hexa, hexapode, 64/48/52/40/44, score 50, P3 capped to P2 (2 open critical repairs, Mobilité and Énergie frozen)
-- R-04 Pince, bras, 52/40/46/30/38, score 41, P2
-- R-05 Nano, suiveur, 40/36/28/22/20, score 29, P2
-- R-06 Titan, rover lourd, 18/10/12/5/8, score 11, P1
+- R-01 T-800, bipède, 82/72/78/70/76, score 76, P4
+- R-02 T-1000, rover, 70/66/60/58/56, score 62, P3
+- R-03 T-X, hexapode, 64/48/52/40/44, score 50, P3 capped to P2 (2 open critical repairs, Mobilité and Énergie frozen)
+- R-04 T-800, bras, 52/40/46/30/38, score 41, P2
+- R-05 T-1000, suiveur, 40/36/28/22/20, score 29, P2
+- R-06 T-X, rover lourd, 18/10/12/5/8, score 11, P1
 
 Prints (id, part, robot, material, priority, g, h, status):
 - IM-101 Fémur gauche v3, R-01, PETG, Haute, 142, 6,5, Validée

@@ -29,33 +29,33 @@ Risks: wrong material breaks a part again; TPU too soft; PETG deforms near motor
 "Now" is **mercredi 25 novembre 2026, 10:00**. Dates dd/mm, 24 h, metric, EUR with comma.
 
 Robots (id, name, type, subsystem scores Châssis/Mobilité/Énergie/Capteurs/Contrôle, score, palier):
-- R-01 Atlas, bipède, 82/72/78/70/76, score 76, P4
-- R-02 Scout, rover, 70/66/60/58/56, score 62, P3
-- R-03 Hexa, hexapode, 64/48/52/40/44, score 50, P3 capped to P2 (2 open critical repairs, Mobilité and Énergie frozen)
-- R-04 Pince, bras, 52/40/46/30/38, score 41, P2
-- R-05 Nano, suiveur, 40/36/28/22/20, score 29, P2
-- R-06 Titan, rover lourd, 18/10/12/5/8, score 11, P1
+- R-01 T-800, bipède, 82/72/78/70/76, score 76, P4
+- R-02 T-1000, rover, 70/66/60/58/56, score 62, P3
+- R-03 T-X, hexapode, 64/48/52/40/44, score 50, P3 capped to P2 (2 open critical repairs, Mobilité and Énergie frozen)
+- R-04 T-800, bras, 52/40/46/30/38, score 41, P2
+- R-05 T-1000, suiveur, 40/36/28/22/20, score 29, P2
+- R-06 T-X, rover lourd, 18/10/12/5/8, score 11, P1
 
 Prints (id, part, robot, material, priority, g, h, status):
 - IM-101 Fémur gauche v3, R-01, PETG, Haute, 142, 6,5, Validée
 - IM-102 Fémur droit v3, R-01, PETG, Haute, 142, 6,5, Validée
 - IM-103 Pied gauche v2, R-01, PLA+, Moyenne, 88, 4,0, Validée
-- IM-104 Capot batterie v2, R-01, PLA+, Basse, 64, 3,0, Validée
-- IM-105 Support roue avant v2, R-02, PETG, Haute, 55, 2,5, En impression
-- IM-106 Carter capteurs v1, R-02, ASA, Moyenne, 97, 4,5, À préparer
-- IM-107 Patte A v3, R-03, PETG, Haute, 76, 3,5, À réimprimer
-- IM-108 Patte B v3, R-03, PETG, Haute, 76, 3,5, À réimprimer
-- IM-109 Patte C v3, R-03, PETG, Haute, 76, 3,5, En impression
-- IM-110 Hanches x6 v2, R-03, PA-CF, Haute, 210, 11,0, À préparer
+- IM-104 Plaque dorsale v2, R-01, PLA+, Basse, 64, 3,0, Validée
+- IM-105 Tibia avant v2, R-02, PETG, Haute, 55, 2,5, En impression
+- IM-106 Crâne et optiques v1, R-02, ASA, Moyenne, 97, 4,5, À préparer
+- IM-107 Tibia A v3, R-03, PETG, Haute, 76, 3,5, À réimprimer
+- IM-108 Tibia B v3, R-03, PETG, Haute, 76, 3,5, À réimprimer
+- IM-109 Tibia C v3, R-03, PETG, Haute, 76, 3,5, En impression
+- IM-110 Bassin x6 v2, R-03, PA-CF, Haute, 210, 11,0, À préparer
 - IM-111 Mâchoire v2, R-04, résine tough, Moyenne, 24, 2,0, Validée
-- IM-112 Base rotative v1, R-04, PETG, Basse, 180, 8,0, À préparer
+- IM-112 Épaule rotative v1, R-04, PETG, Basse, 180, 8,0, À préparer
 - IM-113 Poignet v1, R-04, résine tough, Haute, 31, 2,8, En impression
-- IM-114 Châssis v4, R-05, PLA+, Moyenne, 46, 2,0, Validée
-- IM-115 Roue folle v2, R-05, TPU, Basse, 12, 1,0, À préparer
-- IM-116 Suspension v2, R-05, TPU, Moyenne, 30, 2,2, À réimprimer
-- IM-117 Plaque châssis v1, R-06, PETG, Haute, 420, 18,0, À préparer
-- IM-118 Bras avant v1, R-06, PA-CF, Haute, 260, 13,5, À préparer
-- IM-119 Carter moteur v1, R-06, ASA, Moyenne, 310, 15,0, À préparer
+- IM-114 Cage thoracique v4, R-05, PLA+, Moyenne, 46, 2,0, Validée
+- IM-115 Rotule de genou v2, R-05, TPU, Basse, 12, 1,0, À préparer
+- IM-116 Colonne souple v2, R-05, TPU, Moyenne, 30, 2,2, À réimprimer
+- IM-117 Cage thoracique v1, R-06, PETG, Haute, 420, 18,0, À préparer
+- IM-118 Humérus v1, R-06, PA-CF, Haute, 260, 13,5, À préparer
+- IM-119 Crâne v1, R-06, ASA, Moyenne, 310, 15,0, À préparer
 - IM-120 Clip câbles v2, R-02, PLA+, Basse, 6, 0,4, Validée
 Statuses: Validée 7, En impression 3, À préparer 7, À réimprimer 3.
 
@@ -96,19 +96,19 @@ Under minimum: 5 articles (ST-02, ST-04, ST-06, ST-11, ST-17).
 
 Repairs (id, date, robot, subsystem, part, anomaly and fix, severity, status):
 - RP-01, 03/11, R-01, Mobilité, Fémur gauche v2, casse de fatigue, v3 +2 mm, Majeure, Clôturée
-- RP-02, 06/11, R-01, Châssis, Capot batterie v1, clip cassé, v2, Mineure, Clôturée
-- RP-03, 10/11, R-02, Mobilité, Support roue v1, déformé par la chaleur moteur, v2 PETG, Majeure, À valider
-- RP-04, 12/11, R-03, Mobilité, Patte A v2, rupture à la charnière, v3, Critique, Correctif en cours
+- RP-02, 06/11, R-01, Châssis, Plaque dorsale v1, clip cassé, v2, Mineure, Clôturée
+- RP-03, 10/11, R-02, Mobilité, Tibia avant v1, déformé par la chaleur moteur, v2 PETG, Majeure, À valider
+- RP-04, 12/11, R-03, Mobilité, Tibia A v2, rupture à la charnière, v3, Critique, Correctif en cours
 - RP-05, 14/11, R-03, Énergie, batterie LiPo, gonflée, CMD-37, Critique, Correctif en cours
-- RP-06, 17/11, R-03, Mobilité, Patte B v2, fissure entre couches, v3, Majeure, Ouverte
+- RP-06, 17/11, R-03, Mobilité, Tibia B v2, fissure entre couches, v3, Majeure, Ouverte
 - RP-07, 18/11, R-04, Contrôle, Driver TMC2209, grillé, CMD-32, Majeure, Correctif en cours
 - RP-08, 19/11, R-04, Mobilité, Mâchoire v1, glisse, v2 résine tough, Mineure, Clôturée
-- RP-09, 21/11, R-05, Mobilité, Suspension v1, TPU trop souple, v2, Majeure, Ouverte
+- RP-09, 21/11, R-05, Mobilité, Colonne souple v1, TPU trop souple, v2, Majeure, Ouverte
 - RP-10, 23/11, R-02, Capteurs, ToF, parasité par le soleil, CMD-34, Mineure, À valider
 - RP-11, 29/10, R-01, Énergie, Connecteur batterie, jeu au branchement, JST remplacé (CMD-30), Mineure, Clôturée
 - RP-12, 28/10, R-02, Contrôle, Carte contrôleur, reset intempestif, régulateur 5 V changé, Majeure, Clôturée
 Statuses: Clôturée 5, À valider 2, Correctif en cours 3, Ouverte 2 (12 repairs, 7 not closed, 2 critical).
-Part versions (part, robot, failures): Patte A R-03 2 (v1 casse charnière, v2 rupture RP-04, v3 en test); Fémur gauche R-01 2 (v1 fissure, v2 casse RP-01, v3 validée); Support roue avant R-02 1 (v1 déformé RP-03, v2 en impression); Suspension R-05 1 (v1 trop souple RP-09, v2 à réimprimer); Mâchoire R-04 1 (v1 glisse RP-08, v2 validée); Capot batterie R-01 1 (v1 clip cassé RP-02, v2 validée). "Défaut récurrent" = 2 failures or more: Patte A and Fémur gauche.
+Part versions (part, robot, failures): Tibia A R-03 2 (v1 casse charnière, v2 rupture RP-04, v3 en test); Fémur gauche R-01 2 (v1 fissure, v2 casse RP-01, v3 validée); Tibia avant R-02 1 (v1 déformé RP-03, v2 en impression); Colonne souple R-05 1 (v1 trop souple RP-09, v2 à réimprimer); Mâchoire R-04 1 (v1 glisse RP-08, v2 validée); Plaque dorsale R-01 1 (v1 clip cassé RP-02, v2 validée). "Défaut récurrent" = 2 failures or more: Tibia A and Fémur gauche.
 
 Numbers that must agree: mean score 45; 13 parts to print = 1 833 g, 89 h; 195,70 EUR = the three À commander orders; 5 items under minimum on Stock and its alert list; 2 critical repairs on the Robots KPI and R-03; 7 repairs not closed.
 

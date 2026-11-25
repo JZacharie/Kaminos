@@ -1,8 +1,8 @@
 <section data-route="#/robot/R-03" data-k-nav="#/robots" data-parent="#/robots" aria-labelledby="h-robot-detail">
-  <nav class="k-crumbs" aria-label="Fil d'Ariane"><a href="#/robots">Robots</a> / <span class="rd-crumb">Hexa</span></nav>
+  <nav class="k-crumbs" aria-label="Fil d'Ariane"><a href="#/robots">Robots</a> / <span class="rd-crumb">T-X</span></nav>
   <div class="k-page-header">
     <div>
-      <h1 id="h-robot-detail">Fiche robot R-03 Hexa</h1>
+      <h1 id="h-robot-detail">Fiche robot R-03 T-X</h1>
       <p class="rd-context">Hexapode · mis à jour le 25/11 à 10:00</p>
     </div>
     <div class="k-actions">
@@ -22,12 +22,77 @@
     <div class="k-span-12" id="a-palier-steps" data-k-block="steps" data-k-cfg="robot-detail-steps" data-k-canon></div>
     <div class="k-span-7" id="a-subsystem-scores" data-k-block="bars" data-k-cfg="robot-detail-scores" data-k-canon></div>
     <div class="k-span-5" id="a-prerequisites" data-k-block="detail" data-k-cfg="robot-detail-prereqs" data-k-canon></div>
+    <div class="k-span-12 k-card k-stack" id="a-blueprint">
+      <div class="k-card-head"><h2 class="k-card-title" id="bp-title">Plan de l'endosquelette</h2></div>
+      <div class="bp-grid">
+        <svg id="bp-svg" class="bp-svg" viewBox="0 0 300 560" role="img" aria-labelledby="bp-title"></svg>
+        <div>
+          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante.</p>
+          <ul class="bp-legend" id="bp-legend"></ul>
+          <ul class="bp-key">
+            <li><i class="bp-sw bp-ok"></i>Validée</li><li><i class="bp-sw bp-info"></i>En impression</li>
+            <li><i class="bp-sw bp-warn"></i>À préparer</li><li><i class="bp-sw bp-bad"></i>À réimprimer</li>
+            <li><i class="bp-sw bp-none"></i>Pas de pièce</li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <div class="k-span-12" id="a-subassemblies" data-k-block="table" data-k-cfg="robot-detail-subassemblies" data-k-canon></div>
     <div class="k-span-12" id="a-linked-items" data-k-block="table" data-k-cfg="robot-detail-linked" data-k-canon></div>
   </div>
   <script>
   (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
     var sec = document.getElementById('h-robot-detail').closest('section');
+
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    var BP_ZONES = [
+      ['skull', 'Crâne', '<ellipse cx="150" cy="52" rx="34" ry="40"/><circle cx="136" cy="48" r="7" class="bp-eye"/><circle cx="164" cy="48" r="7" class="bp-eye"/>'],
+      ['jaw', 'Mâchoire', '<path d="M128 86h44l-6 18h-32z"/>'],
+      ['thorax', 'Cage thoracique', '<rect x="104" y="116" width="92" height="86" rx="14"/><path d="M110 138h80M110 158h80M110 178h80" class="bp-rib"/>'],
+      ['spine', 'Colonne', '<rect x="143" y="104" width="14" height="184" rx="4"/>'],
+      ['arm', 'Humérus', '<rect x="70" y="120" width="26" height="86" rx="8"/><rect x="204" y="120" width="26" height="86" rx="8"/>'],
+      ['forearm', 'Poignet', '<rect x="72" y="212" width="22" height="76" rx="8"/><rect x="206" y="212" width="22" height="76" rx="8"/>'],
+      ['pelvis', 'Bassin', '<rect x="112" y="290" width="76" height="40" rx="10"/>'],
+      ['femur', 'Fémur', '<rect x="116" y="336" width="28" height="84" rx="9"/><rect x="156" y="336" width="28" height="84" rx="9"/>'],
+      ['knee', 'Rotule', '<circle cx="130" cy="432" r="14"/><circle cx="170" cy="432" r="14"/>'],
+      ['tibia', 'Tibia', '<rect x="119" y="450" width="22" height="64" rx="7"/><rect x="159" y="450" width="22" height="64" rx="7"/>'],
+      ['foot', 'Pied', '<path d="M108 518h38v18h-50z"/><path d="M154 518h38l12 18h-50z"/>']
+    ];
+    var BP_RULES = [[/Crâne/, 'skull'], [/Mâchoire/, 'jaw'], [/Cage thoracique|Plaque dorsale/, 'thorax'], [/Colonne|Épaule/, 'spine'],
+      [/Humérus/, 'arm'], [/Poignet|Avant-bras/, 'forearm'], [/Bassin/, 'pelvis'], [/Fémur/, 'femur'], [/Rotule|Genou/, 'knee'],
+      [/Tibia/, 'tibia'], [/Pied/, 'foot']];
+    var BP_CLASS = { 'Validée': 'ok', 'En impression': 'info', 'À préparer': 'warn', 'À réimprimer': 'bad' };
+    var BP_RANK = { ok: 1, info: 2, warn: 3, bad: 4 };
+    function bpZone(name) {
+      for (var i = 0; i < BP_RULES.length; i++) if (BP_RULES[i][0].test(name)) return BP_RULES[i][1];
+      return null;
+    }
+    function paintBlueprint(r) {
+      var mine = (D.prints || []).filter(function (p) { return p.robotId === r.id; });
+      var tone = {}, ids = {}, loose = [];
+      mine.forEach(function (p) {
+        var z = bpZone(p.part), c = BP_CLASS[p.status] || 'info';
+        if (!z) { loose.push(p); return; }
+        if (!tone[z] || BP_RANK[c] > BP_RANK[tone[z]]) tone[z] = c;
+        (ids[z] = ids[z] || []).push(p.id + ' ' + p.part + ' (' + p.status + ')');
+      });
+      var h = '<defs><pattern id="bp-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" class="bp-gl"/></pattern></defs>' +
+        '<rect width="300" height="560" fill="url(#bp-grid)" class="bp-bg"/>' +
+        '<line x1="150" y1="6" x2="150" y2="554" class="bp-axis"/>' +
+        '<text x="10" y="18" class="bp-cap">' + esc(r.name) + ' · ' + esc(r.id) + ' · vue de face</text>';
+      BP_ZONES.forEach(function (z) {
+        var t = tone[z[0]] || 'none', tip = ids[z[0]] ? ids[z[0]].join(' ; ') : z[1] + ' : aucune pièce imprimée pour ce robot';
+        h += '<g class="bp-zone bp-' + t + '"><title>' + esc(tip) + '</title>' + z[2] + '</g>';
+      });
+      h += '<line x1="40" y1="12" x2="40" y2="536" class="bp-dim"/><text x="34" y="280" class="bp-dimt" transform="rotate(-90 34 280)">1,85 m</text>';
+      var svg = document.getElementById('bp-svg');
+      svg.innerHTML = h;
+      svg.setAttribute('aria-label', 'Plan de face de ' + r.name + ' (' + r.id + ') : ' + mine.length + ' pièces imprimées');
+      document.getElementById('bp-title').textContent = 'Plan de l\'endosquelette ' + r.name + ' (' + r.id + ')';
+      document.getElementById('bp-legend').innerHTML = mine.map(function (p) {
+        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + '</li>';
+      }).join('') || '<li>Aucune pièce imprimée pour ce robot.</li>';
+    }
     function paint() {
       var m = /#\/robot\/([^/?]+)/.exec(location.hash), id = m ? decodeURIComponent(m[1]) : 'R-03';
       var r = (D.robots || []).filter(function (x) { return x.id === id; })[0];
@@ -35,6 +100,7 @@
       document.getElementById('h-robot-detail').textContent = 'Fiche robot ' + r.id + ' ' + r.name;
       sec.querySelector('.rd-crumb').textContent = r.name;
       sec.querySelector('.rd-context').textContent = r.type.charAt(0).toUpperCase() + r.type.slice(1) + ' · score ' + r.score + ' sur 100 · mis à jour le 25/11 à 10:00';
+      paintBlueprint(r);
       var crit = (D.repairs || []).filter(function (x) { return x.robotId === id && x.severity === 'Critique' && x.status !== 'Clôturée'; });
       var capped = r.palierShown !== r.palier && crit.length > 0;
       var box = sec.querySelector('.rd-cap');

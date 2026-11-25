@@ -213,3 +213,12 @@
 - Result: accepted (Agent change: Un bouton « Commander une pièce CNC ou laser » est ajouté sur les pages Stock et Commandes. Il ouvre un formulaire de commande (procédé, pièce, robot lié, prestataire, montant, délai). Le tableau des commandes a maintenant une colonne et un filtre « Type », et deux commandes d'exemple (CNC et laser…)
 - Agent: ui-refiner · strands-agents 1.25.0 · global.anthropic.claude-sonnet-5-5 · 122.6 s · 0.59 USD
 
+## v35 · 2026-11-25T11:02:04Z · refine
+- Request: "ajoute un tableau de board pour identifier les ressources disponibles. definit des budjet et de capacité d'utilisation. tu dois pouvoir aussi gérer plsuieur roboto du même type."
+- Selection: (whole page)
+- Classification: aesthetic
+- Changed: none
+- Requirement effect: none
+- Result: accepted (Agent change: Ajout d'un tableau de board des ressources disponibles (budget, capacité d'utilisation, état), d'une gestion de plusieurs exemplaires par modèle de robot et d'un formulaire pour définir budget et capacité.)
+- Agent: ui-refiner · strands-agents 1.25.0 · global.anthropic.claude-sonnet-5-5 · 290.9 s · 1.39 USD
+

@@ -22,8 +22,8 @@
       ]
     },
     {
-      "id": "robot-detail", "title": "Fiche robot R-03 Hexa", "route": "#/robot/R-03",
-      "purpose": "Comprendre pourquoi Hexa est plafonné à P2 et ce qui débloque le palier suivant. Blocks: bars, steps, detail, table.",
+      "id": "robot-detail", "title": "Fiche robot R-03 T-X", "route": "#/robot/R-03",
+      "purpose": "Comprendre pourquoi T-X est plafonné à P2 et ce qui débloque le palier suivant. Blocks: bars, steps, detail, table.",
       "primaryAction": "Ouvrir la réparation critique",
       "anchors": [
         { "id": "a-subsystem-scores", "label": "Scores par sous-système", "kind": "chart", "screen": "robot-detail" },
@@ -85,7 +85,7 @@
       "name": "robots", "rows": 6, "key": "id",
       "fields": [
         { "name": "id", "type": "id", "example": "R-03" },
-        { "name": "name", "type": "string", "example": "Hexa" },
+        { "name": "name", "type": "string", "example": "T-X" },
         { "name": "type", "type": "string", "example": "hexapode" },
         { "name": "scoreChassis", "type": "integer", "unit": "pts", "example": 64 },
         { "name": "scoreMobility", "type": "integer", "unit": "pts", "example": 48 },
@@ -108,7 +108,7 @@
       "name": "prints", "rows": 20, "key": "id",
       "fields": [
         { "name": "id", "type": "id", "example": "IM-107" },
-        { "name": "part", "type": "string", "example": "Patte A v3" },
+        { "name": "part", "type": "string", "example": "Tibia A v3" },
         { "name": "robotId", "type": "string", "example": "R-03" },
         { "name": "material", "type": "enum", "enum": ["PLA+", "PETG", "ASA", "PA-CF", "TPU", "Résine tough"], "example": "PETG" },
         { "name": "priority", "type": "enum", "enum": ["Haute", "Moyenne", "Basse"], "example": "Haute" },
@@ -152,9 +152,9 @@
         { "name": "date", "type": "date", "example": "2026-11-12" },
         { "name": "robotId", "type": "string", "example": "R-03" },
         { "name": "subsystem", "type": "enum", "enum": ["Châssis", "Mobilité", "Énergie", "Capteurs", "Contrôle"], "example": "Mobilité" },
-        { "name": "part", "type": "string", "example": "Patte A v2" },
+        { "name": "part", "type": "string", "example": "Tibia A v2" },
         { "name": "anomaly", "type": "string", "example": "Rupture à la charnière" },
-        { "name": "fix", "type": "string", "example": "Patte A v3" },
+        { "name": "fix", "type": "string", "example": "Tibia A v3" },
         { "name": "severity", "type": "enum", "enum": ["Critique", "Majeure", "Mineure"], "example": "Critique" },
         { "name": "status", "type": "enum", "enum": ["Ouverte", "Correctif en cours", "À valider", "Clôturée"], "example": "Correctif en cours" }
       ],
@@ -164,7 +164,7 @@
       "name": "partVersions", "rows": 14, "key": "id",
       "fields": [
         { "name": "id", "type": "id", "example": "PV-01" },
-        { "name": "part", "type": "string", "example": "Patte A" },
+        { "name": "part", "type": "string", "example": "Tibia A" },
         { "name": "robotId", "type": "string", "example": "R-03" },
         { "name": "version", "type": "string", "example": "v2" },
         { "name": "outcome", "type": "enum", "enum": ["Défaut constaté", "Validée", "En test", "En impression", "À réimprimer"], "example": "Défaut constaté" },
@@ -177,7 +177,7 @@
       "fields": [
         { "name": "id", "type": "id", "example": "SA-05" },
         { "name": "robotId", "type": "string", "example": "R-03" },
-        { "name": "name", "type": "string", "example": "Pattes" },
+        { "name": "name", "type": "string", "example": "Tibias" },
         { "name": "requires", "type": "string", "example": "IM-107, IM-108, IM-109" },
         { "name": "readiness", "type": "enum", "enum": ["Prêt à assembler", "Attente impressions", "Attente composants", "Bloqué par réparation"], "example": "Bloqué par réparation" }
       ],

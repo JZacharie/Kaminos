@@ -1,0 +1,27 @@
+{
+  "version": 35,
+  "parent": 34,
+  "createdAt": "2026-11-25T11:02:04Z",
+  "cause": {
+    "kind": "refine",
+    "stage": "intent-capture",
+    "refs": []
+  },
+  "summary": "Agent change: Ajout d'un tableau de board des ressources disponibles (budget, capacité d'utilisation, état), d'une gestion de plusieurs exemplaires par modèle de robot et d'un formulaire pour définir budget et capacité.",
+  "request": "ajoute un tableau de board pour identifier les ressources disponibles. definit des budjet et de capacité d'utilisation. tu dois pouvoir aussi gérer plsuieur roboto du même type.",
+  "selection": [],
+  "selectionSource": "agent",
+  "via": "agent-mode",
+  "agent": "ui-refiner",
+  "jobId": "ag-mww0ef8q-klr5",
+  "files": [
+    "ui/src/data.js",
+    "ui/src/extra.css",
+    "ui/src/screens/10-robots.blocks.js",
+    "ui/src/screens/10-robots.html"
+  ],
+  "n": 35,
+  "kind": "refine",
+  "changedIds": [],
+  "classification": "aesthetic"
+}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="aidlc-ui-version" content="34">
+<meta name="aidlc-ui-version" content="35">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#4f46e5">
 <title>Kaminos · Atelier Cyclope</title>
@@ -992,6 +992,39 @@ html[data-k-m] .k-m-ind{transition:transform .4s var(--k-ease),width .4s var(--k
 .rp-ghost text{fill:var(--text-muted);font-size:11px}
 .rp-picked{margin:0;font-weight:600}
 @media(max-width:900px){.rp-grid{grid-template-columns:minmax(0,1fr)}}
+#rb-units.k-table-wide{width:100%}
+#rb-units :is(th,td){min-width:0}
+#rb-units .rb-name span{display:block;font-weight:400;font-size:var(--fs-0)}
+#rb-units .rb-step{display:inline-flex;align-items:center;gap:var(--s2)}
+#rb-units .rb-units{min-width:1.5rem;text-align:center;font-variant-numeric:tabular-nums}
+#rb-units .rb-in{width:5.5rem;min-height:2.25rem;padding:.25rem .5rem;text-align:right}
+#rb-units tfoot :is(th,td){border-top:2px solid var(--line);border-bottom:0;font-weight:700}
+#rb-define-card .k-filters{align-items:flex-end}
+#rb-define-card .k-filters .k-field{flex:1 1 12rem;max-width:20rem}
+.rb-err{color:var(--bad-t);font-weight:600}
+.bp-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:var(--s5);align-items:start}
+.bp-svg{display:block;width:100%;max-width:340px;height:auto;margin:0 auto;border:1px solid var(--line);border-radius:var(--r2);background:var(--surface-2)}
+.bp-gl{fill:none;stroke:var(--border);stroke-width:.5;opacity:.6}
+.bp-bg{fill-opacity:1}
+.bp-axis,.bp-dim{stroke:var(--text-muted);stroke-width:.8;stroke-dasharray:4 3}
+.bp-cap,.bp-dimt{fill:var(--text-muted);font-size:10px;font-family:inherit;text-anchor:start}
+.bp-dimt{text-anchor:middle}
+.bp-zone{stroke:var(--text);stroke-width:1.4;stroke-linejoin:round}
+.bp-zone *{vector-effect:non-scaling-stroke}
+.bp-zone.bp-none{fill:none;stroke:var(--text-muted);stroke-dasharray:4 3}
+.bp-zone.bp-ok,.bp-sw.bp-ok{fill:var(--ok-bg);background:var(--ok)}
+.bp-zone.bp-info,.bp-sw.bp-info{fill:var(--info-bg);background:var(--info)}
+.bp-zone.bp-warn,.bp-sw.bp-warn{fill:var(--warn-bg);background:var(--warn)}
+.bp-zone.bp-bad,.bp-sw.bp-bad{fill:var(--bad-bg);background:var(--bad)}
+.bp-zone.bp-ok{stroke:var(--ok)}.bp-zone.bp-info{stroke:var(--info)}.bp-zone.bp-warn{stroke:var(--warn)}.bp-zone.bp-bad{stroke:var(--bad)}
+.bp-zone .bp-eye{fill:var(--bad);stroke:none}
+.bp-zone .bp-rib{fill:none;stroke:inherit;stroke-width:1}
+.bp-hint{margin:0 0 var(--s3);color:var(--text-muted)}
+.bp-legend,.bp-key{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
+.bp-key{display:flex;flex-wrap:wrap;gap:var(--s4);margin-top:var(--s4);color:var(--text-muted);font-size:var(--fs-0)}
+.bp-sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid var(--border)}
+.bp-sw.bp-none{background:none;border-style:dashed}
+@media(max-width:900px){.bp-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -1032,6 +1065,52 @@ UI_BLOCKS.shell = {
       <p class="k-muted" id="robots-count" role="status"></p>
       <div class="k-grid k-grid-stretch" id="robots-cards-list"></div>
       <div class="k-empty-sm" id="robots-empty" hidden>Aucun robot à ce palier. Choisissez un autre palier ou réinitialisez le filtre.</div>
+    </div>
+    <div class="k-span-12" id="rb-kpi" data-k-block="kpi" data-k-cfg="robots-board-kpi"></div>
+    <div class="k-span-12" id="rb-resources" data-k-block="table" data-k-cfg="robots-resources"></div>
+    <div class="k-span-12 k-card k-stack" id="rb-units-card">
+      <div class="k-card-head"><h2 class="k-card-title">Exemplaires par modèle de robot</h2></div>
+      <p class="k-muted">Gérez plusieurs robots du même type : ajoutez ou retirez des exemplaires d'un modèle, puis fixez le budget et la capacité d'utilisation de chaque exemplaire. Un exemplaire est indisponible tant qu'une réparation critique est ouverte sur son modèle.</p>
+      <div class="k-table-wrap">
+        <table class="k-table" id="rb-units">
+          <caption>Exemplaires, budget et capacité d'utilisation par modèle</caption>
+          <thead>
+            <tr>
+              <th scope="col">Modèle</th>
+              <th scope="col">Exemplaires</th>
+              <th scope="col">Disponibles</th>
+              <th scope="col">Budget par exemplaire (€)</th>
+              <th scope="col">Budget total</th>
+              <th scope="col">Capacité par exemplaire (h/sem.)</th>
+              <th scope="col">Charge prévue</th>
+              <th scope="col">Utilisation de la capacité</th>
+            </tr>
+          </thead>
+          <tbody id="rb-units-body"></tbody>
+          <tfoot id="rb-units-foot"></tfoot>
+        </table>
+      </div>
+      <p class="k-muted" id="rb-units-status" role="status"></p>
+    </div>
+    <div class="k-span-12 k-card k-stack" id="rb-define-card">
+      <div class="k-card-head"><h2 class="k-card-title">Définir le budget et la capacité d'une ressource</h2></div>
+      <p class="k-muted">Choisissez une ressource, puis fixez son budget et la quantité maximale que l'atelier peut utiliser. Le tableau « Ressources disponibles » se met à jour.</p>
+      <div class="k-filters">
+        <div class="k-field">
+          <label for="rb-res-select">Ressource</label>
+          <select class="k-select" id="rb-res-select"></select>
+        </div>
+        <div class="k-field">
+          <label for="rb-res-budget">Budget (€)</label>
+          <input class="k-input" type="number" id="rb-res-budget" min="0" step="5">
+        </div>
+        <div class="k-field">
+          <label for="rb-res-cap" id="rb-res-cap-label">Capacité d'utilisation</label>
+          <input class="k-input" type="number" id="rb-res-cap" min="0" step="any">
+        </div>
+        <button class="k-btn k-btn-primary" type="button" id="rb-res-apply">Appliquer</button>
+      </div>
+      <p class="k-muted" id="rb-res-msg" role="status"></p>
     </div>
     <div class="k-span-12 k-card k-stack" id="rp-card">
       <div class="k-card-head"><h2 class="k-card-title">Plan des robots</h2></div>
@@ -1123,7 +1202,132 @@ UI_BLOCKS.shell = {
     var open = document.getElementById('robots-open-first');
     open.setAttribute('href', '#/robot/' + focus.id);
     open.setAttribute('aria-label', 'Ouvrir la fiche d\'un robot, par exemple ' + focus.id + ' ' + focus.name);
-    document.getElementById('robots-context').textContent = 'Atelier Cyclope, Lyon · mis à jour mer. 25/11 à 10:00 · ' + D.kpis.robotsCount + ' robots';
+    window.RobotContext = function () {
+      var n = D.robots.reduce(function (s, r) { return s + r.units; }, 0);
+      document.getElementById('robots-context').textContent = 'Atelier Cyclope, Lyon · mis à jour mer. 25/11 à 10:00 · ' + D.kpis.robotsCount + ' modèles de robots, ' + plural(n, 'exemplaire');
+    };
+    window.RobotContext();
+  });
+  </script>
+  <script>
+  (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
+    var B = window.BoardCalc;
+    function byId(id) { return document.getElementById(id); }
+    function say(id, msg) { var p = byId(id); if (p) p.textContent = msg; }
+    function plural(n, w) { return n + ' ' + w + (n > 1 ? 's' : ''); }
+    function robotOf(id) { return D.robots.filter(function (r) { return r.id === id; })[0]; }
+    function resOf(id) { return D.resources.filter(function (r) { return r.id === id; })[0]; }
+
+    function refreshBlocks() {
+      [['rb-kpi', 'robots-board-kpi'], ['rb-resources', 'robots-resources']].forEach(function (p) {
+        var el = byId(p[0]);
+        if (el && el._kBlock && window.UI_BLOCKS[p[1]]) el._kBlock.update(window.UI_BLOCKS[p[1]]());
+      });
+      if (window.RobotContext) window.RobotContext();
+    }
+
+    // ---- exemplaires par modèle
+    var USE = { ok: 'Confortable', warn: 'Élevée', bad: 'Saturée' };
+    function unitRow(r) {
+      var c = B.robot(r), nm = r.name;
+      var h = '<tr data-rb-robot="' + esc(r.id) + '">';
+      h += '<th scope="row" class="rb-name"><a href="#/robot/' + esc(r.id) + '">' + esc(r.id + ' ' + nm) + '</a><span class="k-muted">' + esc(r.type) + '</span></th>';
+      h += '<td><div class="rb-step"><button type="button" class="k-btn k-btn-sm" data-rb-step="-1" aria-label="Retirer un exemplaire de ' + esc(nm) + '"' + (r.units <= 1 ? ' disabled' : '') + '>−</button>';
+      h += '<strong class="rb-units">' + r.units + '</strong>';
+      h += '<button type="button" class="k-btn k-btn-sm" data-rb-step="1" aria-label="Ajouter un exemplaire de ' + esc(nm) + '"' + (r.units >= 9 ? ' disabled' : '') + '>+</button></div></td>';
+      h += '<td class="k-num">' + c.free + ' / ' + r.units + (c.paused ? ' <span class="k-badge k-badge-bad">' + c.paused + ' en pause</span>' : '') + '</td>';
+      h += '<td class="k-num"><input class="k-input rb-in" type="number" min="0" step="10" value="' + r.unitBudgetEur + '" data-rb-field="unitBudgetEur" aria-label="Budget par exemplaire de ' + esc(nm) + ', en euros"></td>';
+      h += '<td class="k-num">' + B.fr(c.budgetTotal, 0) + ' €</td>';
+      h += '<td class="k-num"><input class="k-input rb-in" type="number" min="0" max="80" step="1" value="' + r.hoursPerUnit + '" data-rb-field="hoursPerUnit" aria-label="Capacité par exemplaire de ' + esc(nm) + ', en heures par semaine"></td>';
+      h += '<td class="k-num">' + B.fr(r.hoursPlanned) + ' h/sem.</td>';
+      h += '<td>' + (c.usage == null
+        ? '<span class="k-badge k-badge-bad">Aucune capacité disponible</span>'
+        : '<span class="k-badge k-badge-' + c.tone + '">' + c.usage + ' % de ' + B.fr(c.cap) + ' h · ' + USE[c.tone] + '</span>') + '</td></tr>';
+      return h;
+    }
+    function renderUnits() {
+      var body = byId('rb-units-body');
+      if (!body) return;
+      body.innerHTML = D.robots.map(unitRow).join('');
+      var u = 0, f = 0, b = 0, hp = 0, cap = 0;
+      D.robots.forEach(function (r) { var c = B.robot(r); u += r.units; f += c.free; b += c.budgetTotal; hp += r.hoursPlanned; cap += c.cap; });
+      byId('rb-units-foot').innerHTML = '<tr><th scope="row">Total</th><td class="k-num">' + u + '</td><td class="k-num">' + f + ' / ' + u + '</td><td></td><td class="k-num">' + B.fr(b, 0) + ' €</td><td></td><td class="k-num">' + B.fr(hp) + ' h/sem.</td><td>' + (cap ? Math.round(100 * hp / cap) + ' % de ' + B.fr(cap) + ' h' : '') + '</td></tr>';
+    }
+    function refocus(id, sel) {
+      var el = byId('rb-units-body').querySelector('[data-rb-robot="' + id + '"] ' + sel);
+      if (el && !el.disabled) el.focus();
+      else { var alt = byId('rb-units-body').querySelector('[data-rb-robot="' + id + '"] button:not([disabled])'); if (alt) alt.focus(); }
+    }
+    function step(row, d, btn) {
+      var r = robotOf(row.getAttribute('data-rb-robot'));
+      if (!r) return;
+      var n = Math.max(1, Math.min(9, r.units + d));
+      if (n === r.units) return;
+      r.units = n;
+      renderUnits(); refreshBlocks();
+      refocus(r.id, '[data-rb-step="' + btn.getAttribute('data-rb-step') + '"]');
+      say('rb-units-status', n + ' exemplaire' + (n > 1 ? 's' : '') + ' de ' + r.name + ' (' + r.type + '). Budget total du modèle : ' + B.fr(B.robot(r).budgetTotal, 0) + ' €.');
+    }
+    function setField(row, input) {
+      var r = robotOf(row.getAttribute('data-rb-robot')), key = input.getAttribute('data-rb-field'), v = parseFloat(String(input.value).replace(',', '.'));
+      if (!r) return;
+      if (!isFinite(v) || v < 0) { input.value = r[key]; say('rb-units-status', 'Saisissez un nombre positif ou nul.'); return; }
+      r[key] = key === 'hoursPerUnit' ? Math.min(80, Math.round(v)) : Math.round(v);
+      renderUnits(); refreshBlocks();
+      refocus(r.id, '[data-rb-field="' + key + '"]');
+      say('rb-units-status', key === 'unitBudgetEur' ? 'Budget de ' + r.name + ' : ' + B.fr(r[key], 0) + ' € par exemplaire.' : 'Capacité de ' + r.name + ' : ' + r[key] + ' h par semaine et par exemplaire.');
+    }
+
+    // ---- budget et capacité d'une ressource
+    function fillResForm() {
+      var r = resOf(byId('rb-res-select').value);
+      if (!r) return;
+      byId('rb-res-budget').value = r.budgetEur == null ? '' : r.budgetEur;
+      byId('rb-res-budget').disabled = r.budgetEur == null;
+      byId('rb-res-cap').value = r.capacity;
+      byId('rb-res-cap-label').textContent = 'Capacité d\'utilisation (' + r.capUnit + ')';
+    }
+    function applyRes() {
+      var r = resOf(byId('rb-res-select').value), msg = byId('rb-res-msg');
+      if (!r) return;
+      var cap = parseFloat(String(byId('rb-res-cap').value).replace(',', '.'));
+      var bud = r.budgetEur == null ? null : parseFloat(String(byId('rb-res-budget').value).replace(',', '.'));
+      msg.classList.remove('rb-err');
+      if (!isFinite(cap) || cap < 0 || (bud != null && (!isFinite(bud) || bud < 0))) {
+        msg.classList.add('rb-err');
+        msg.textContent = 'Saisissez un budget et une capacité positifs ou nuls.';
+        return;
+      }
+      r.capacity = cap;
+      if (bud != null) r.budgetEur = bud;
+      refreshBlocks();
+      msg.textContent = r.name + ' : capacité ' + B.fr(cap) + ' ' + r.capUnit + (bud != null ? ', budget ' + B.fr(bud, 2) + ' €' : '') + '. Le tableau est à jour.';
+    }
+    var sel = byId('rb-res-select');
+    sel.innerHTML = D.resources.map(function (r) { return '<option value="' + esc(r.id) + '">' + esc(r.name) + ' (' + esc(r.kind.toLowerCase()) + ')</option>'; }).join('');
+    fillResForm();
+    renderUnits();
+
+    if (window.__rbOff) window.__rbOff();
+    (function () {
+      var subs = [];
+      function on(target, type, fn) { target.addEventListener(type, fn); subs.push([target, type, fn]); }
+      window.__rbOff = function () { subs.forEach(function (s) { s[0].removeEventListener(s[1], s[2]); }); subs = []; };
+      on(document, 'click', function (e) {
+        var t = e.target && e.target.closest ? e.target : null;
+        if (!t) return;
+        var b = t.closest('[data-rb-step]');
+        if (b && b.closest('#rb-units-body')) step(b.closest('tr'), Number(b.getAttribute('data-rb-step')), b);
+        else if (t.closest('#rb-res-apply')) applyRes();
+      });
+      on(document, 'change', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        if (t.id === 'rb-res-select') fillResForm();
+        else if (t.hasAttribute('data-rb-field') && t.closest('#rb-units-body')) setField(t.closest('tr'), t);
+      });
+      on(window, 'kit:route', function () { if (byId('rb-units-body')) renderUnits(); });
+    })();
   });
   </script>
   <script>
@@ -1327,10 +1531,10 @@ UI_BLOCKS.shell = {
   </script>
 </section>
 <section data-route="#/robot/R-03" data-k-nav="#/robots" data-parent="#/robots" aria-labelledby="h-robot-detail">
-  <nav class="k-crumbs" aria-label="Fil d'Ariane"><a href="#/robots">Robots</a> / <span class="rd-crumb">Hexa</span></nav>
+  <nav class="k-crumbs" aria-label="Fil d'Ariane"><a href="#/robots">Robots</a> / <span class="rd-crumb">T-X</span></nav>
   <div class="k-page-header">
     <div>
-      <h1 id="h-robot-detail">Fiche robot R-03 Hexa</h1>
+      <h1 id="h-robot-detail">Fiche robot R-03 T-X</h1>
       <p class="rd-context">Hexapode · mis à jour le 25/11 à 10:00</p>
     </div>
     <div class="k-actions">
@@ -1350,12 +1554,77 @@ UI_BLOCKS.shell = {
     <div class="k-span-12" id="a-palier-steps" data-k-block="steps" data-k-cfg="robot-detail-steps" data-k-canon></div>
     <div class="k-span-7" id="a-subsystem-scores" data-k-block="bars" data-k-cfg="robot-detail-scores" data-k-canon></div>
     <div class="k-span-5" id="a-prerequisites" data-k-block="detail" data-k-cfg="robot-detail-prereqs" data-k-canon></div>
+    <div class="k-span-12 k-card k-stack" id="a-blueprint">
+      <div class="k-card-head"><h2 class="k-card-title" id="bp-title">Plan de l'endosquelette</h2></div>
+      <div class="bp-grid">
+        <svg id="bp-svg" class="bp-svg" viewBox="0 0 300 560" role="img" aria-labelledby="bp-title"></svg>
+        <div>
+          <p class="bp-hint">Vue de face. Chaque zone prend la couleur du statut de la pièce imprimée correspondante.</p>
+          <ul class="bp-legend" id="bp-legend"></ul>
+          <ul class="bp-key">
+            <li><i class="bp-sw bp-ok"></i>Validée</li><li><i class="bp-sw bp-info"></i>En impression</li>
+            <li><i class="bp-sw bp-warn"></i>À préparer</li><li><i class="bp-sw bp-bad"></i>À réimprimer</li>
+            <li><i class="bp-sw bp-none"></i>Pas de pièce</li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <div class="k-span-12" id="a-subassemblies" data-k-block="table" data-k-cfg="robot-detail-subassemblies" data-k-canon></div>
     <div class="k-span-12" id="a-linked-items" data-k-block="table" data-k-cfg="robot-detail-linked" data-k-canon></div>
   </div>
   <script>
   (window.APP_RENDER = window.APP_RENDER || []).push(function (D) {
     var sec = document.getElementById('h-robot-detail').closest('section');
+
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    var BP_ZONES = [
+      ['skull', 'Crâne', '<ellipse cx="150" cy="52" rx="34" ry="40"/><circle cx="136" cy="48" r="7" class="bp-eye"/><circle cx="164" cy="48" r="7" class="bp-eye"/>'],
+      ['jaw', 'Mâchoire', '<path d="M128 86h44l-6 18h-32z"/>'],
+      ['thorax', 'Cage thoracique', '<rect x="104" y="116" width="92" height="86" rx="14"/><path d="M110 138h80M110 158h80M110 178h80" class="bp-rib"/>'],
+      ['spine', 'Colonne', '<rect x="143" y="104" width="14" height="184" rx="4"/>'],
+      ['arm', 'Humérus', '<rect x="70" y="120" width="26" height="86" rx="8"/><rect x="204" y="120" width="26" height="86" rx="8"/>'],
+      ['forearm', 'Poignet', '<rect x="72" y="212" width="22" height="76" rx="8"/><rect x="206" y="212" width="22" height="76" rx="8"/>'],
+      ['pelvis', 'Bassin', '<rect x="112" y="290" width="76" height="40" rx="10"/>'],
+      ['femur', 'Fémur', '<rect x="116" y="336" width="28" height="84" rx="9"/><rect x="156" y="336" width="28" height="84" rx="9"/>'],
+      ['knee', 'Rotule', '<circle cx="130" cy="432" r="14"/><circle cx="170" cy="432" r="14"/>'],
+      ['tibia', 'Tibia', '<rect x="119" y="450" width="22" height="64" rx="7"/><rect x="159" y="450" width="22" height="64" rx="7"/>'],
+      ['foot', 'Pied', '<path d="M108 518h38v18h-50z"/><path d="M154 518h38l12 18h-50z"/>']
+    ];
+    var BP_RULES = [[/Crâne/, 'skull'], [/Mâchoire/, 'jaw'], [/Cage thoracique|Plaque dorsale/, 'thorax'], [/Colonne|Épaule/, 'spine'],
+      [/Humérus/, 'arm'], [/Poignet|Avant-bras/, 'forearm'], [/Bassin/, 'pelvis'], [/Fémur/, 'femur'], [/Rotule|Genou/, 'knee'],
+      [/Tibia/, 'tibia'], [/Pied/, 'foot']];
+    var BP_CLASS = { 'Validée': 'ok', 'En impression': 'info', 'À préparer': 'warn', 'À réimprimer': 'bad' };
+    var BP_RANK = { ok: 1, info: 2, warn: 3, bad: 4 };
+    function bpZone(name) {
+      for (var i = 0; i < BP_RULES.length; i++) if (BP_RULES[i][0].test(name)) return BP_RULES[i][1];
+      return null;
+    }
+    function paintBlueprint(r) {
+      var mine = (D.prints || []).filter(function (p) { return p.robotId === r.id; });
+      var tone = {}, ids = {}, loose = [];
+      mine.forEach(function (p) {
+        var z = bpZone(p.part), c = BP_CLASS[p.status] || 'info';
+        if (!z) { loose.push(p); return; }
+        if (!tone[z] || BP_RANK[c] > BP_RANK[tone[z]]) tone[z] = c;
+        (ids[z] = ids[z] || []).push(p.id + ' ' + p.part + ' (' + p.status + ')');
+      });
+      var h = '<defs><pattern id="bp-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" class="bp-gl"/></pattern></defs>' +
+        '<rect width="300" height="560" fill="url(#bp-grid)" class="bp-bg"/>' +
+        '<line x1="150" y1="6" x2="150" y2="554" class="bp-axis"/>' +
+        '<text x="10" y="18" class="bp-cap">' + esc(r.name) + ' · ' + esc(r.id) + ' · vue de face</text>';
+      BP_ZONES.forEach(function (z) {
+        var t = tone[z[0]] || 'none', tip = ids[z[0]] ? ids[z[0]].join(' ; ') : z[1] + ' : aucune pièce imprimée pour ce robot';
+        h += '<g class="bp-zone bp-' + t + '"><title>' + esc(tip) + '</title>' + z[2] + '</g>';
+      });
+      h += '<line x1="40" y1="12" x2="40" y2="536" class="bp-dim"/><text x="34" y="280" class="bp-dimt" transform="rotate(-90 34 280)">1,85 m</text>';
+      var svg = document.getElementById('bp-svg');
+      svg.innerHTML = h;
+      svg.setAttribute('aria-label', 'Plan de face de ' + r.name + ' (' + r.id + ') : ' + mine.length + ' pièces imprimées');
+      document.getElementById('bp-title').textContent = 'Plan de l\'endosquelette ' + r.name + ' (' + r.id + ')';
+      document.getElementById('bp-legend').innerHTML = mine.map(function (p) {
+        return '<li><span class="k-badge k-badge-' + (BP_CLASS[p.status] || 'info') + '">' + esc(p.status) + '</span> <strong>' + esc(p.id) + '</strong> ' + esc(p.part) + (bpZone(p.part) ? '' : ' (hors plan)') + '</li>';
+      }).join('') || '<li>Aucune pièce imprimée pour ce robot.</li>';
+    }
     function paint() {
       var m = /#\/robot\/([^/?]+)/.exec(location.hash), id = m ? decodeURIComponent(m[1]) : 'R-03';
       var r = (D.robots || []).filter(function (x) { return x.id === id; })[0];
@@ -1363,6 +1632,7 @@ UI_BLOCKS.shell = {
       document.getElementById('h-robot-detail').textContent = 'Fiche robot ' + r.id + ' ' + r.name;
       sec.querySelector('.rd-crumb').textContent = r.name;
       sec.querySelector('.rd-context').textContent = r.type.charAt(0).toUpperCase() + r.type.slice(1) + ' · score ' + r.score + ' sur 100 · mis à jour le 25/11 à 10:00';
+      paintBlueprint(r);
       var crit = (D.repairs || []).filter(function (x) { return x.robotId === id && x.severity === 'Critique' && x.status !== 'Clôturée'; });
       var capped = r.palierShown !== r.palier && crit.length > 0;
       var box = sec.querySelector('.rd-cap');
@@ -1851,7 +2121,7 @@ UI_BLOCKS.shell = {
 {"question":"intent-capture-questions#Q19","answer":"C","ops":[{"op":"badge","target":"a-prints-table","text":"Tableau et kanban"}]},
 {"question":"intent-capture-questions#Q19","answer":"D","ops":[{"op":"badge","target":"a-prints-table","text":"Liste simple"}]},
 {"question":"intent-capture-questions#Q19","answer":"*","ops":[{"op":"badge","target":"a-prints-table","text":"Other"}]}
-,{"question":"table-questions#Q1","answer":"A","ops":[{"op":"badge","target":"a-table-filters","text":"They do not (just the list)"}]},{"question":"table-questions#Q1","answer":"B","ops":[{"op":"badge","target":"a-table-filters","text":"By status"}]},{"question":"table-questions#Q1","answer":"C","ops":[{"op":"badge","target":"a-table-filters","text":"By status and a text search on the title"}]},{"question":"table-questions#Q1","answer":"*","ops":[{"op":"badge","target":"a-table-filters","text":"Other"}]},{"question":"table-questions#Q2","answer":"A","ops":[{"op":"badge","target":"a-table-sort","text":"Newest first, fixed"}]},{"question":"table-questions#Q2","answer":"B","ops":[{"op":"badge","target":"a-table-sort","text":"People choose newest or oldest first, and may s…"}]},{"question":"table-questions#Q2","answer":"*","ops":[{"op":"badge","target":"a-table-sort","text":"Other"}]},{"question":"table-questions#Q3","answer":"A","ops":[{"op":"badge","target":"a-table-pager","text":"Show the first 50 rows only"}]},{"question":"table-questions#Q3","answer":"B","ops":[{"op":"badge","target":"a-table-pager","text":"Page through all rows; people choose the page s…"}]},{"question":"table-questions#Q3","answer":"*","ops":[{"op":"badge","target":"a-table-pager","text":"Other"}]},{"question":"table-questions#Q4","answer":"A","ops":[{"op":"badge","target":"a-table-add","text":"Read-only list"}]},{"question":"table-questions#Q4","answer":"B","ops":[{"op":"badge","target":"a-table-add","text":"People add and edit rows"}]},{"question":"table-questions#Q4","answer":"*","ops":[{"op":"badge","target":"a-table-add","text":"Other"}]},{"question":"chatbot-questions#Q1","answer":"A","ops":[{"op":"badge","target":"a-chatbot-panel","text":"General knowledge only"}]},{"question":"chatbot-questions#Q1","answer":"B","ops":[{"op":"badge","target":"a-chatbot-panel","text":"Our documents first, and general knowledge when…"}]},{"question":"chatbot-questions#Q1","answer":"C","ops":[{"op":"badge","target":"a-chatbot-panel","text":"Only our documents; say \"I don't know\" otherwise"}]},{"question":"chatbot-questions#Q1","answer":"*","ops":[{"op":"badge","target":"a-chatbot-panel","text":"Other"}]},{"question":"chatbot-questions#Q2","answer":"A","ops":[{"op":"badge","target":"a-chatbot-sources","text":"No"}]},{"question":"chatbot-questions#Q2","answer":"B","ops":[{"op":"badge","target":"a-chatbot-sources","text":"Yes, list the documents under each answer"}]},{"question":"chatbot-questions#Q2","answer":"*","ops":[{"op":"badge","target":"a-chatbot-sources","text":"Other"}]},{"question":"chatbot-questions#Q3","answer":"A","ops":[{"op":"badge","target":"a-chatbot-input","text":"English only"}]},{"question":"chatbot-questions#Q3","answer":"B","ops":[{"op":"badge","target":"a-chatbot-input","text":"Spanish and English"}]},{"question":"chatbot-questions#Q3","answer":"*","ops":[{"op":"badge","target":"a-chatbot-input","text":"Other"}]},{"question":"chatbot-questions#Q4","answer":"A","ops":[{"op":"badge","target":"a-chatbot-disclaimer","text":"None"}]},{"question":"chatbot-questions#Q4","answer":"B","ops":[{"op":"badge","target":"a-chatbot-disclaimer","text":"\"AI-generated, may contain errors\""}]},{"question":"chatbot-questions#Q4","answer":"*","ops":[{"op":"badge","target":"a-chatbot-disclaimer","text":"Other"}]},{"question":"login-questions#Q1","answer":"A","ops":[{"op":"badge","target":"a-login-form","text":"Email and password"}]},{"question":"login-questions#Q1","answer":"B","ops":[{"op":"badge","target":"a-login-form","text":"Email, password and an authenticator-app code (…"}]},{"question":"login-questions#Q1","answer":"C","ops":[{"op":"badge","target":"a-login-form","text":"Through the company's existing login (hosted lo…"}]},{"question":"login-questions#Q1","answer":"*","ops":[{"op":"badge","target":"a-login-form","text":"Other"}]},{"question":"login-questions#Q2","answer":"A","ops":[{"op":"badge","target":"a-login-role-badge","text":"One role for everybody"}]},{"question":"login-questions#Q2","answer":"B","ops":[{"op":"badge","target":"a-login-role-badge","text":"Two roles: user and admin"}]},{"question":"login-questions#Q2","answer":"*","ops":[{"op":"badge","target":"a-login-role-badge","text":"Other"}]},{"question":"login-questions#Q3","answer":"A","ops":[{"op":"badge","target":"a-login-signup","text":"Administrators invite people"}]},{"question":"login-questions#Q3","answer":"B","ops":[{"op":"badge","target":"a-login-signup","text":"People sign up themselves (email verification)"}]},{"question":"login-questions#Q3","answer":"*","ops":[{"op":"badge","target":"a-login-signup","text":"Other"}]},{"question":"login-questions#Q4","answer":"A","ops":[{"op":"badge","target":"a-login-forgot","text":"They reset it themselves by email"}]},{"question":"login-questions#Q4","answer":"B","ops":[{"op":"badge","target":"a-login-forgot","text":"They ask an administrator"}]},{"question":"login-questions#Q4","answer":"*","ops":[{"op":"badge","target":"a-login-forgot","text":"Other"}]}]}
+]}
 </script>
 <script>
 /* AI-DLC UI blocks core 1.4 (MIT-0). K.block registry, safe mount, declarative mount, shared helpers, K.theme. No network, only global: K. */
@@ -4054,22 +4324,22 @@ function sparkline(target, o) {
     ['IM-101', 'Fémur gauche v3', 'R-01', 'PETG', 'Haute', 142, 6.5, 'Validée'],
     ['IM-102', 'Fémur droit v3', 'R-01', 'PETG', 'Haute', 142, 6.5, 'Validée'],
     ['IM-103', 'Pied gauche v2', 'R-01', 'PLA+', 'Moyenne', 88, 4.0, 'Validée'],
-    ['IM-104', 'Capot batterie v2', 'R-01', 'PLA+', 'Basse', 64, 3.0, 'Validée'],
-    ['IM-105', 'Support roue avant v2', 'R-02', 'PETG', 'Haute', 55, 2.5, 'En impression'],
-    ['IM-106', 'Carter capteurs v1', 'R-02', 'ASA', 'Moyenne', 97, 4.5, 'À préparer'],
-    ['IM-107', 'Patte A v3', 'R-03', 'PETG', 'Haute', 76, 3.5, 'À réimprimer'],
-    ['IM-108', 'Patte B v3', 'R-03', 'PETG', 'Haute', 76, 3.5, 'À réimprimer'],
-    ['IM-109', 'Patte C v3', 'R-03', 'PETG', 'Haute', 76, 3.5, 'En impression'],
-    ['IM-110', 'Hanches x6 v2', 'R-03', 'PA-CF', 'Haute', 210, 11.0, 'À préparer'],
+    ['IM-104', 'Plaque dorsale v2', 'R-01', 'PLA+', 'Basse', 64, 3.0, 'Validée'],
+    ['IM-105', 'Tibia avant v2', 'R-02', 'PETG', 'Haute', 55, 2.5, 'En impression'],
+    ['IM-106', 'Crâne et optiques v1', 'R-02', 'ASA', 'Moyenne', 97, 4.5, 'À préparer'],
+    ['IM-107', 'Tibia A v3', 'R-03', 'PETG', 'Haute', 76, 3.5, 'À réimprimer'],
+    ['IM-108', 'Tibia B v3', 'R-03', 'PETG', 'Haute', 76, 3.5, 'À réimprimer'],
+    ['IM-109', 'Tibia C v3', 'R-03', 'PETG', 'Haute', 76, 3.5, 'En impression'],
+    ['IM-110', 'Bassin x6 v2', 'R-03', 'PA-CF', 'Haute', 210, 11.0, 'À préparer'],
     ['IM-111', 'Mâchoire v2', 'R-04', 'Résine tough', 'Moyenne', 24, 2.0, 'Validée'],
-    ['IM-112', 'Base rotative v1', 'R-04', 'PETG', 'Basse', 180, 8.0, 'À préparer'],
+    ['IM-112', 'Épaule rotative v1', 'R-04', 'PETG', 'Basse', 180, 8.0, 'À préparer'],
     ['IM-113', 'Poignet v1', 'R-04', 'Résine tough', 'Haute', 31, 2.8, 'En impression'],
-    ['IM-114', 'Châssis v4', 'R-05', 'PLA+', 'Moyenne', 46, 2.0, 'Validée'],
-    ['IM-115', 'Roue folle v2', 'R-05', 'TPU', 'Basse', 12, 1.0, 'À préparer'],
-    ['IM-116', 'Suspension v2', 'R-05', 'TPU', 'Moyenne', 30, 2.2, 'À réimprimer'],
-    ['IM-117', 'Plaque châssis v1', 'R-06', 'PETG', 'Haute', 420, 18.0, 'À préparer'],
-    ['IM-118', 'Bras avant v1', 'R-06', 'PA-CF', 'Haute', 260, 13.5, 'À préparer'],
-    ['IM-119', 'Carter moteur v1', 'R-06', 'ASA', 'Moyenne', 310, 15.0, 'À préparer'],
+    ['IM-114', 'Cage thoracique v4', 'R-05', 'PLA+', 'Moyenne', 46, 2.0, 'Validée'],
+    ['IM-115', 'Rotule de genou v2', 'R-05', 'TPU', 'Basse', 12, 1.0, 'À préparer'],
+    ['IM-116', 'Colonne souple v2', 'R-05', 'TPU', 'Moyenne', 30, 2.2, 'À réimprimer'],
+    ['IM-117', 'Cage thoracique v1', 'R-06', 'PETG', 'Haute', 420, 18.0, 'À préparer'],
+    ['IM-118', 'Humérus v1', 'R-06', 'PA-CF', 'Haute', 260, 13.5, 'À préparer'],
+    ['IM-119', 'Crâne v1', 'R-06', 'ASA', 'Moyenne', 310, 15.0, 'À préparer'],
     ['IM-120', 'Clip câbles v2', 'R-02', 'PLA+', 'Basse', 6, 0.4, 'Validée']
   ];
   var prints = printRaw.map(function (p) {
@@ -4090,8 +4360,8 @@ function sparkline(target, o) {
     ['CMD-40', 'Moteurs NEMA17 x4', 'IM-118', 'MotionShop', 52.0, d(12, 3), 'Commandée'],
     ['CMD-29', 'Filament PLA+ 1 kg x2', 'R-01 maintenance', 'FilaMax', 31.8, d(11, 12), 'Reçue'],
     ['CMD-30', 'Connecteurs JST x50', 'RP-02', 'ElecDirect', 8.9, d(11, 9), 'Reçue'],
-    ['CMD-41', 'Plaque châssis alu 4 mm (usinage CNC)', 'R-06 Titan', 'UsiPro', 86.0, d(11, 20), 'Reçue', 'Usinage CNC'],
-    ['CMD-42', 'Capots contreplaqué 3 mm x6 (découpe laser)', 'R-02 Scout', 'LaserCut', 34.5, d(11, 21), 'Reçue', 'Découpe laser']
+    ['CMD-41', 'Cage thoracique alu 4 mm (usinage CNC)', 'R-06 T-X', 'UsiPro', 86.0, d(11, 20), 'Reçue', 'Usinage CNC'],
+    ['CMD-42', 'Capots contreplaqué 3 mm x6 (découpe laser)', 'R-02 T-1000', 'LaserCut', 34.5, d(11, 21), 'Reçue', 'Découpe laser']
   ];
   var orders = orderRaw.map(function (o) {
     return { id: o[0], component: o[1], linkedTo: o[2], supplier: o[3], totalEur: o[4], eta: o[5], status: o[6], kind: o[7] || 'Composant' };
@@ -4124,14 +4394,14 @@ function sparkline(target, o) {
   // ---- repairs
   var repairRaw = [
     ['RP-01', d(11, 3), 'R-01', 'Mobilité', 'Fémur gauche v2', 'Casse de fatigue', 'v3 +2 mm', 'Majeure', 'Clôturée'],
-    ['RP-02', d(11, 6), 'R-01', 'Châssis', 'Capot batterie v1', 'Clip cassé', 'v2', 'Mineure', 'Clôturée'],
-    ['RP-03', d(11, 10), 'R-02', 'Mobilité', 'Support roue v1', 'Déformé par la chaleur moteur', 'v2 PETG', 'Majeure', 'À valider'],
-    ['RP-04', d(11, 12), 'R-03', 'Mobilité', 'Patte A v2', 'Rupture à la charnière', 'v3', 'Critique', 'Correctif en cours'],
+    ['RP-02', d(11, 6), 'R-01', 'Châssis', 'Plaque dorsale v1', 'Clip cassé', 'v2', 'Mineure', 'Clôturée'],
+    ['RP-03', d(11, 10), 'R-02', 'Mobilité', 'Tibia avant v1', 'Déformé par la chaleur moteur', 'v2 PETG', 'Majeure', 'À valider'],
+    ['RP-04', d(11, 12), 'R-03', 'Mobilité', 'Tibia A v2', 'Rupture à la charnière', 'v3', 'Critique', 'Correctif en cours'],
     ['RP-05', d(11, 14), 'R-03', 'Énergie', 'Batterie LiPo', 'Gonflée', 'CMD-37', 'Critique', 'Correctif en cours'],
-    ['RP-06', d(11, 17), 'R-03', 'Mobilité', 'Patte B v2', 'Fissure entre couches', 'v3', 'Majeure', 'Ouverte'],
+    ['RP-06', d(11, 17), 'R-03', 'Mobilité', 'Tibia B v2', 'Fissure entre couches', 'v3', 'Majeure', 'Ouverte'],
     ['RP-07', d(11, 18), 'R-04', 'Contrôle', 'Driver TMC2209', 'Grillé', 'CMD-32', 'Majeure', 'Correctif en cours'],
     ['RP-08', d(11, 19), 'R-04', 'Mobilité', 'Mâchoire v1', 'Glisse', 'v2 résine tough', 'Mineure', 'Clôturée'],
-    ['RP-09', d(11, 21), 'R-05', 'Mobilité', 'Suspension v1', 'TPU trop souple', 'v2', 'Majeure', 'Ouverte'],
+    ['RP-09', d(11, 21), 'R-05', 'Mobilité', 'Colonne souple v1', 'TPU trop souple', 'v2', 'Majeure', 'Ouverte'],
     ['RP-10', d(11, 23), 'R-02', 'Capteurs', 'Capteur ToF', 'Parasité par le soleil', 'CMD-34', 'Mineure', 'À valider'],
     ['RP-11', d(10, 29), 'R-01', 'Énergie', 'Connecteur batterie', 'Jeu au branchement', 'JST remplacé (CMD-30)', 'Mineure', 'Clôturée'],
     ['RP-12', d(10, 28), 'R-02', 'Contrôle', 'Carte contrôleur', 'Reset intempestif', 'Régulateur 5 V changé', 'Majeure', 'Clôturée']
@@ -4142,12 +4412,12 @@ function sparkline(target, o) {
 
   // ---- robots: score, palier and shown palier computed by the thresholds
   var robotRaw = [
-    ['R-01', 'Atlas', 'bipède', 82, 72, 78, 70, 76],
-    ['R-02', 'Scout', 'rover', 70, 66, 60, 58, 56],
-    ['R-03', 'Hexa', 'hexapode', 64, 48, 52, 40, 44],
-    ['R-04', 'Pince', 'bras', 52, 40, 46, 30, 38],
-    ['R-05', 'Nano', 'suiveur', 40, 36, 28, 22, 20],
-    ['R-06', 'Titan', 'rover lourd', 18, 10, 12, 5, 8]
+    ['R-01', 'T-800', 'bipède', 82, 72, 78, 70, 76],
+    ['R-02', 'T-1000', 'rover', 70, 66, 60, 58, 56],
+    ['R-03', 'T-X', 'hexapode', 64, 48, 52, 40, 44],
+    ['R-04', 'T-800', 'bras', 52, 40, 46, 30, 38],
+    ['R-05', 'T-1000', 'suiveur', 40, 36, 28, 22, 20],
+    ['R-06', 'T-X', 'rover lourd', 18, 10, 12, 5, 8]
   ];
   function palierIndex(score) { return score >= 75 ? 3 : score >= 50 ? 2 : score >= 25 ? 1 : 0; }
   var robots = robotRaw.map(function (r) {
@@ -4167,22 +4437,40 @@ function sparkline(target, o) {
     };
   });
 
+  // ---- robot units: several exemplaires of the same model; budget and weekly capacity are set per exemplaire
+  // [exemplaires, budget per exemplaire (EUR), usable hours per week per exemplaire, planned hours per week]
+  var unitRaw = {
+    'R-01': [1, 520, 20, 14],
+    'R-02': [2, 260, 20, 26],
+    'R-03': [1, 640, 16, 12],
+    'R-04': [1, 380, 18, 10],
+    'R-05': [1, 150, 24, 20],
+    'R-06': [1, 900, 12, 6]
+  };
+  robots.forEach(function (r) {
+    var u = unitRaw[r.id];
+    r.units = u[0];
+    r.unitBudgetEur = u[1];
+    r.hoursPerUnit = u[2];
+    r.hoursPlanned = u[3];
+  });
+
   // ---- part versions (14 rows)
   var partVersionRaw = [
-    ['PV-01', 'Patte A', 'R-03', 'v1', 'Défaut constaté', 'Casse à la charnière'],
-    ['PV-02', 'Patte A', 'R-03', 'v2', 'Défaut constaté', 'Rupture à la charnière (RP-04)'],
-    ['PV-03', 'Patte A', 'R-03', 'v3', 'En test', 'Charnière renforcée, en test (IM-107)'],
+    ['PV-01', 'Tibia A', 'R-03', 'v1', 'Défaut constaté', 'Casse à la charnière'],
+    ['PV-02', 'Tibia A', 'R-03', 'v2', 'Défaut constaté', 'Rupture à la charnière (RP-04)'],
+    ['PV-03', 'Tibia A', 'R-03', 'v3', 'En test', 'Charnière renforcée, en test (IM-107)'],
     ['PV-04', 'Fémur gauche', 'R-01', 'v1', 'Défaut constaté', 'Fissure près de la hanche'],
     ['PV-05', 'Fémur gauche', 'R-01', 'v2', 'Défaut constaté', 'Casse de fatigue (RP-01)'],
     ['PV-06', 'Fémur gauche', 'R-01', 'v3', 'Validée', 'Épaisseur +2 mm, validée (IM-101)'],
-    ['PV-07', 'Support roue avant', 'R-02', 'v1', 'Défaut constaté', 'Déformé par la chaleur moteur (RP-03)'],
-    ['PV-08', 'Support roue avant', 'R-02', 'v2', 'En impression', 'Passage en PETG (IM-105)'],
-    ['PV-09', 'Suspension', 'R-05', 'v1', 'Défaut constaté', 'TPU trop souple (RP-09)'],
-    ['PV-10', 'Suspension', 'R-05', 'v2', 'À réimprimer', 'Dureté revue, à réimprimer (IM-116)'],
+    ['PV-07', 'Tibia avant', 'R-02', 'v1', 'Défaut constaté', 'Déformé par la chaleur moteur (RP-03)'],
+    ['PV-08', 'Tibia avant', 'R-02', 'v2', 'En impression', 'Passage en PETG (IM-105)'],
+    ['PV-09', 'Colonne souple', 'R-05', 'v1', 'Défaut constaté', 'TPU trop souple (RP-09)'],
+    ['PV-10', 'Colonne souple', 'R-05', 'v2', 'À réimprimer', 'Dureté revue, à réimprimer (IM-116)'],
     ['PV-11', 'Mâchoire', 'R-04', 'v1', 'Défaut constaté', 'Glisse sur la pièce (RP-08)'],
     ['PV-12', 'Mâchoire', 'R-04', 'v2', 'Validée', 'Résine tough, validée (IM-111)'],
-    ['PV-13', 'Capot batterie', 'R-01', 'v1', 'Défaut constaté', 'Clip cassé (RP-02)'],
-    ['PV-14', 'Capot batterie', 'R-01', 'v2', 'Validée', 'Clip renforcé, validé (IM-104)']
+    ['PV-13', 'Plaque dorsale', 'R-01', 'v1', 'Défaut constaté', 'Clip cassé (RP-02)'],
+    ['PV-14', 'Plaque dorsale', 'R-01', 'v2', 'Validée', 'Clip renforcé, validé (IM-104)']
   ];
   var partVersions = partVersionRaw.map(function (p) {
     return { id: p[0], part: p[1], robotId: p[2], version: p[3], outcome: p[4], note: p[5] };
@@ -4192,10 +4480,10 @@ function sparkline(target, o) {
   var subRaw = [
     ['SA-01', 'R-01', 'Jambes', ['IM-101', 'IM-102'], []],
     ['SA-02', 'R-01', 'Pieds et capot batterie', ['IM-103', 'IM-104'], []],
-    ['SA-03', 'R-02', 'Roues avant', ['IM-105', 'IM-120'], []],
-    ['SA-04', 'R-02', 'Module capteurs', ['IM-106'], []],
-    ['SA-05', 'R-03', 'Pattes', ['IM-107', 'IM-108', 'IM-109'], ['RP-04', 'RP-06']],
-    ['SA-06', 'R-03', 'Hanches', ['IM-110'], []],
+    ['SA-03', 'R-02', 'Genoux avant', ['IM-105', 'IM-120'], []],
+    ['SA-04', 'R-02', 'Module optique', ['IM-106'], []],
+    ['SA-05', 'R-03', 'Tibias', ['IM-107', 'IM-108', 'IM-109'], ['RP-04', 'RP-06']],
+    ['SA-06', 'R-03', 'Bassin', ['IM-110'], []],
     ['SA-07', 'R-04', 'Poignet', ['IM-113'], []],
     ['SA-08', 'R-04', 'Mâchoire et carte de contrôle', ['IM-111'], ['CMD-32']]
   ];
@@ -4222,16 +4510,16 @@ function sparkline(target, o) {
   var prereqRaw = [
     ['PR-01', 'R-03', 'Clôturer la réparation RP-04', 'Réparation', 'RP-04'],
     ['PR-02', 'R-03', 'Clôturer la réparation RP-05', 'Réparation', 'RP-05'],
-    ['PR-03', 'R-03', 'Valider l\'impression IM-107 (Patte A v3)', 'Impression', 'IM-107'],
-    ['PR-04', 'R-03', 'Valider l\'impression IM-108 (Patte B v3)', 'Impression', 'IM-108'],
+    ['PR-03', 'R-03', 'Valider l\'impression IM-107 (Tibia A v3)', 'Impression', 'IM-107'],
+    ['PR-04', 'R-03', 'Valider l\'impression IM-108 (Tibia B v3)', 'Impression', 'IM-108'],
     ['PR-05', 'R-03', 'Recevoir la commande CMD-37 (batterie LiPo)', 'Commande', 'CMD-37'],
     ['PR-06', 'R-03', 'Atteindre 55 pts de score', 'Score', 'R-03'],
-    ['PR-07', 'R-02', 'Valider l\'impression IM-106 (carter capteurs)', 'Impression', 'IM-106'],
+    ['PR-07', 'R-02', 'Valider l\'impression IM-106 (crâne et optiques)', 'Impression', 'IM-106'],
     ['PR-08', 'R-02', 'Atteindre 75 pts de score', 'Score', 'R-02'],
     ['PR-09', 'R-04', 'Recevoir la commande CMD-32 (drivers)', 'Commande', 'CMD-32'],
     ['PR-10', 'R-04', 'Clôturer la réparation RP-07', 'Réparation', 'RP-07'],
-    ['PR-11', 'R-05', 'Valider l\'impression IM-116 (suspension v2)', 'Impression', 'IM-116'],
-    ['PR-12', 'R-06', 'Valider l\'impression IM-117 (plaque châssis)', 'Impression', 'IM-117']
+    ['PR-11', 'R-05', 'Valider l\'impression IM-116 (colonne souple v2)', 'Impression', 'IM-116'],
+    ['PR-12', 'R-06', 'Valider l\'impression IM-117 (cage thoracique)', 'Impression', 'IM-117']
   ];
   var scoreTargets = { 'PR-06': 55, 'PR-08': 75 };
   var prerequisites = prereqRaw.map(function (p) {
@@ -4275,18 +4563,52 @@ function sparkline(target, o) {
     })
   };
 
+  // ---- resources board: available (stock or machines), planned need, usage capacity and budget (budget and capacity are set on screen)
+  // [id, name, kind, stock id, material of the prints still to do, fixed need, unit, usage capacity, budget EUR, linked orders]
+  var resRaw = [
+    ['RS-01', 'PETG', 'Matière', 'ST-09', 'PETG', null, 'kg', 2, 60, ['CMD-36']],
+    ['RS-02', 'PLA+', 'Matière', 'ST-10', 'PLA+', null, 'kg', 2, 30, ['CMD-29']],
+    ['RS-03', 'PA-CF', 'Matière', 'ST-11', 'PA-CF', null, 'kg', 0.5, 80, ['CMD-35']],
+    ['RS-04', 'TPU', 'Matière', 'ST-12', 'TPU', null, 'kg', 0.5, 30, []],
+    ['RS-05', 'Résine tough', 'Matière', 'ST-13', 'Résine tough', null, 'L', 0.5, 60, ['CMD-38']],
+    ['RS-06', 'Servos 20 kg', 'Composant', 'ST-04', null, 6, 'pièces', 8, 140, ['CMD-31']],
+    ['RS-07', 'Drivers TMC2209', 'Composant', 'ST-06', null, 2, 'pièces', 4, 40, ['CMD-32']],
+    ['RS-08', 'Moteurs NEMA17', 'Composant', 'ST-05', null, 2, 'pièces', 4, 80, ['CMD-40']],
+    ['RS-09', 'Capteurs ToF', 'Composant', 'ST-07', null, 2, 'pièces', 4, 40, ['CMD-34']],
+    ['RS-10', 'Vis M3x12', 'Composant', 'ST-01', null, 120, 'pièces', 200, 20, ['CMD-33']]
+  ];
+  var resources = resRaw.map(function (x) {
+    var st = byId(stock, x[3]);
+    var need = x[4]
+      ? r2(sum(prints.filter(function (p) { return notValidated(p) && p.material === x[4]; }), function (p) { return p.grams; }) / 1000)
+      : x[5];
+    return {
+      id: x[0], name: x[1], kind: x[2], stockId: x[3],
+      available: st.quantity, need: need, capacity: x[7], budgetEur: x[8],
+      engagedEur: r2(sum(x[9], function (o) { return byId(orders, o).totalEur; })),
+      availUnit: x[6], needUnit: x[6], capUnit: x[6]
+    };
+  });
+  function machineHours(resin) {
+    return r1(sum(prints.filter(function (p) { return notValidated(p) && (p.material === 'Résine tough') === resin; }), function (p) { return p.hours; }));
+  }
+  resources.push(
+    { id: 'RS-11', name: 'Imprimantes FDM', kind: 'Machine', stockId: '', available: 3, need: machineHours(false), capacity: 120, budgetEur: null, engagedEur: null, availUnit: 'imprimantes', needUnit: 'h', capUnit: 'h par semaine' },
+    { id: 'RS-12', name: 'Imprimante résine', kind: 'Machine', stockId: '', available: 1, need: machineHours(true), capacity: 40, budgetEur: null, engagedEur: null, availUnit: 'imprimante', needUnit: 'h', capUnit: 'h par semaine' }
+  );
+
   // ---- plans of the three robots with a plan: each part is a print (printId); plan = rectangle on the top view
   // (x, y, w, h), model = primitives of the 3D view: ['box', cx, cy, cz, w, h, d] or ['cyl', cx, cy, cz, radius, length, axis]
   var robotPlans = [
     { robotId: 'R-06', view: 'Vue de dessus',
-      ghosts: [[170, 52, 70, 34, 'Roue'], [310, 52, 70, 34, 'Roue'], [170, 234, 70, 34, 'Roue'], [310, 234, 70, 34, 'Roue']],
+      ghosts: [[170, 52, 70, 34, 'Hanche'], [310, 52, 70, 34, 'Hanche'], [170, 234, 70, 34, 'Hanche'], [310, 234, 70, 34, 'Hanche']],
       parts: [
         { printId: 'IM-117', plan: [150, 96, 250, 128], model: [['box', 0, 0, 0, 6, 0.35, 4], ['cyl', -2.5, 0.35, -1.5, 0.35, 0.5, 'y'], ['cyl', 2.5, 0.35, -1.5, 0.35, 0.5, 'y'], ['cyl', -2.5, 0.35, 1.5, 0.35, 0.5, 'y'], ['cyl', 2.5, 0.35, 1.5, 0.35, 0.5, 'y']] },
         { printId: 'IM-118', plan: [420, 115, 120, 70], model: [['box', 0, 0, 0, 5, 0.7, 0.9], ['box', 2.6, 0, -0.7, 1.2, 0.7, 0.5], ['box', 2.6, 0, 0.7, 1.2, 0.7, 0.5], ['cyl', -2.4, 0, 0, 0.65, 1.1, 'z']] },
         { printId: 'IM-119', plan: [20, 100, 110, 100], model: [['box', 0, 0, 0, 3, 1.6, 2.4], ['cyl', 1.9, 0, 0, 0.7, 0.8, 'x'], ['box', -0.6, 0.85, 0, 1.2, 0.12, 1.4]] }
       ] },
     { robotId: 'R-05', view: 'Vue de dessus',
-      ghosts: [[230, 56, 90, 34, 'Roue motrice'], [230, 230, 90, 34, 'Roue motrice']],
+      ghosts: [[230, 56, 90, 34, 'Genou'], [230, 230, 90, 34, 'Genou']],
       parts: [
         { printId: 'IM-114', plan: [150, 96, 250, 128], model: [['box', 0, 0, 0, 5, 0.3, 3], ['box', 0, 0.45, -1.4, 5, 0.6, 0.2], ['box', 0, 0.45, 1.4, 5, 0.6, 0.2], ['box', 2.4, 0.45, 0, 0.2, 0.6, 2.6]] },
         { printId: 'IM-115', plan: [30, 115, 100, 70], model: [['cyl', 0, 0, 0, 1.4, 0.6, 'z'], ['cyl', 0, 0, 0.5, 0.5, 0.5, 'z']] },
@@ -4304,6 +4626,7 @@ function sparkline(target, o) {
   window.APP_DATA = {
     robotPlans: robotPlans,
     robots: robots,
+    resources: resources,
     prints: prints,
     orders: orders,
     stock: stock,
@@ -4338,6 +4661,71 @@ UI_BLOCKS['robots-kpi-toprint'] = function () {
   var D = window.APP_DATA;
   var reprint = D.prints.filter(function (p) { return p.status === 'À réimprimer'; }).length;
   return { items: [{ label: 'Pièces à imprimer', value: D.kpis.partsToPrint, hint: 'dont ' + reprint + ' à réimprimer' }] };
+};
+// ---- resources board: shared calculations (also used by the screen script)
+window.BoardCalc = (function () {
+  var fr = function (n, dp) { return Number(n).toLocaleString('fr-FR', { maximumFractionDigits: dp == null ? 2 : dp }); };
+  var AV = { crit: 'Insuffisant', warn: 'Juste', ok: 'Suffisant' };
+  var BU = { crit: 'Dépassé', warn: 'À surveiller', ok: 'Dans le budget' };
+  function resource(r) {
+    var limit = r.kind === 'Machine' ? r.capacity : r.available;
+    var avail = r.need > limit ? 'crit' : (r.need > 0.8 * limit || r.need > r.capacity) ? 'warn' : 'ok';
+    var budget = r.budgetEur == null ? '' : r.engagedEur > r.budgetEur ? 'crit' : r.engagedEur >= 0.8 * r.budgetEur ? 'warn' : 'ok';
+    return { avail: avail, budget: budget, usage: r.capacity > 0 ? Math.round(100 * r.need / r.capacity) : null };
+  }
+  function robot(r) {
+    var paused = r.criticalOpen > 0 ? 1 : 0;
+    var free = Math.max(0, r.units - paused);
+    var cap = free * r.hoursPerUnit;
+    var usage = cap > 0 ? Math.round(100 * r.hoursPlanned / cap) : null;
+    return { paused: Math.min(paused, r.units), free: free, budgetTotal: r.units * r.unitBudgetEur, cap: cap, usage: usage,
+      tone: usage == null || usage > 100 ? 'bad' : usage > 80 ? 'warn' : 'ok' };
+  }
+  return { fr: fr, AV: AV, BU: BU, resource: resource, robot: robot };
+})();
+UI_BLOCKS['robots-board-kpi'] = function () {
+  var D = window.APP_DATA, B = window.BoardCalc;
+  var units = 0, free = 0, paused = 0, budget = 0;
+  D.robots.forEach(function (r) { var c = B.robot(r); units += r.units; free += c.free; paused += c.paused; budget += c.budgetTotal; });
+  var calc = D.resources.map(B.resource);
+  var short = calc.filter(function (c) { return c.avail === 'crit'; }).length;
+  var tight = calc.filter(function (c) { return c.avail === 'warn'; }).length;
+  var over = calc.filter(function (c) { return c.budget === 'crit'; }).length;
+  return { columns: 4, items: [
+    { label: 'Exemplaires de robots', value: units, hint: D.robots.length + ' modèles, plusieurs exemplaires possibles par modèle' },
+    { label: 'Exemplaires disponibles', value: free, status: paused ? 'warn' : 'ok', hint: paused ? paused + ' en pause (réparation critique)' : 'Aucun exemplaire en pause' },
+    { label: 'Budget des robots', value: B.fr(budget, 0), unit: '€', hint: 'budget par exemplaire × nombre d\'exemplaires' },
+    { label: 'Ressources en tension', value: short + tight, status: short ? 'crit' : tight ? 'warn' : 'ok',
+      hint: short + ' insuffisante' + (short > 1 ? 's' : '') + ', ' + tight + ' juste' + (tight > 1 ? 's' : '') + ', ' + over + ' budget' + (over > 1 ? 's' : '') + ' dépassé' + (over > 1 ? 's' : '') }
+  ] };
+};
+UI_BLOCKS['robots-resources'] = function () {
+  var D = window.APP_DATA, B = window.BoardCalc;
+  var q = function (v, u) { return B.fr(v) + ' ' + (u === 'pièces' && Math.abs(v) <= 1 ? 'pièce' : u === 'imprimantes' && Math.abs(v) <= 1 ? 'imprimante' : u); };
+  var eur = function (v) { return v == null ? '' : B.fr(v, 2) + ' €'; };
+  var rows = D.resources.map(function (r) {
+    var c = B.resource(r);
+    return { id: r.id, name: r.name, kind: r.kind, available: r.available, need: r.need, capacity: r.capacity, usage: c.usage,
+      budgetEur: r.budgetEur, engagedEur: r.engagedEur, availStatus: c.avail, availRank: { crit: 3, warn: 2, ok: 1 }[c.avail], budgetStatus: c.budget, _r: r };
+  });
+  return {
+    headingLevel: 2, title: 'Ressources disponibles', noun: 'ressources', pageSize: 0, maxColumns: 8, idPrefix: 'rb-row-',
+    subtitle: 'Disponible, besoin prévu, capacité d\'utilisation et budget de chaque matière, composant et machine',
+    sort: { key: 'availStatus', dir: 'desc' }, emptyText: 'Aucune ressource suivie',
+    columns: [
+      { key: 'name', label: 'Ressource', type: 'text', priority: 1, minWidth: 140 },
+      { key: 'kind', label: 'Type', type: 'badge', priority: 4 },
+      { key: 'available', label: 'Disponible', type: 'num', priority: 2, format: function (r) { return q(r.available, r._r.availUnit); } },
+      { key: 'need', label: 'Besoin prévu', type: 'num', priority: 2, format: function (r) { return q(r.need, r._r.needUnit); } },
+      { key: 'capacity', label: 'Capacité d\'utilisation', type: 'num', priority: 3, format: function (r) { return q(r.capacity, r._r.capUnit); } },
+      { key: 'usage', label: 'Utilisation', type: 'num', unit: '%', priority: 3 },
+      { key: 'availStatus', label: 'Disponibilité', type: 'status', priority: 1, sortKey: 'availRank', format: function (r) { return B.AV[r.availStatus]; } },
+      { key: 'budgetEur', label: 'Budget', type: 'num', priority: 2, format: function (r) { return eur(r.budgetEur); } },
+      { key: 'engagedEur', label: 'Engagé', type: 'num', priority: 4, format: function (r) { return eur(r.engagedEur); } },
+      { key: 'budgetStatus', label: 'État du budget', type: 'status', priority: 2, format: function (r) { return r.budgetStatus ? B.BU[r.budgetStatus] : ''; } }
+    ],
+    rows: rows
+  };
 };
 UI_BLOCKS['robots-filters'] = function () {
   var D = window.APP_DATA;
@@ -6007,795 +6395,6 @@ window.UI_BLOCKS = window.UI_BLOCKS || {};
   const ready = () => { root.dataset.ready = ''; };
   window.kit = { toast, route, ready, refresh: (sel) => $(sel)._k && render($(sel)) };
   route();
-})();
-</script>
-
-<template id="aidlc-module-table" data-aidlc-module="table" data-after="" data-screen="stock" data-screen-route="#/stock">
-<!-- Module "table" v1.0.0 · drop-in fragment. Self-contained: inline CSS (scoped under #a-table) and JS, fake data, no network.
-     The root carries four switches that mirror the module questions; the Canvas or the prototype sets them from the answers:
-       data-filters="none | status | status-search"   (table-questions#Q1 = A | B | C)
-       data-sort="fixed | choose"                      (table-questions#Q2 = A | B)
-       data-pager="first50 | pages"                    (table-questions#Q3 = A | B)
-       data-editable="false | true"                    (table-questions#Q4 = A | B)
-     Controls that do not apply are hidden with the `hidden` attribute, never removed. -->
-<section id="a-table" class="tm" data-filters="status-search" data-sort="choose" data-pager="pages" data-editable="true" aria-label="Data table">
-<style>
-#a-table{--tm-panel:var(--panel,#fff);--tm-panel2:var(--panel-2,#f0f2f8);--tm-text:var(--text,#161b2e);--tm-muted:var(--muted,#64708a);--tm-line:var(--line,#e2e6f0);
-  --tm-acc:var(--acc,#6a4cff);--tm-acc-soft:var(--acc-soft,#ece8ff);--tm-acc-ink:var(--acc-ink,#4328d6);
-  --tm-ok:var(--ok,#16a34a);--tm-ok-soft:var(--ok-soft,#dcfce7);--tm-warn:var(--warn,#d97706);--tm-warn-soft:var(--warn-soft,#fef3c7);
-  --tm-bad:var(--bad,#dc2626);--tm-bad-soft:var(--bad-soft,#fee2e2);--tm-info:var(--info,#2563eb);--tm-info-soft:var(--info-soft,#dbeafe);
-  --tm-shadow:var(--shadow,0 1px 2px rgba(20,27,50,.06),0 8px 24px rgba(20,27,50,.07));
-  box-sizing:border-box;position:relative;background:var(--tm-panel);color:var(--tm-text);border:1px solid var(--tm-line);border-radius:14px;box-shadow:var(--tm-shadow);
-  padding:16px 18px;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
-#a-table *,#a-table *::before,#a-table *::after{box-sizing:border-box}
-#a-table [hidden]{display:none!important}
-#a-table :focus-visible{outline:2px solid var(--tm-acc);outline-offset:2px;border-radius:6px}
-#a-table .tm-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
-#a-table .tm-head>div{flex:1;min-width:0}
-#a-table .tm-title{margin:0;font-size:18px;line-height:1.25}
-#a-table .tm-sub{margin:2px 0 0;color:var(--tm-muted);font-size:12.5px}
-#a-table .tm-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--tm-line);background:var(--tm-panel);color:var(--tm-text);border-radius:9px;padding:6px 12px;font:inherit;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
-#a-table .tm-btn:hover{border-color:var(--tm-acc);color:var(--tm-acc-ink)}
-#a-table .tm-btn.tm-pri{background:var(--tm-acc);border-color:var(--tm-acc);color:#fff}
-#a-table .tm-btn.tm-pri:hover{filter:brightness(1.08);color:#fff}
-#a-table .tm-btn.tm-sm{padding:3px 9px;font-size:12px;border-radius:7px}
-#a-table .tm-btn.tm-danger:hover{border-color:var(--tm-bad);color:var(--tm-bad)}
-#a-table .tm-btn[disabled]{opacity:.45;cursor:not-allowed}
-#a-table .tm-bar{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px;padding:10px 12px;background:var(--tm-panel2);border:1px solid var(--tm-line);border-radius:11px}
-#a-table .tm-bar:not(:has(>:not([hidden]))){display:none}
-#a-table .tm-filters{display:flex;align-items:flex-end;gap:12px;flex:1 1 320px;flex-wrap:wrap;position:relative}
-#a-table .tm-sort{position:relative}
-#a-table .tm-field{display:flex;flex-direction:column;gap:3px;font-size:11.5px;font-weight:700;color:var(--tm-muted);text-transform:uppercase;letter-spacing:.4px}
-#a-table .tm-field.tm-grow{flex:1 1 180px}
-#a-table .tm-field select,#a-table .tm-field input{font:inherit;font-size:13.5px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--tm-text);background:var(--tm-panel);border:1px solid var(--tm-line);border-radius:9px;padding:7px 10px;min-width:150px;width:100%}
-#a-table .tm-field select:disabled{opacity:.5}
-#a-table .tm-hint{font-size:11.5px;color:var(--tm-muted);font-weight:500;text-transform:none;letter-spacing:0}
-#a-table .tm-form{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:12px;padding:12px;border:1px dashed var(--tm-acc);border-radius:11px;background:var(--tm-acc-soft)}
-#a-table .tm-form .tm-field{color:var(--tm-acc-ink)}
-#a-table .tm-form-actions{display:flex;gap:8px}
-#a-table .tm-form-err{grid-column:1/-1;margin:0;color:var(--tm-bad);font-weight:600;font-size:12.5px}
-#a-table .tm-scroll{overflow-x:auto;border:1px solid var(--tm-line);border-radius:11px}
-#a-table table{width:100%;border-collapse:collapse}
-#a-table th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--tm-muted);padding:10px 12px;border-bottom:1px solid var(--tm-line);background:var(--tm-panel2);white-space:nowrap}
-#a-table td{padding:10px 12px;border-bottom:1px solid var(--tm-line);vertical-align:middle}
-#a-table tbody tr:last-child td{border-bottom:0}
-#a-table tbody tr:hover{background:var(--tm-panel2)}
-#a-table .tm-name{font-weight:700}
-#a-table .tm-id{display:block;font-size:11.5px;color:var(--tm-muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-#a-table .tm-badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
-#a-table .tm-badge.s-open{background:var(--tm-info-soft);color:var(--tm-info)}
-#a-table .tm-badge.s-progress{background:var(--tm-warn-soft);color:var(--tm-warn)}
-#a-table .tm-badge.s-done{background:var(--tm-ok-soft);color:var(--tm-ok)}
-#a-table .tm-badge.s-blocked{background:var(--tm-bad-soft);color:var(--tm-bad)}
-#a-table .tm-actions-cell{text-align:right;white-space:nowrap}
-#a-table .tm-actions-cell .tm-btn+.tm-btn{margin-left:6px}
-#a-table .tm-empty{text-align:center;color:var(--tm-muted);padding:28px 12px}
-#a-table .tm-pager{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 2px 0;color:var(--tm-muted);font-size:12.5px;position:relative}
-#a-table .tm-pager .tm-grow{flex:1}
-#a-table .tm-pager select{font:inherit;color:var(--tm-text);background:var(--tm-panel);border:1px solid var(--tm-line);border-radius:8px;padding:4px 8px}
-#a-table .tm-pager-nav{display:flex;align-items:center;gap:8px}
-@media (max-width:640px){
-  #a-table{padding:12px}
-  #a-table .tm-form{grid-template-columns:1fr}
-  #a-table .tm-field select,#a-table .tm-field input{min-width:0}
-  #a-table .tm-sort,#a-table .tm-filters .tm-field{flex:1 1 100%}
-  #a-table .tm-scroll{border:0}
-  #a-table thead{position:absolute;left:-9999px}
-  #a-table table,#a-table tbody,#a-table tr,#a-table td{display:block;width:100%}
-  #a-table tbody tr{border:1px solid var(--tm-line);border-radius:11px;margin-bottom:10px;padding:6px 0;background:var(--tm-panel)}
-  #a-table td{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:0;padding:5px 12px;text-align:right}
-  #a-table td::before{content:attr(data-label);color:var(--tm-muted);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;text-align:left}
-  #a-table td.tm-title-cell{display:block;text-align:left;padding-top:8px}
-  #a-table td.tm-title-cell::before{display:none}
-  #a-table .tm-actions-cell{justify-content:flex-end}
-  #a-table .tm-actions-cell::before{display:none}
-  #a-table td.tm-empty{display:block;text-align:center}
-  #a-table td.tm-empty::before{display:none}
-}
-</style>
-
-<header class="tm-head">
-  <div>
-    <h2 class="tm-title">Items</h2>
-    <p class="tm-sub" data-role="summary" aria-live="polite">&nbsp;</p>
-  </div>
-  <button id="a-table-add" class="tm-btn tm-pri" type="button">+ Add item</button>
-</header>
-
-<form class="tm-form" data-role="form" hidden novalidate>
-  <label class="tm-field">Title
-    <input type="text" name="title" maxlength="120" autocomplete="off" placeholder="What is it?">
-  </label>
-  <label class="tm-field">Status
-    <select name="status">
-      <option value="open">Open</option>
-      <option value="in progress">In progress</option>
-      <option value="done">Done</option>
-      <option value="blocked">Blocked</option>
-    </select>
-  </label>
-  <label class="tm-field">Owner
-    <input type="text" name="owner" maxlength="80" autocomplete="off" placeholder="Optional">
-  </label>
-  <div class="tm-form-actions">
-    <button class="tm-btn tm-pri" type="submit" data-role="save">Save</button>
-    <button class="tm-btn" type="button" data-role="cancel">Cancel</button>
-  </div>
-  <p class="tm-form-err" data-role="form-error" role="alert" hidden></p>
-</form>
-
-<div class="tm-bar">
-  <div id="a-table-filters" class="tm-filters" role="group" aria-label="Filters">
-    <label class="tm-field">Status
-      <select id="a-table-status-filter" data-role="status">
-        <option value="">All statuses</option>
-        <option value="open">Open</option>
-        <option value="in progress">In progress</option>
-        <option value="done">Done</option>
-        <option value="blocked">Blocked</option>
-      </select>
-    </label>
-    <label class="tm-field tm-grow">Search title
-      <input id="a-table-search" data-role="search" type="search" maxlength="120" placeholder="Type part of a title…" autocomplete="off">
-    </label>
-  </div>
-  <div id="a-table-sort" class="tm-sort">
-    <label class="tm-field">Sort by
-      <select data-role="sort">
-        <option value="newest">Newest first</option>
-        <option value="oldest">Oldest first</option>
-        <option value="title-asc" data-title-sort>Title A–Z</option>
-        <option value="title-desc" data-title-sort>Title Z–A</option>
-      </select>
-    </label>
-    <span class="tm-hint" data-role="sort-hint" hidden>Title order is off while a status is chosen.</span>
-  </div>
-</div>
-
-<div class="tm-scroll">
-  <table id="a-table-grid">
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Status</th>
-        <th scope="col">Owner</th>
-        <th scope="col">Created</th>
-        <th scope="col" class="tm-actions-cell" data-role="actions-head"><span class="sr-only" style="position:absolute;left:-9999px">Actions</span></th>
-      </tr>
-    </thead>
-    <tbody data-role="rows"></tbody>
-  </table>
-</div>
-
-<footer id="a-table-pager" class="tm-pager">
-  <span data-role="range">&nbsp;</span>
-  <span class="tm-grow"></span>
-  <label data-role="size-wrap">Rows per page
-    <select data-role="size">
-      <option value="10" selected>10</option>
-      <option value="25">25</option>
-      <option value="50">50</option>
-      <option value="100">100</option>
-    </select>
-  </label>
-  <span class="tm-pager-nav" data-role="nav">
-    <button class="tm-btn tm-sm" type="button" data-role="prev">‹ Previous</button>
-    <span data-role="page">Page 1</span>
-    <button class="tm-btn tm-sm" type="button" data-role="next">Next ›</button>
-  </span>
-</footer>
-
-<script>
-(function () {
-  var root = document.getElementById('a-table');
-  if (!root || root.__tmInit) return;
-  root.__tmInit = true;
-  var $ = function (role) { return root.querySelector('[data-role="' + role + '"]'); };
-  var el = {
-    summary: $('summary'), rows: $('rows'), status: $('status'), search: $('search'), sort: $('sort'), sortHint: $('sort-hint'),
-    range: $('range'), size: $('size'), sizeWrap: $('size-wrap'), nav: $('nav'), prev: $('prev'), next: $('next'), page: $('page'),
-    form: $('form'), formError: $('form-error'), actionsHead: $('actions-head'), add: document.getElementById('a-table-add'),
-    filters: document.getElementById('a-table-filters'), sortBox: document.getElementById('a-table-sort')
-  };
-  var f = { title: el.form.elements.namedItem('title'), status: el.form.elements.namedItem('status'), owner: el.form.elements.namedItem('owner') };
-
-  // ---- fake data (deterministic) ----
-  var STATUSES = ['open', 'in progress', 'done', 'blocked'];
-  var NOUNS = ['Purchase order', 'Supplier contract', 'Invoice', 'Shipment', 'Customer request', 'Quality check', 'Price update', 'Audit note'];
-  var OWNERS = ['Ana', 'Luis', 'Marta', 'Jonas', ''];
-  var seed = 7;
-  function rnd(n) { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return (seed >> 11) % n; }
-  var DATA = [];
-  for (var i = 0; i < 57; i++) {
-    var d = new Date(Date.UTC(2026, 10, 3, 9) - i * 86400000 * 0.9);
-    DATA.push({
-      id: 'itm-' + (1042 - i), title: NOUNS[rnd(NOUNS.length)] + ' ' + (1042 - i),
-      status: STATUSES[rnd(STATUSES.length)], owner: OWNERS[rnd(OWNERS.length)], created: d.getTime()
-    });
-  }
-  var nextNo = 1043;
-
-  var state = { status: '', q: '', sort: 'newest', page: 0, size: 10, editing: null, armed: null };
-
-  function cfg() {
-    var d = root.dataset;
-    return {
-      filters: d.filters || 'status-search', sort: d.sort || 'choose',
-      pager: d.pager || 'pages', editable: d.editable !== 'false'
-    };
-  }
-  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function label(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-  function cls(s) { return s === 'in progress' ? 's-progress' : 's-' + s; }
-  function day(ms) { return new Date(ms).toISOString().slice(0, 10); }
-
-  function applyConfig() {
-    var c = cfg();
-    el.filters.hidden = c.filters === 'none';
-    $('status').closest('label').hidden = c.filters === 'none';
-    el.search.closest('label').hidden = c.filters !== 'status-search';
-    el.sortBox.hidden = c.sort !== 'choose';
-    el.add.hidden = !c.editable;
-    el.actionsHead.hidden = !c.editable;
-    el.sizeWrap.hidden = c.pager !== 'pages';
-    el.nav.hidden = c.pager !== 'pages';
-    if (!c.editable) closeForm();
-    // reset state a hidden control would otherwise keep applying
-    if (c.filters === 'none') { state.status = ''; el.status.value = ''; }
-    if (c.filters !== 'status-search') { state.q = ''; el.search.value = ''; }
-    if (c.sort !== 'choose') { state.sort = 'newest'; el.sort.value = 'newest'; }
-  }
-
-  function visibleRows() {
-    var c = cfg();
-    var q = state.q.trim().toLowerCase();
-    var rows = DATA.filter(function (r) {
-      if (c.filters !== 'none' && state.status && r.status !== state.status) return false;
-      if (c.filters === 'status-search' && q && r.title.toLowerCase().indexOf(q) === -1) return false;
-      return true;
-    });
-    var sort = c.sort === 'choose' ? state.sort : 'newest';
-    rows.sort(function (a, b) {
-      if (sort === 'oldest') return a.created - b.created;
-      if (sort === 'title-asc') return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
-      if (sort === 'title-desc') return a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1;
-      return b.created - a.created;
-    });
-    return rows;
-  }
-
-  function render() {
-    applyConfig();
-    var c = cfg();
-    // status filter and title sort exclude each other (the API rejects the combination)
-    var titleSort = state.sort.indexOf('title') === 0;
-    el.status.disabled = titleSort && c.sort === 'choose';
-    Array.prototype.forEach.call(el.sort.querySelectorAll('[data-title-sort]'), function (o) { o.disabled = !!state.status && c.filters !== 'none'; });
-    el.sortHint.hidden = !(state.status && c.filters !== 'none' && c.sort === 'choose');
-
-    var all = visibleRows();
-    var total = all.length;
-    var shown, from;
-    if (c.pager === 'pages') {
-      var pages = Math.max(1, Math.ceil(total / state.size));
-      if (state.page >= pages) state.page = pages - 1;
-      from = state.page * state.size;
-      shown = all.slice(from, from + state.size);
-      el.page.textContent = 'Page ' + (state.page + 1) + ' of ' + pages;
-      el.prev.disabled = state.page === 0;
-      el.next.disabled = state.page >= pages - 1;
-      el.range.textContent = total ? 'Showing ' + (from + 1) + '–' + (from + shown.length) + ' of ' + total : 'No rows';
-    } else {
-      from = 0;
-      shown = all.slice(0, 50);
-      el.range.textContent = total > 50 ? 'Showing the first 50 of ' + total + ' rows' : (total + (total === 1 ? ' row' : ' rows'));
-    }
-    el.summary.textContent = total + (total === 1 ? ' item' : ' items') + (state.status || state.q ? ' match' : '');
-
-    if (!shown.length) {
-      el.rows.innerHTML = '<tr><td class="tm-empty" colspan="5">No items match. Clear the filters to see everything.</td></tr>';
-      return;
-    }
-    el.rows.innerHTML = shown.map(function (r) {
-      var armed = state.armed === r.id;
-      return '<tr data-id="' + esc(r.id) + '">' +
-        '<td class="tm-title-cell" data-label="Title"><span class="tm-name">' + esc(r.title) + '</span><span class="tm-id">' + esc(r.id) + '</span></td>' +
-        '<td data-label="Status"><span class="tm-badge ' + cls(r.status) + '">' + esc(label(r.status)) + '</span></td>' +
-        '<td data-label="Owner">' + (r.owner ? esc(r.owner) : '<span style="color:var(--tm-muted)">—</span>') + '</td>' +
-        '<td data-label="Created">' + day(r.created) + '</td>' +
-        (c.editable ? '<td class="tm-actions-cell"><button class="tm-btn tm-sm" type="button" data-act="edit">Edit</button>' +
-          '<button class="tm-btn tm-sm tm-danger" type="button" data-act="del">' + (armed ? 'Sure?' : 'Delete') + '</button></td>' : '') +
-        '</tr>';
-    }).join('');
-  }
-
-  // ---- add / edit ----
-  function openForm(row) {
-    state.editing = row ? row.id : null;
-    f.title.value = row ? row.title : '';
-    f.status.value = row ? row.status : 'open';
-    f.owner.value = row ? row.owner : '';
-    el.formError.hidden = true;
-    el.form.hidden = false;
-    f.title.focus();
-  }
-  function closeForm() { el.form.hidden = true; state.editing = null; }
-
-  el.add.addEventListener('click', function () { openForm(null); });
-  $('cancel').addEventListener('click', closeForm);
-  el.form.addEventListener('submit', function (ev) {
-    ev.preventDefault();
-    var title = f.title.value;
-    if (!title.trim()) { el.formError.textContent = 'A title is required.'; el.formError.hidden = false; return; }
-    if (title.length > 120) { el.formError.textContent = 'The title can have at most 120 characters.'; el.formError.hidden = false; return; }
-    if (state.editing) {
-      var row = DATA.filter(function (r) { return r.id === state.editing; })[0];
-      if (row) { row.title = title; row.status = f.status.value; row.owner = f.owner.value; }
-    } else {
-      DATA.unshift({ id: 'itm-' + (nextNo++), title: title, status: f.status.value, owner: f.owner.value, created: Date.now() });
-      state.page = 0;
-    }
-    closeForm();
-    render();
-  });
-  el.rows.addEventListener('click', function (ev) {
-    var btn = ev.target.closest('[data-act]');
-    if (!btn) return;
-    var id = btn.closest('tr').getAttribute('data-id');
-    var row = DATA.filter(function (r) { return r.id === id; })[0];
-    if (btn.getAttribute('data-act') === 'edit') { openForm(row); return; }
-    if (state.armed === id) { DATA.splice(DATA.indexOf(row), 1); state.armed = null; } else { state.armed = id; setTimeout(function () { if (state.armed === id) { state.armed = null; render(); } }, 3000); }
-    render();
-  });
-
-  // ---- filters, sort, pager ----
-  el.status.addEventListener('change', function () { state.status = el.status.value; state.page = 0; render(); });
-  el.search.addEventListener('input', function () { state.q = el.search.value; state.page = 0; render(); });
-  el.sort.addEventListener('change', function () { state.sort = el.sort.value; state.page = 0; render(); });
-  el.size.addEventListener('change', function () { state.size = Number(el.size.value); state.page = 0; render(); });
-  el.prev.addEventListener('click', function () { state.page = Math.max(0, state.page - 1); render(); });
-  el.next.addEventListener('click', function () { state.page += 1; render(); });
-
-  // re-render when the switches on the root change (answers applied by the Canvas / prototype)
-  new MutationObserver(function () { render(); }).observe(root, { attributes: true, attributeFilter: ['data-filters', 'data-sort', 'data-pager', 'data-editable'] });
-  render();
-})();
-</script>
-</section>
-</template>
-<script data-aidlc-module="table">
-(function () {
-  var tpl = document.getElementById('aidlc-module-table');
-  if (!tpl || !tpl.content) return;
-  var mid = tpl.getAttribute('data-aidlc-module');
-  var after = tpl.getAttribute('data-after') || '';
-  var route = tpl.getAttribute('data-screen-route') || '';
-  var shell = tpl.getAttribute('data-screen') === 'shell';
-  var obs = null;
-  function mounted() { return Array.prototype.slice.call(document.querySelectorAll('[data-aidlc-mounted="' + mid + '"]')); }
-  function placed(cur, anchor) {
-    var p = cur[0].previousElementSibling;
-    while (p && p !== anchor && p.hasAttribute('data-aidlc-mounted')) p = p.previousElementSibling;
-    return p === anchor;
-  }
-  function place() {
-    if (obs) { obs.takeRecords(); obs.disconnect(); }
-    try {
-      var cur = mounted();
-      if (!shell && (location.hash || '') !== route) { cur.forEach(function (n) { n.remove(); }); return; }
-      var anchor = after ? document.getElementById(after) : null;
-      if (cur.length && (!anchor || placed(cur, anchor))) return;
-      cur.forEach(function (n) { n.remove(); });
-      var frag = document.createDocumentFragment();
-      Array.prototype.forEach.call(tpl.content.children, function (c) {
-        var n = c.cloneNode(true);
-        n.setAttribute('data-aidlc-mounted', mid);
-        frag.appendChild(n);
-      });
-      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(frag, anchor.nextSibling);
-      else (document.querySelector('main') || document.body).appendChild(frag);
-    } finally {
-      if (obs) obs.observe(document.body, { childList: true, subtree: true });
-    }
-  }
-  obs = new MutationObserver(place);
-  window.addEventListener('hashchange', place);
-  place();
-})();
-</script>
-
-<template id="aidlc-module-chatbot" data-aidlc-module="chatbot" data-after="" data-screen="stock" data-screen-route="#/stock">
-<!-- Chatbot module: drop-in component (HTML fragment, no <html>/<body>).
-     Root anchor: a-chatbot. Anchors: a-chatbot-panel, -messages, -sources, -input, -send, -disclaimer.
-     This fragment is OFFLINE ONLY (prototype rule, addon/ANCHORS.md section 2): it answers from fake documents and makes
-     no network call. The connection to the deployed API is a separate file, ui/live-client.js, that the deploy step
-     (Construction) adds to the built app; it installs a transport with root.__cb.setTransport(fn).
-     Configuration (attribute on the root element):
-       data-lang      "en" or "es" (default: browser language).
-     Answer effects (the Canvas toggles the `hidden` attribute, elements are never removed):
-       chatbot-questions#Q2 = A -> hide a-chatbot-sources;  #Q4 = A -> hide a-chatbot-disclaimer. -->
-<div id="a-chatbot" class="cb" data-lang="">
-<style>
-#a-chatbot{--cb-bg:var(--panel,#fff);--cb-bg2:var(--panel-2,#f0f2f8);--cb-text:var(--text,#161b2e);--cb-muted:var(--muted,#64708a);--cb-line:var(--line,#e2e6f0);--cb-acc:var(--acc,#6a4cff);--cb-acc-soft:var(--acc-soft,#ece8ff);--cb-acc-ink:var(--acc-ink,#4328d6);--cb-bad:var(--bad,#dc2626);--cb-bad-soft:var(--bad-soft,#fee2e2);--cb-shadow:var(--shadow,0 1px 2px rgba(20,27,50,.06),0 8px 24px rgba(20,27,50,.07));
-  box-sizing:border-box;width:100%;max-width:440px;color:var(--cb-text);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
-#a-chatbot *,#a-chatbot *::before,#a-chatbot *::after{box-sizing:border-box}
-#a-chatbot [hidden]{display:none!important}
-#a-chatbot .cb-panel{display:flex;flex-direction:column;height:min(560px,calc(100vh - 32px));min-height:340px;background:var(--cb-bg);border:1px solid var(--cb-line);border-radius:14px;box-shadow:var(--cb-shadow);overflow:hidden}
-#a-chatbot .cb-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--cb-line);background:linear-gradient(90deg,var(--cb-acc-soft),transparent 80%)}
-#a-chatbot .cb-av{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--cb-acc);color:#fff;font-weight:800;font-size:16px;flex:none}
-#a-chatbot .cb-head b{display:block;font-size:14.5px;line-height:1.2}
-#a-chatbot .cb-head small{color:var(--cb-muted);font-size:12px}
-#a-chatbot .cb-state{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--cb-muted);white-space:nowrap}
-#a-chatbot .cb-state i{width:8px;height:8px;border-radius:50%;background:#16a34a;display:inline-block}
-#a-chatbot .cb-state.demo i{background:#d97706}
-#a-chatbot .cb-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--cb-bg)}
-#a-chatbot .cb-m{max-width:86%;padding:9px 12px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}
-#a-chatbot .cb-m.bot{align-self:flex-start;background:var(--cb-bg2);border:1px solid var(--cb-line);border-bottom-left-radius:4px}
-#a-chatbot .cb-m.user{align-self:flex-end;background:var(--cb-acc);color:#fff;border-bottom-right-radius:4px}
-#a-chatbot .cb-m.err{align-self:flex-start;background:var(--cb-bad-soft);color:var(--cb-bad);border:1px solid var(--cb-bad)}
-#a-chatbot .cb-typing{display:inline-flex;gap:4px;align-items:center;height:18px}
-#a-chatbot .cb-typing i{width:7px;height:7px;border-radius:50%;background:var(--cb-muted);animation:cb-b 1.2s infinite ease-in-out}
-#a-chatbot .cb-typing i:nth-child(2){animation-delay:.15s}#a-chatbot .cb-typing i:nth-child(3){animation-delay:.3s}
-@keyframes cb-b{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
-#a-chatbot .cb-src{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 14px;border-top:1px solid var(--cb-line);background:var(--cb-bg2);font-size:12px;color:var(--cb-muted)}
-#a-chatbot .cb-src[data-has="0"]{display:none}
-#a-chatbot .cb-src b{font-weight:700;color:var(--cb-text)}
-#a-chatbot .cb-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:99px;background:var(--cb-acc-soft);color:var(--cb-acc-ink);font-weight:600;font-size:12px}
-#a-chatbot .cb-form{display:flex;align-items:flex-end;gap:8px;padding:10px 12px;border-top:1px solid var(--cb-line);background:var(--cb-bg)}
-#a-chatbot textarea{flex:1;resize:none;min-height:38px;max-height:120px;border:1px solid var(--cb-line);background:var(--cb-bg);color:var(--cb-text);border-radius:10px;padding:8px 11px;font:inherit}
-#a-chatbot textarea:disabled{opacity:.6}
-#a-chatbot button.cb-send{border:1px solid var(--cb-acc);background:var(--cb-acc);color:#fff;border-radius:10px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer;height:38px}
-#a-chatbot button.cb-send:hover:not([disabled]){filter:brightness(1.08)}
-#a-chatbot button.cb-send[disabled]{opacity:.5;cursor:not-allowed}
-#a-chatbot :focus-visible{outline:2px solid var(--cb-acc);outline-offset:2px;border-radius:8px}
-#a-chatbot .cb-count{font-size:11.5px;color:var(--cb-muted);padding:0 14px 2px;text-align:right}
-#a-chatbot .cb-count.over{color:var(--cb-bad);font-weight:700}
-#a-chatbot .cb-note{margin:0;padding:6px 14px 10px;font-size:11.5px;color:var(--cb-muted);text-align:center;background:var(--cb-bg)}
-@media (max-width:480px){#a-chatbot{max-width:none}#a-chatbot .cb-panel{height:min(560px,calc(100vh - 24px))}#a-chatbot .cb-m{max-width:92%}}
-@media (prefers-reduced-motion:reduce){#a-chatbot .cb-typing i{animation:none;opacity:.7}}
-</style>
-<section id="a-chatbot-panel" class="cb-panel" aria-label="Assistant">
-  <header class="cb-head">
-    <span class="cb-av" aria-hidden="true">✦</span>
-    <div><b data-t="title">Assistant</b><small data-t="subtitle">Ask a question about the app</small></div>
-    <span class="cb-state demo" data-role="state"><i></i><span data-role="state-text">Demo</span></span>
-  </header>
-  <div id="a-chatbot-messages" class="cb-msgs" role="log" aria-live="polite" aria-relevant="additions"></div>
-  <div id="a-chatbot-sources" class="cb-src" aria-live="polite" data-has="0">
-    <b data-t="sources">Sources</b><span data-role="chips"></span>
-  </div>
-  <div class="cb-count" data-role="count" hidden></div>
-  <form class="cb-form" data-role="form" autocomplete="off">
-    <textarea id="a-chatbot-input" rows="1" maxlength="2000" placeholder="Type your question…" aria-label="Type your question"></textarea>
-    <button id="a-chatbot-send" class="cb-send" type="submit" data-t="send">Send</button>
-  </form>
-  <p id="a-chatbot-disclaimer" class="cb-note" data-t="disclaimer">AI-generated, may contain errors</p>
-</section>
-<script>
-(function () {
-  var root = document.getElementById('a-chatbot');
-  if (!root || root.__cb) return;
-  var T = {
-    en: { title: 'Assistant', subtitle: 'Ask a question about the app', sources: 'Sources', send: 'Send', placeholder: 'Type your question…',
-          disclaimer: 'AI-generated, may contain errors', online: 'Online', demo: 'Demo', hello: 'Hi! How can I help you?',
-          tooLong: 'The message is longer than 2000 characters.', fail: 'The assistant is not available right now. Try again.', slow: 'The assistant did not answer in time. Try again.' },
-    es: { title: 'Asistente', subtitle: 'Pregunta lo que necesites sobre la app', sources: 'Fuentes', send: 'Enviar', placeholder: 'Escribe tu pregunta…',
-          disclaimer: 'Generado por IA, puede contener errores', online: 'En línea', demo: 'Demo', hello: '¡Hola! ¿En qué puedo ayudarte?',
-          tooLong: 'El mensaje supera los 2000 caracteres.', fail: 'El asistente no está disponible ahora. Inténtalo de nuevo.', slow: 'El asistente no respondió a tiempo. Inténtalo de nuevo.' }
-  };
-  var lang = (root.getAttribute('data-lang') || (navigator.language || 'en')).toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
-  var L = T[lang];
-  function q(sel) { return root.querySelector(sel); }
-  var msgs = q('#a-chatbot-messages'), input = q('#a-chatbot-input'), sendBtn = q('#a-chatbot-send');
-  var srcBox = q('#a-chatbot-sources'), chips = q('[data-role=chips]'), form = q('[data-role=form]');
-  var count = q('[data-role=count]'), stateEl = q('[data-role=state]'), stateText = q('[data-role=state-text]');
-  // transport: null = offline demo answers; otherwise function ({message, sessionId}) -> Promise<{reply, sources, sessionId?}>
-  // installed by ui/live-client.js. A rejected promise shows the error line; Error.status 502 with "time" in the message shows the slow text.
-  var transport = null;
-  var sessionId = null, busy = false;
-
-  root.querySelectorAll('[data-t]').forEach(function (n) { n.textContent = L[n.getAttribute('data-t')]; });
-  input.setAttribute('placeholder', L.placeholder); input.setAttribute('aria-label', L.placeholder);
-  function refreshState() { stateText.textContent = transport ? L.online : L.demo; stateEl.classList.toggle('demo', !transport); }
-  refreshState();
-
-  function add(role, text, extraClass) {
-    var d = document.createElement('div');
-    d.className = 'cb-m ' + role + (extraClass ? ' ' + extraClass : '');
-    d.textContent = text;
-    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-    return d;
-  }
-  function showSources(list) {
-    chips.textContent = '';
-    (list || []).forEach(function (s) {
-      var c = document.createElement('span'); c.className = 'cb-chip'; c.title = s.id; c.textContent = s.title || s.id; chips.appendChild(c);
-    });
-    // Empty strip is collapsed by CSS (data-has=0); the Canvas hides it for good with the `hidden` attribute.
-    srcBox.setAttribute('data-has', list && list.length ? '1' : '0');
-  }
-  function typing() {
-    var d = add('bot', ''); d.innerHTML = '<span class="cb-typing" aria-label="…"><i></i><i></i><i></i></span>'; return d;
-  }
-  function setBusy(b) { busy = b; input.disabled = b; sendBtn.disabled = b; }
-
-  // Offline demo answers (fake documents) used while no transport is installed.
-  var FAKE = [
-    { id: 'support-desk', title: 'Support desk', words: ['support', 'desk', 'open', 'help', 'ayuda', 'soporte', 'horario'], text: 'The support desk opens at 08:30 CET and closes at 17:45 CET, Monday to Friday.' },
-    { id: 'returns-policy', title: 'Returns policy', words: ['return', 'refund', 'pallet', 'devolucion', 'devolución'], text: 'Unopened pallets can be returned within 31 days of delivery (6.5% restocking fee).' },
-    { id: 'warehouse-network', title: 'Warehouse network', words: ['warehouse', 'cold', 'chain', 'temperature', 'almacen', 'almacén'], text: 'Chilled pallets must stay below 4.2 °C in all three warehouses.' }
-  ];
-  function demoAnswer(text) {
-    var low = text.toLowerCase();
-    var hit = FAKE.filter(function (d) { return d.words.some(function (w) { return low.indexOf(w) >= 0; }); });
-    if (!hit.length) return { reply: lang === 'es' ? 'Esto es una demo sin conexión: pregunta por soporte, devoluciones o almacenes.' : 'This is an offline demo: ask about the support desk, returns or warehouses.', sources: [] };
-    return { reply: hit.map(function (d) { return d.text; }).join(' '), sources: hit.map(function (d) { return { id: d.id, title: d.title }; }) };
-  }
-
-  function ask(text) {
-    if (!transport) {
-      return new Promise(function (resolve) { setTimeout(function () { resolve(demoAnswer(text)); }, 700); });
-    }
-    return Promise.resolve(transport({ message: text, sessionId: sessionId })).then(function (j) {
-      if (j && j.sessionId) sessionId = j.sessionId;
-      return j || { reply: '', sources: [] };
-    });
-  }
-
-  function submit() {
-    var text = input.value.trim();
-    if (busy || !text) return;
-    if (text.length > 2000) { add('err', L.tooLong); return; }
-    add('user', text); input.value = ''; autosize(); updateCount();
-    setBusy(true); var wait = typing();
-    ask(text).then(function (a) {
-      wait.remove(); add('bot', a.reply); showSources(a.sources);
-    }).catch(function (e) {
-      wait.remove(); add('err', e && e.status === 502 && /time/i.test(e.message) ? L.slow : L.fail);
-    }).then(function () { setBusy(false); input.focus(); });
-  }
-  function autosize() { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 120) + 'px'; }
-  function updateCount() {
-    var n = input.value.length; count.hidden = n < 1800; count.textContent = n + ' / 2000'; count.classList.toggle('over', n > 2000);
-  }
-  form.addEventListener('submit', function (ev) { ev.preventDefault(); submit(); });
-  input.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' && !ev.shiftKey && !ev.isComposing) { ev.preventDefault(); submit(); } });
-  input.addEventListener('input', function () { autosize(); updateCount(); });
-
-  add('bot', L.hello);
-  root.__cb = { add: add, showSources: showSources, setTransport: function (fn) { transport = typeof fn === 'function' ? fn : null; refreshState(); } };
-})();
-</script>
-</div>
-</template>
-<script data-aidlc-module="chatbot">
-(function () {
-  var tpl = document.getElementById('aidlc-module-chatbot');
-  if (!tpl || !tpl.content) return;
-  var mid = tpl.getAttribute('data-aidlc-module');
-  var after = tpl.getAttribute('data-after') || '';
-  var route = tpl.getAttribute('data-screen-route') || '';
-  var shell = tpl.getAttribute('data-screen') === 'shell';
-  var obs = null;
-  function mounted() { return Array.prototype.slice.call(document.querySelectorAll('[data-aidlc-mounted="' + mid + '"]')); }
-  function placed(cur, anchor) {
-    var p = cur[0].previousElementSibling;
-    while (p && p !== anchor && p.hasAttribute('data-aidlc-mounted')) p = p.previousElementSibling;
-    return p === anchor;
-  }
-  function place() {
-    if (obs) { obs.takeRecords(); obs.disconnect(); }
-    try {
-      var cur = mounted();
-      if (!shell && (location.hash || '') !== route) { cur.forEach(function (n) { n.remove(); }); return; }
-      var anchor = after ? document.getElementById(after) : null;
-      if (cur.length && (!anchor || placed(cur, anchor))) return;
-      cur.forEach(function (n) { n.remove(); });
-      var frag = document.createDocumentFragment();
-      Array.prototype.forEach.call(tpl.content.children, function (c) {
-        var n = c.cloneNode(true);
-        n.setAttribute('data-aidlc-mounted', mid);
-        frag.appendChild(n);
-      });
-      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(frag, anchor.nextSibling);
-      else (document.querySelector('main') || document.body).appendChild(frag);
-    } finally {
-      if (obs) obs.observe(document.body, { childList: true, subtree: true });
-    }
-  }
-  obs = new MutationObserver(place);
-  window.addEventListener('hashchange', place);
-  place();
-})();
-</script>
-
-<template id="aidlc-module-login" data-aidlc-module="login" data-after="" data-screen="stock" data-screen-route="#/stock">
-<style>
-#a-login-form{--lg-panel:var(--panel,#fff);--lg-panel2:var(--panel-2,#f0f2f8);--lg-text:var(--text,#161b2e);--lg-muted:var(--muted,#64708a);--lg-line:var(--line,#e2e6f0);--lg-brand:var(--brand,#e9a210);--lg-brand-soft:var(--brand-soft,#fff3d6);--lg-brand-ink:var(--brand-ink,#7a4d00);--lg-acc:var(--acc,#6a4cff);--lg-acc-soft:var(--acc-soft,#ece8ff);--lg-acc-ink:var(--acc-ink,#4328d6);--lg-ok:var(--ok,#16a34a);--lg-ok-soft:var(--ok-soft,#dcfce7);--lg-bad:var(--bad,#dc2626);--lg-bad-soft:var(--bad-soft,#fee2e2);--lg-shadow:var(--shadow,0 1px 2px rgba(20,27,50,.06),0 8px 24px rgba(20,27,50,.07));box-sizing:border-box;width:100%;max-width:400px;margin:0 auto;color:var(--lg-text);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
-#a-login-form *{box-sizing:border-box}
-#a-login-form [hidden]{display:none!important}
-#a-login-form .lg-card{background:var(--lg-panel);border:1px solid var(--lg-line);border-radius:16px;box-shadow:var(--lg-shadow);padding:26px 26px 22px}
-#a-login-form .lg-head{text-align:center;margin-bottom:18px}
-#a-login-form .lg-logo{width:46px;height:46px;border-radius:13px;background:var(--lg-brand-soft);color:var(--lg-brand-ink);display:grid;place-items:center;font-size:24px;margin:0 auto 10px}
-#a-login-form h2{margin:0;font-size:20px;letter-spacing:-.2px}
-#a-login-form .lg-sub{margin:3px 0 0;color:var(--lg-muted);font-size:13px}
-#a-login-form .lg-alert{display:flex;gap:8px;align-items:flex-start;background:var(--lg-bad-soft);color:var(--lg-bad);border-radius:10px;padding:9px 12px;margin-bottom:14px;font-weight:600;font-size:13px}
-#a-login-form .lg-field{margin-bottom:13px}
-#a-login-form label{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;font-size:12.5px;margin-bottom:5px}
-#a-login-form label small{font-weight:500;color:var(--lg-muted)}
-#a-login-form input[type=email],#a-login-form input[type=password],#a-login-form input[type=text]{width:100%;font:inherit;color:var(--lg-text);background:var(--lg-panel2);border:1px solid var(--lg-line);border-radius:10px;padding:10px 12px;outline:none;transition:border-color .15s,box-shadow .15s}
-#a-login-form input:focus{border-color:var(--lg-acc);box-shadow:0 0 0 3px var(--lg-acc-soft)}
-#a-login-form input[aria-invalid=true]{border-color:var(--lg-bad)}
-#a-login-form .lg-code{letter-spacing:.5em;text-align:center;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
-#a-login-form .lg-hint{margin:5px 0 0;color:var(--lg-muted);font-size:12px}
-#a-login-form .lg-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font:inherit;font-weight:700;border-radius:10px;padding:10px 14px;cursor:pointer;border:1px solid var(--lg-line);background:var(--lg-panel);color:var(--lg-text)}
-#a-login-form .lg-btn:hover{border-color:var(--lg-acc);color:var(--lg-acc-ink)}
-#a-login-form .lg-btn.pri{background:var(--lg-acc);border-color:var(--lg-acc);color:#fff}
-#a-login-form .lg-btn.pri:hover{filter:brightness(1.07);color:#fff}
-#a-login-form .lg-btn:focus-visible,#a-login-form a:focus-visible{outline:2px solid var(--lg-acc);outline-offset:2px}
-#a-login-form .lg-or{display:flex;align-items:center;gap:10px;color:var(--lg-muted);font-size:12px;margin:14px 0}
-#a-login-form .lg-or:before,#a-login-form .lg-or:after{content:"";flex:1;height:1px;background:var(--lg-line)}
-#a-login-form .lg-links{display:flex;flex-direction:column;gap:6px;margin-top:16px;text-align:center;font-size:12.5px;color:var(--lg-muted)}
-#a-login-form .lg-links a{color:var(--lg-acc-ink);font-weight:700;text-decoration:none;cursor:pointer}
-#a-login-form .lg-links a:hover{text-decoration:underline}
-#a-login-form .lg-in{text-align:center}
-#a-login-form .lg-avatar{width:56px;height:56px;border-radius:50%;background:var(--lg-acc-soft);color:var(--lg-acc-ink);display:grid;place-items:center;font-weight:800;font-size:20px;margin:0 auto 10px}
-#a-login-form .lg-who{font-weight:700;word-break:break-all}
-#a-login-form .lg-badge{display:inline-flex;align-items:center;gap:5px;margin:8px 0 16px;padding:3px 11px;border-radius:99px;font-weight:800;font-size:12px;background:var(--lg-ok-soft);color:var(--lg-ok);text-transform:uppercase;letter-spacing:.4px}
-#a-login-form .lg-badge[data-role=admin]{background:var(--lg-brand-soft);color:var(--lg-brand-ink)}
-@media (max-width:420px){#a-login-form .lg-card{padding:20px 16px 18px;border-radius:14px}}
-</style>
-<section id="a-login-form" class="aidlc-login" data-mode="password" data-roles="two" data-signup="admin" data-forgot="self" aria-label="Sign in">
-  <div class="lg-card">
-    <div class="lg-out">
-      <header class="lg-head">
-        <div class="lg-logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path><circle cx="12" cy="15.5" r="1.2" fill="currentColor"></circle></svg></div>
-        <h2 class="lg-title">Sign in</h2>
-        <p class="lg-sub">Use your work email and password</p>
-      </header>
-      <div id="a-login-error" class="lg-alert" role="alert" hidden></div>
-      <form class="lg-fields" novalidate>
-        <div class="lg-step lg-step1">
-          <div class="lg-field">
-            <label for="a-login-email">Email</label>
-            <input id="a-login-email" type="email" autocomplete="username" placeholder="you@company.com">
-          </div>
-          <div class="lg-field">
-            <label for="a-login-password">Password</label>
-            <input id="a-login-password" type="password" autocomplete="current-password" placeholder="12+ characters">
-          </div>
-        </div>
-        <div id="a-login-mfa" class="lg-field lg-step2" hidden>
-          <label for="a-login-mfa-code">Authenticator code <small>6 digits</small></label>
-          <input id="a-login-mfa-code" class="lg-code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000">
-          <p class="lg-hint">Open your authenticator app and type the current code.</p>
-        </div>
-        <button id="a-login-submit" class="lg-btn pri" type="submit">Sign in</button>
-      </form>
-      <div class="lg-or" hidden data-for="federated"><span>or</span></div>
-      <button id="a-login-federated" class="lg-btn" type="button" hidden>Continue with company login</button>
-      <div class="lg-links">
-        <span id="a-login-forgot">
-          <a class="lg-forgot-self" href="#a-login-form" role="button">Forgot password?</a>
-          <span class="lg-forgot-admin" hidden>Forgot your password? Ask your administrator to reset it.</span>
-        </span>
-        <span id="a-login-signup">
-          <span class="lg-signup-admin">Accounts are created by your administrator.</span>
-          <span class="lg-signup-self" hidden>New here? <a href="#a-login-form" role="button">Create an account</a></span>
-        </span>
-      </div>
-    </div>
-    <div id="a-login-signedin" class="lg-in" hidden>
-      <div class="lg-avatar" aria-hidden="true">A</div>
-      <div class="lg-who">ana@example.com</div>
-      <div><span id="a-login-role-badge" class="lg-badge" data-role="user">user</span></div>
-      <button id="a-login-signout" class="lg-btn" type="button">Sign out</button>
-    </div>
-  </div>
-</section>
-<script>
-(function () {
-  var root = document.getElementById('a-login-form');
-  if (!root || root.__lgInit) return;
-  root.__lgInit = true;
-  var $ = function (s) { return root.querySelector(s); };
-  var email = $('#a-login-email'), pass = $('#a-login-password'), code = $('#a-login-mfa-code');
-  var mfa = $('#a-login-mfa'), step1 = $('.lg-step1'), err = $('#a-login-error');
-  var submit = $('#a-login-submit'), fed = $('#a-login-federated'), or = $('.lg-or');
-  var out = $('.lg-out'), inn = $('#a-login-signedin'), badge = $('#a-login-role-badge');
-  var step = 1;
-
-  // Answer effects: Canvas / the mock flip these data attributes, the markup stays in the DOM.
-  function apply() {
-    var mode = root.getAttribute('data-mode') || 'password';
-    var roles = root.getAttribute('data-roles') || 'two';
-    var signup = root.getAttribute('data-signup') || 'admin';
-    var forgot = root.getAttribute('data-forgot') || 'self';
-    fed.hidden = or.hidden = mode !== 'federated';
-    mfa.hidden = !(mode === 'mfa' && step === 2);
-    step1.hidden = mode === 'mfa' && step === 2;
-    submit.textContent = mode === 'mfa' && step === 2 ? 'Verify and sign in' : 'Sign in';
-    $('.lg-sub').textContent = mode === 'mfa' && step === 2 ? 'Two-step verification' : 'Use your work email and password';
-    badge.hidden = roles === 'one';
-    $('.lg-forgot-self').hidden = forgot !== 'self';
-    $('.lg-forgot-admin').hidden = forgot !== 'admin';
-    $('.lg-signup-admin').hidden = signup !== 'admin';
-    $('.lg-signup-self').hidden = signup !== 'self';
-  }
-  function fail(msg, field) {
-    err.textContent = msg; err.hidden = false;
-    [email, pass, code].forEach(function (i) { i.removeAttribute('aria-invalid'); });
-    if (field) { field.setAttribute('aria-invalid', 'true'); field.focus(); }
-  }
-  function signedIn(who) {
-    var admin = /^admin/i.test(who);
-    $('.lg-who').textContent = who;
-    $('.lg-avatar').textContent = (who.charAt(0) || '?').toUpperCase();
-    badge.textContent = admin ? 'admin' : 'user';
-    badge.setAttribute('data-role', admin ? 'admin' : 'user');
-    out.hidden = true; inn.hidden = false;
-  }
-  $('form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    err.hidden = true;
-    var mode = root.getAttribute('data-mode') || 'password';
-    if (step === 1) {
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)) return fail('Enter a valid email address.', email);
-      if (pass.value.length < 12) return fail('Passwords have at least 12 characters.', pass);
-      if (mode === 'mfa') { step = 2; apply(); code.focus(); return; }
-    } else if (!/^\d{6}$/.test(code.value)) {
-      return fail('Enter the 6-digit code from your authenticator app.', code);
-    }
-    signedIn(email.value);
-  });
-  fed.addEventListener('click', function () { signedIn('company.user@company.com'); });
-  $('#a-login-signout').addEventListener('click', function () {
-    step = 1; pass.value = ''; code.value = ''; inn.hidden = true; out.hidden = false; apply();
-  });
-  new MutationObserver(function () { if (step === 2 && root.getAttribute('data-mode') !== 'mfa') step = 1; apply(); })
-    .observe(root, { attributes: true, attributeFilter: ['data-mode', 'data-roles', 'data-signup', 'data-forgot'] });
-  apply();
-})();
-</script>
-</template>
-<script data-aidlc-module="login">
-(function () {
-  var tpl = document.getElementById('aidlc-module-login');
-  if (!tpl || !tpl.content) return;
-  var mid = tpl.getAttribute('data-aidlc-module');
-  var after = tpl.getAttribute('data-after') || '';
-  var route = tpl.getAttribute('data-screen-route') || '';
-  var shell = tpl.getAttribute('data-screen') === 'shell';
-  var obs = null;
-  function mounted() { return Array.prototype.slice.call(document.querySelectorAll('[data-aidlc-mounted="' + mid + '"]')); }
-  function placed(cur, anchor) {
-    var p = cur[0].previousElementSibling;
-    while (p && p !== anchor && p.hasAttribute('data-aidlc-mounted')) p = p.previousElementSibling;
-    return p === anchor;
-  }
-  function place() {
-    if (obs) { obs.takeRecords(); obs.disconnect(); }
-    try {
-      var cur = mounted();
-      if (!shell && (location.hash || '') !== route) { cur.forEach(function (n) { n.remove(); }); return; }
-      var anchor = after ? document.getElementById(after) : null;
-      if (cur.length && (!anchor || placed(cur, anchor))) return;
-      cur.forEach(function (n) { n.remove(); });
-      var frag = document.createDocumentFragment();
-      Array.prototype.forEach.call(tpl.content.children, function (c) {
-        var n = c.cloneNode(true);
-        n.setAttribute('data-aidlc-mounted', mid);
-        frag.appendChild(n);
-      });
-      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(frag, anchor.nextSibling);
-      else (document.querySelector('main') || document.body).appendChild(frag);
-    } finally {
-      if (obs) obs.observe(document.body, { childList: true, subtree: true });
-    }
-  }
-  obs = new MutationObserver(place);
-  window.addEventListener('hashchange', place);
-  place();
 })();
 </script>
 </body>

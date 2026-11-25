@@ -1,0 +1,53 @@
+{
+  "version": 35,
+  "critic": {
+    "status": "FAIL",
+    "mean": 3.5,
+    "criteria": {
+      "hierarchy": 4,
+      "realism": 4,
+      "consistency": 3,
+      "readability": 3,
+      "layout": 3,
+      "fit": 4
+    },
+    "issues": [
+      {
+        "criterion": "consistency",
+        "text": "Stock page has a leftover generic English 'Items' block (Invoice 1042, Purchase order 1041, 'In progress', 'Add item', 'Edit/Delete') that clashes with the French robot-workshop UI and uses placeholder-like data."
+      },
+      {
+        "criterion": "readability",
+        "text": "Very small, low-contrast secondary text (KPI captions, filter labels, 'Pour atteindre…' hints, badge text, bar tracks) is hard to read at both viewports."
+      },
+      {
+        "criterion": "layout",
+        "text": "Robot cards: progress bars for Énergie, Capteurs and Contrôle are empty or barely visible while scores are 12-46, so the bars look broken. Card heights are uneven and cut off at the fold, with big empty space in the R-06 card."
+      },
+      {
+        "criterion": "layout",
+        "text": "At 1280 the content is a narrow centered column with wide side margins and the 1440 view shrinks everything, so the width is not used well. Stock page has a large empty area under the alerts column."
+      },
+      {
+        "criterion": "realism",
+        "text": "Data inconsistencies: the R-06 score is 6 at 1280 and 5 at 1440, R-05 is 15 vs 12, R-04 is 21 vs 17. The R-03 card shows a P2 badge, score 0 and a 'P3 Fiable' note, which is confusing. Score 0 on R-02 and R-01 with high component values looks wrong."
+      },
+      {
+        "criterion": "hierarchy",
+        "text": "The R-03 'En pause' badge and the P2 pill stack awkwardly around the ring, and the ring is not aligned with the other cards, so the paused state is not clear."
+      }
+    ],
+    "summary": "The Kaminos UI is coherent and domain-realistic, with a clear title, a primary CTA and KPI cards. It is let down by the stray English 'Items' placeholder section on Stock, inconsistent scores, empty progress bars, tiny text and uneven card layout.",
+    "model": "global.anthropic.claude-sonnet-5-5",
+    "costUsd": 0.0352,
+    "htmlSha": "1f6bee0eef5eaccbdd424d26099aca590c5d271ce490fb06be6e23c802df2bda",
+    "rubric": "addon",
+    "samples": 2,
+    "sampleMeans": [
+      3.5,
+      3.5
+    ],
+    "seconds": 19.1,
+    "at": "2026-11-25T11:02:23Z"
+  }
+}
