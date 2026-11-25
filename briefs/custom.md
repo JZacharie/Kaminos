@@ -13,7 +13,7 @@ Linking rules the UI must make visible:
 Risks: wrong material breaks a part again; TPU too soft; PETG deforms near motors; a swollen LiPo is critical.
 
 ## Users and roles
-- **Camille Lefèvre, lead engineer** (daily): Robots, detail, repairs.
+- **Sarah Connor, lead engineer who orders the stock** (daily): Robots, detail, repairs, Orders, Stock.
 - **Hugo Marchand, print and supply technician** (daily): Prints, Orders, Stock.
 - **Inès Roche, workshop manager** (weekly): Robots, Orders total, Stock alerts.
 
